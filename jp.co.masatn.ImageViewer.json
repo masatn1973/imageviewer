@@ -7,10 +7,9 @@
     "separate-locales": false,
     "finish-args": [
         "--share=ipc",
-        "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland",
-        "--filesystem=home:ro"
+        "--socket=fallback-x11",
+        "--socket=wayland"
     ],
     "cleanup": [
         "/include",
@@ -26,13 +25,11 @@
         {
             "name": "imageviewer",
             "buildsystem": "meson",
-            "config-opts": [
-                "-Dprofile=default"
-            ],
             "sources": [
                 {
-                    "type": "dir",
-                    "path": "."
+                    "type": "git",
+                    "url": "https://github.com/masatn1973/imageviewer.git",
+                    "tag": "0.1.0"
                 }
             ]
         }
