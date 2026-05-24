@@ -1,6 +1,7 @@
+*~
 *.*~
 *.bak
 *.flatpak
-.builddir
-.repo
+builddir/
+repo/
 
