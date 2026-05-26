@@ -2,7 +2,7 @@
 Name=Image Viewer
 Comment=Browse Images
 Exec=imageviewer
-Icon=jp.co.masatn.ImageViewer
+Icon=io.github.masatn1973.ImageViewer
 Terminal=false
 Type=Application
 Categories=Graphics;

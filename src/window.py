@@ -21,11 +21,11 @@ import gettext
 import locale
 import gi
 
-locale.bindtextdomain("jp.co.masatn.ImageViewer", "/app/share/locale")
-locale.textdomain("jp.co.masatn.ImageViewer")
+locale.bindtextdomain("io.github.masatn1973.ImageViewer", "/app/share/locale")
+locale.textdomain("io.github.masatn1973.ImageViewer")
 
-gettext.bindtextdomain("jp.co.masatn.ImageViewer", "/app/share/locale")
-gettext.textdomain("jp.co.masatn.ImageViewer")
+gettext.bindtextdomain("io.github.masatn1973.ImageViewer", "/app/share/locale")
+gettext.textdomain("io.github.masatn1973.ImageViewer")
 
 
 from gettext import gettext as _
@@ -42,7 +42,7 @@ IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
 THUMB = 128
 
 
-@Gtk.Template(resource_path="/jp/co/masatn/ImageViewer/window.ui")
+@Gtk.Template(resource_path="/io.github.masatn1973/ImageViewer/window.ui")
 class ImageViewerWindow(Adw.ApplicationWindow):
     __gtype_name__ = "ImageViewerWindow"
 
@@ -126,8 +126,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     def on_about(self, action, param):
-        builder = Gtk.Builder.new_from_resource("/jp/co/masatn/ImageViewer/about.ui")
-        builder.set_translation_domain("jp.co.masatn.ImageViewer")
+        builder = Gtk.Builder.new_from_resource(
+            "/io.github.masatn1973/ImageViewer/about.ui"
+        )
+        builder.set_translation_domain("io.github.masatn1973.ImageViewer")
 
         about = builder.get_object("about")
         about.present(self)

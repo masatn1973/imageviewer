@@ -1,4 +1,4 @@
-application_id = 'jp.co.masatn.ImageViewer'
+application_id = 'io.github.masatn1973.ImageViewer'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(

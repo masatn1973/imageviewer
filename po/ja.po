@@ -18,29 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
-#: data/jp.co.masatn.ImageViewer.desktop.in:2
-#: data/jp.co.masatn.ImageViewer.metainfo.xml.in:5 src/about.ui:7
+#: data/io.github.masatn1973.ImageViewer.desktop.in:2
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5 src/about.ui:7
 #: src/window.ui:6
 msgid "Image Viewer"
 msgstr "画像ビューワ"
 
-#: data/jp.co.masatn.ImageViewer.desktop.in:3
+#: data/io.github.masatn1973.ImageViewer.desktop.in:3
 msgid "Browse Images"
 msgstr "画像を閲覧"
 
-#: data/jp.co.masatn.ImageViewer.desktop.in:9
+#: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
 msgstr "GTK;"
 
-#: data/jp.co.masatn.ImageViewer.metainfo.xml.in:7
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:7
 msgid "Browse and view image files"
 msgstr "画像ファイルを閲覧して表示する"
 
-#: data/jp.co.masatn.ImageViewer.metainfo.xml.in:13
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
 msgid "masatn"
 msgstr ""
 
-#: data/jp.co.masatn.ImageViewer.metainfo.xml.in:21
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:21
 msgid ""
 "Image Viewer is a lightweight application for browsing and viewing image "
 "files. It is built with GTK4 and libadwaita and supports common image "

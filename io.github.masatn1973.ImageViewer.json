@@ -1,5 +1,5 @@
 {
-    "app-id": "jp.co.masatn.ImageViewer",
+    "app-id": "io.github.masatn1973.ImageViewer",
     "runtime": "org.gnome.Platform",
     "runtime-version": "50",
     "sdk": "org.gnome.Sdk",

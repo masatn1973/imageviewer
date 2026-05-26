@@ -1,8 +1,8 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/jp.co.plamokozo.ImageViewer.desktop.in
-data/jp.co.plamokozo.ImageViewer.gschema.xml
-data/jp.co.plamokozo.ImageViewer.metainfo.xml.in
+data/io.github.masatn1973.ImageViewer.desktop.in
+data/io.github.masatn1973.ImageViewer.gschema.xml
+data/io.github.masatn1973.ImageViewer.metainfo.xml.in
 src/about.py
 src/main.py
 src/window.py

@@ -19,7 +19,7 @@
 import gettext
 import locale
 
-APP_ID = "jp.co.masatn.ImageViewer"
+APP_ID = "io.github.masatn1973.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
 locale.textdomain(APP_ID)
@@ -37,7 +37,7 @@ gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk
 
 
-@Gtk.Template(resource_path="/jp/co/masatn/ImageViewer/shortcuts.ui")
+@Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/shortcuts.ui")
 class ImageviewerShortcuts(Gtk.ShortcutsWindow):
     __gtype_name__ = "ImageviewerShortcuts"
 

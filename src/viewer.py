@@ -25,7 +25,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
 
 
-@Gtk.Template(resource_path="/jp/co/masatn/ImageViewer/viewer.ui")
+@Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
     __gtype_name__ = "ImageViewerDialog"
 

@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'jp.co.masatn.ImageViewer.desktop.in',
-       output: 'jp.co.masatn.ImageViewer.desktop',
+        input: 'io.github.masatn1973.ImageViewer.desktop.in',
+       output: 'io.github.masatn1973.ImageViewer.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'jp.co.masatn.ImageViewer.metainfo.xml.in',
-       output: 'jp.co.masatn.ImageViewer.metainfo.xml',
+        input: 'io.github.masatn1973.ImageViewer.metainfo.xml.in',
+       output: 'io.github.masatn1973.ImageViewer.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: get_option('datadir') / 'metainfo'
@@ -24,7 +24,7 @@ appstreamcli = find_program('appstreamcli', required: false, disabler: true)
 test('Validate appstream file', appstreamcli,
      args: ['validate', '--no-net', '--explain', appstream_file])
 
-install_data('jp.co.masatn.ImageViewer.gschema.xml',
+install_data('io.github.masatn1973.ImageViewer.gschema.xml',
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 
@@ -37,8 +37,8 @@ test('Validate schema file',
 service_conf = configuration_data()
 service_conf.set('bindir', get_option('prefix') / get_option('bindir'))
 configure_file(
-  input: 'jp.co.masatn.ImageViewer.service.in',
-  output: 'jp.co.masatn.ImageViewer.service',
+  input: 'io.github.masatn1973.ImageViewer.service.in',
+  output: 'io.github.masatn1973.ImageViewer.service',
   configuration: service_conf,
   install_dir: get_option('datadir') / 'dbus-1' / 'services'
 )

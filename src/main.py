@@ -22,7 +22,7 @@ import locale
 import sys
 import gi
 
-APP_ID = "jp.co.masatn.ImageViewer"
+APP_ID = "io.github.masatn1973.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
 locale.textdomain(APP_ID)
@@ -38,15 +38,18 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Gio, Adw
 from .window import ImageViewerWindow
 
+resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
+resource._register()
+
 
 class ImageviewerApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
         super().__init__(
-            application_id="jp.co.masatn.ImageViewer",
+            application_id="io.github.masatn1973.ImageViewer",
             flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
-            resource_base_path="/jp/co/masatn/ImageViewer",
+            resource_base_path="/io/github/masatn1973/ImageViewer",
         )
         self.create_action("quit", lambda *_: self.quit(), ["<Ctrl>Q"])
 
