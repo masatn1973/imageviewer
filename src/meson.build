@@ -22,4 +22,4 @@ install_data([
   'viewer.py',
   'about.py',
   'shortcuts.py',
-], install_dir: '/app/share/imageviewer/imageviewer')
+], install_dir: '/app/share/imageviewer')
