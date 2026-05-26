@@ -7,7 +7,7 @@ gnome.compile_resources(
   source_dir: '.',
   gresource_bundle: true,
   install: true,
-  install_dir: '/apps/share/imageviewer'
+  install_dir: '/apps/share/imageviewer/imageviewer'
 )
 
 install_data(
