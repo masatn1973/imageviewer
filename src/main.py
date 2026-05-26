@@ -100,3 +100,7 @@ def main(version):
     """The application's entry point."""
     app = ImageviewerApplication()
     return app.run(sys.argv)
+
+
+if __name__ == "__main__":
+    sys.exit(main(None))
