@@ -40,7 +40,7 @@ from gi.repository import Gtk, Gio, Adw
 resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
 resource._register()
 
-from .window import ImageViewerWindow
+from window import ImageViewerWindow
 
 
 class ImageviewerApplication(Adw.Application):

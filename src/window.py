@@ -35,8 +35,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf
-from .shortcuts import ImageviewerShortcuts
-from .viewer import ImageViewerDialog
+from shortcuts import ImageviewerShortcuts
+from viewer import ImageViewerDialog
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
 THUMB = 128

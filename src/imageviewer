@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-export PYTHONPATH=/app/share/imageviewer
-
-exec python3 -m imageviewer.main "$@"
+exec python3 -m /app/share/imageviewer/main.py "$@"
