@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/github/masatn1973/ImageViewer">
+    <file>about.ui</file>
     <file>window.ui</file>
     <file>shortcuts.ui</file>
   </gresource>
