@@ -36,6 +36,10 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Gio, Adw
+
+resource = Gio.Resource.load("/app/share/imageviewer/imageviewer/imageviewer.gresource")
+resource._register()
+
 from .window import ImageViewerWindow
 
 resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
