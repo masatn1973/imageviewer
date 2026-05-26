@@ -3,6 +3,5 @@
   <gresource prefix="/io/github/masatn1973/ImageViewer">
     <file>window.ui</file>
     <file>shortcuts.ui</file>
-    <file>style.css</file>
   </gresource>
 </gresources>
