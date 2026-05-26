@@ -3,7 +3,7 @@
     "runtime": "org.gnome.Platform",
     "runtime-version": "50",
     "sdk": "org.gnome.Sdk",
-    "command": "python3",
+    "command": "imageviewer",
     "separate-locales": false,
     "finish-args": [
         "--share=ipc",
