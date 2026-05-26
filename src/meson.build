@@ -3,7 +3,7 @@ gnome = import('gnome')
 
 gnome.compile_resources(
   'imageviewer',
-  'imageviewer.gresources.xml',
+  'imageviewer.gresource.xml',
   source_dir: '.',
   gresource_bundle: true,
   install: true,
