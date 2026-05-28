@@ -48,7 +48,7 @@ class ImageviewerApplication(Adw.Application):
 
     def __init__(self):
         super().__init__(
-            application_id="io.github.masatn1973.ImageViewer",
+            application_id=APP_ID,
             flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
             resource_base_path="/io/github/masatn1973/ImageViewer",
         )
