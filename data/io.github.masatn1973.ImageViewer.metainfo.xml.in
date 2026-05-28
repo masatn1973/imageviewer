@@ -26,6 +26,6 @@
     <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
     <content_rating type="oars-1.1"/>
     <releases>
-      <release version="0.1.0" date="2026-05-24"/>
+      <release version="0.1.1" date="2026-05-28"/>
     </releases>
 </component>
