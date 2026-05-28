@@ -5,7 +5,9 @@
   <summary translatable="yes">Browse and view image files</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <developer_name>masatn</developer_name>
+  <developer id="io.github.masatn1973">
+    <name>masatn</name>
+  </developer>
   <launchable type="desktop-id">io.github.masatn1973.ImageViewer.desktop</launchable>
   <description>
     <p translatable="yes">
