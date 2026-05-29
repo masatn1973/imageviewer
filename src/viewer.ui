@@ -8,7 +8,7 @@
     <child>
       <object class="AdwToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar"/>
+          <object class="AdwHeaderBar" id="headerbar"/>
         </child>
         <property name="content">
           <object class="GtkScrolledWindow">

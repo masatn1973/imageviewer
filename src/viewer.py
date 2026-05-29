@@ -22,7 +22,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Adw, Gio
+from gi.repository import Gdk, Gtk, Adw
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
@@ -30,9 +30,19 @@ class ImageViewerDialog(Adw.Window):
     __gtype_name__ = "ImageViewerDialog"
 
     picture = Gtk.Template.Child()
+    headerbar = Gtk.Template.Child()
 
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__(transient_for=parent)
+
+        prev_button = Gtk.Button(icon_name="show_previous-symbolic")
+        prev_button.connect("clicked", lambda *_: self.show_previous_image())
+
+        lext_button = Gtk.Button(icon_name="go-next-symbolic")
+        lext_button.connect("clicked", lambda *_: self.show_next_image())
+
+        self.headerbar.pack_start(prev_button)
+        self.headerbar.pack_start(lext_button)
 
         self.image_files = image_files or []
         self.current_index = current_index
@@ -41,21 +51,6 @@ class ImageViewerDialog(Adw.Window):
             Gtk.Shortcut.new(
                 Gtk.ShortcutTrigger.parse_string("Right"),
                 Gtk.NamedAction.new("next-image"),
-            )
-        )
-
-        next_action = Gio.SimpleAction.new("next-image", None)
-        next_action.connect("activate", lambda *_: self.show_next_image())
-        self.add_action(next_action)
-
-        prev_action = Gio.SimpleAction.new("prev_image", None)
-        prev_action.connect("activate", lambda *_: self.show_previous_image())
-        self.add_action(prev_action)
-
-        self.add_shortcut(
-            Gtk.Shortcut.new(
-                Gtk.ShortcutTrigger.parse_string("Left"),
-                Gtk.NamedAction.new("prev_image"),
             )
         )
 
@@ -75,6 +70,10 @@ class ImageViewerDialog(Adw.Window):
 
         if self.image_files:
             self.show_current_image()
+
+        controller = Gtk.EventControllerKey()
+        controller.connect("key-pressed", self.on_key_pressed)
+        self.add_controller(controller)
 
         print("FILES:", len(self.image_files))
         print("INDEX:", self.current_index)
