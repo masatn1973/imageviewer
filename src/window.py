@@ -56,7 +56,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.app = app
         self.viewer = None
 
-        # アクション
+        self.image_files = []
+
+        # Action
         shortcuts_action = Gio.SimpleAction.new("shortcuts", None)
         shortcuts_action.connect("activate", self.on_shortcuts)
         self.add_action(shortcuts_action)
@@ -97,8 +99,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.viewer.close()
             self.viewer = None
 
-        viewer = ImageViewerDialog(self)
-        viewer.open_image(image_path)
+        viewer = ImageViewerDialog(
+            self, self.image_files, self.image_files.index(image_path)
+        )
         viewer.connect("close-request", self.on_viewer_close)
         viewer.present()
 
@@ -141,14 +144,16 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         win.present()
 
     def load_folder(self, path):
+        self.image_files = []
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
 
-        for name in os.listdir(path):
+        for name in sorted(os.listdir(path)):
             if not name.lower().endswith(IMAGE_EXTS):
                 continue
 
             filepath = os.path.join(path, name)
+            self.image_files.append(filepath)
 
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -172,8 +177,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                         self.viewer.close()
                         self.viewer = None
 
-                    viewer = ImageViewerDialog(self)
-                    viewer.open_image(path)
+                    viewer = ImageViewerDialog(
+                        self, self.image_files, self.image_files.index(path)
+                    )
                     viewer.connect("close-request", self.on_viewer_close)
                     viewer.present()
 
@@ -182,11 +188,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 gesture.connect("released", on_click)
 
                 child.add_controller(gesture)
-
-                # child = Gtk.FlowBoxChild()
-                # child.set_child(pic)
-                # child.image_path = filepath
-
                 self.flowbox.append(child)
 
             except Exception as e:
