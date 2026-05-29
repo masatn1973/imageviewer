@@ -75,19 +75,12 @@ class ImageViewerDialog(Adw.Window):
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
 
-        print("FILES:", len(self.image_files))
-        print("INDEX:", self.current_index)
-
     def on_key_pressed(self, controller, keyval, keycode, state):
-        print("KEY:", keyval, Gdk.keyval_name(keyval))
-
         if keyval == Gdk.KEY_Right:
-            print("NEXT")
             self.show_next_image()
             return True
 
         if keyval == Gdk.KEY_Left:
-            print("PREV")
             self.show_previous_image()
             return True
 
@@ -105,9 +98,7 @@ class ImageViewerDialog(Adw.Window):
         self.picture.set_filename(path)
 
     def show_next_image(self):
-        print("NEXT")
         if not self.image_files:
-            print("NO FILES")
             return
 
         self.current_index += 1
@@ -118,9 +109,7 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     def show_previous_image(self):
-        print("PREV")
         if not self.image_files:
-            print("NO FILES")
             return
 
         self.current_index -= 1
