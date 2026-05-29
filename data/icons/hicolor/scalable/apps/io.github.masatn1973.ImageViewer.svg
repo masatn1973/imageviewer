@@ -1,186 +1,51 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafcff"/>
+      <stop offset="100%" stop-color="#dbe8ff"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#edf3ff"/>
+    </linearGradient>
+    <linearGradient id="mountainA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#54d0ff"/>
+      <stop offset="100%" stop-color="#3584ff"/>
+    </linearGradient>
+    <linearGradient id="mountainB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7fe3ff"/>
+      <stop offset="100%" stop-color="#4caeff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.18"/>
+    </filter>
+  </defs>
 
-<svg
-   width="33.75mm"
-   height="33.75mm"
-   viewBox="0 0 33.75 33.75"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
-   sodipodi:docname="io.github.masatn1973.ImageViewer.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     inkscape:zoom="5.6"
-     inkscape:cx="77.589286"
-     inkscape:cy="64.107143"
-     inkscape:window-width="1280"
-     inkscape:window-height="958"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs1" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="fill:#0000ff;stroke-width:2;stroke-linejoin:bevel"
-       id="rect1"
-       width="25.040924"
-       height="25.040924"
-       x="4.354538"
-       y="4.354538"
-       ry="3.7437005" />
-    <rect
-       style="fill:#00ffff;stroke-width:1.91132;stroke-linejoin:bevel"
-       id="rect1-4"
-       width="23.954243"
-       height="23.906996"
-       x="4.8978786"
-       y="4.9215021"
-       ry="3.5741744" />
-    <rect
-       style="fill:#0000ff;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2"
-       width="5.2916665"
-       height="5.0081844"
-       x="5.5751486"
-       y="6.0476184"
-       ry="1.3701642" />
-    <rect
-       style="fill:#008000;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-7"
-       width="5.2916665"
-       height="5.0081844"
-       x="11.27944"
-       y="6.1043153"
-       ry="1.3701642" />
-    <rect
-       style="fill:#ff5555;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-78"
-       width="5.2916665"
-       height="5.0081844"
-       x="16.983732"
-       y="6.1232142"
-       ry="1.3701642" />
-    <rect
-       style="fill:#ffe680;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-3"
-       width="5.2916665"
-       height="5.0081844"
-       x="22.688023"
-       y="6.1137648"
-       ry="1.3701642" />
-    <rect
-       style="fill:#c8beb7;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-0"
-       width="5.2916665"
-       height="5.0081844"
-       x="5.7168899"
-       y="11.518824"
-       ry="1.3701642" />
-    <rect
-       style="fill:#e9afaf;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-7-6"
-       width="5.2916665"
-       height="5.0081844"
-       x="11.421182"
-       y="11.575521"
-       ry="1.3701642" />
-    <rect
-       style="fill:#00ff00;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-78-8"
-       width="5.2916665"
-       height="5.0081844"
-       x="17.125473"
-       y="11.594419"
-       ry="1.3701642" />
-    <rect
-       style="fill:#280b0b;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-3-9"
-       width="5.2916665"
-       height="5.0081844"
-       x="22.829765"
-       y="11.58497"
-       ry="1.3701642" />
-    <rect
-       style="fill:#ff00ff;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-9"
-       width="5.2916665"
-       height="5.0081844"
-       x="5.8775301"
-       y="16.99003"
-       ry="1.3701642" />
-    <rect
-       style="fill:#c87137;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-7-5"
-       width="5.2916665"
-       height="5.0081844"
-       x="11.581821"
-       y="17.046728"
-       ry="1.3701642" />
-    <rect
-       style="fill:#917c6f;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-78-0"
-       width="5.2916665"
-       height="5.0081844"
-       x="17.286114"
-       y="17.065626"
-       ry="1.3701642" />
-    <rect
-       style="fill:#d35f5f;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-3-4"
-       width="5.2916665"
-       height="5.0081844"
-       x="22.990404"
-       y="17.056177"
-       ry="1.3701642" />
-    <rect
-       style="fill:#000080;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-2"
-       width="5.2916665"
-       height="5.0081844"
-       x="5.8208332"
-       y="22.461235"
-       ry="1.3701642" />
-    <rect
-       style="fill:#e3dedb;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-7-7"
-       width="5.2916665"
-       height="5.0081844"
-       x="11.525126"
-       y="22.517933"
-       ry="1.3701642" />
-    <rect
-       style="fill:#ffcc00;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-78-2"
-       width="5.2916665"
-       height="5.0081844"
-       x="17.229416"
-       y="22.536831"
-       ry="1.3701642" />
-    <rect
-       style="fill:#916f6f;stroke-width:2;stroke-linejoin:bevel"
-       id="rect2-3-2"
-       width="5.2916665"
-       height="5.0081844"
-       x="22.933708"
-       y="22.527382"
-       ry="1.3701642" />
-  </g>
+  <!-- GNOME/libadwaita style rounded tile -->
+  <rect x="32" y="32" width="448" height="448" rx="96"
+        fill="url(#frame)" filter="url(#shadow)"/>
+
+  <!-- image area -->
+  <rect x="64" y="64" width="384" height="384" rx="72"
+        fill="url(#bg)"/>
+
+  <!-- sun -->
+  <circle cx="150" cy="145" r="38" fill="#ffbf3d"/>
+
+  <!-- cloud -->
+  <path d="M300 130c12-26 50-31 70-9c25-8 50 10 50 35H270c0-15 13-26 30-26z"
+        fill="#d9e7f5"/>
+
+  <!-- mountains -->
+  <path d="M92 350 L210 225 L315 350 Z" fill="url(#mountainB)"/>
+  <path d="M180 350 L340 165 L420 350 Z" fill="url(#mountainA)"/>
+
+  <!-- subtle horizon -->
+  <rect x="64" y="350" width="384" height="40"
+        fill="#bde7ff" opacity="0.8"/>
+
+  <!-- GNOME-style highlight -->
+  <path d="M64 120 C64 88,88 64,120 64 L392 64"
+        fill="none" stroke="#ffffff" stroke-width="8" opacity="0.65"/>
 </svg>
