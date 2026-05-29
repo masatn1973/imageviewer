@@ -79,7 +79,9 @@ class ImageViewerDialog(Adw.Window):
         print("INDEX:", self.current_index)
 
     def on_key_pressed(self, controller, keyval, keycode, state):
-        print("KEY:", keyval)
+        print("KEY:", keyval, Gdk.keyval_name(keyval))
+
+        return False
 
         if keyval == Gdk.KEY_Right:
             print("NEXT")
