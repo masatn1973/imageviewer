@@ -40,7 +40,7 @@ from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf
 from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
 
-IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
+IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp", ".tiff")
 THUMB = 128
 
 
