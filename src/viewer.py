@@ -81,8 +81,6 @@ class ImageViewerDialog(Adw.Window):
     def on_key_pressed(self, controller, keyval, keycode, state):
         print("KEY:", keyval, Gdk.keyval_name(keyval))
 
-        return False
-
         if keyval == Gdk.KEY_Right:
             print("NEXT")
             self.show_next_image()
@@ -100,6 +98,8 @@ class ImageViewerDialog(Adw.Window):
             return
 
         path = self.image_files[self.current_index]
+
+        print("SHOW:", self.current_index, path)
 
         self.set_title(os.path.basename(path))
         self.picture.set_filename(path)
