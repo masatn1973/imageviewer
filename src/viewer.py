@@ -92,8 +92,6 @@ class ImageViewerDialog(Adw.Window):
 
         path = self.image_files[self.current_index]
 
-        print("SHOW:", self.current_index, path)
-
         self.set_title(os.path.basename(path))
         self.picture.set_filename(path)
 
