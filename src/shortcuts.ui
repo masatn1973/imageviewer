@@ -23,6 +23,18 @@
               </object>
             </child>
             <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Previous Image</property>
+                <property name="accelerator">Left</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Next Image</property>
+                <property name="accelerator">Right</property>
+              </object>
+            </child>
+            <child>
                 <object class="GtkShortcutsShortcut">
                     <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
                     <property name="accelerator">&lt;Ctrl&gt;question</property>
