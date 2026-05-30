@@ -28,12 +28,18 @@
     <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
     <content_rating type="oars-1.1"/>
     <releases>
-      <release version="0.1.1" date="2026-05-30"/>
+      <release version="0.1.1" date="2026-05-30">
         <description>
-          <p translatable="yes">
-            Supports .bmp and .tiff file format.
-            Support Left and Right arrow key for view Previous and Next image.
-          </p>
+          <ul>
+            <li translatable="yes">Supports .bmp and .tiff file format.</li>
+            <li translatable="yes">Support Left and Right arrow key for view Previous and Next image.</li>
+          </ul>
         </description>
+      </release>
+      <release version=0.1.0" date="2026-05-26">
+        <description>
+          <p translatable="yes">Initial release</p>
+        </description>
+      </release>
     </releases>
 </component>
