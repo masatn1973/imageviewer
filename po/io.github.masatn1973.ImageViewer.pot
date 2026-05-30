@@ -1,19 +1,20 @@
-# io.github.masatn1973.ImageViewer.pot
-# Copyright (C) 2026 masatn
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the io.github.masatn1973.ImageViewer package.
-# masatn <masatn1973@gmail.com>, 2026.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 14:49+0900\n"
-"PO-Revision-Date: 2026-05-30 14:54+9000\n"
-"Last-Translator: masatn <masatn1973@gmail.com>\n"
+"POT-Creation-Date: 2026-05-30 15:58+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:2
@@ -43,6 +44,18 @@ msgid ""
 "Image Viewer is a lightweight application for browsing and viewing image "
 "files. It is built with GTK4 and libadwaita and supports common image "
 "formats."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid "Supports .bmp and .tiff file format."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+msgid "Support Left and Right arrow key for view Previous and Next image."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+msgid "Initial release"
 msgstr ""
 
 #: src/about.ui:12
