@@ -1,15 +1,15 @@
-# ja.po
+# io.github.masatn1973.ImageViewer.pot
 # Copyright (C) 2026 masatn
-# This file is distributed under the same license as the imageviewer package.
-# masatn <masatn1973@gmail.com>, 2026
+# This file is distributed under the same license as the io.github.masatn1973.ImageViewer package.
+# masatn <masatn1973@gmail.com>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: imageviewer\n"
+"Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-22 23:36+0900\n"
-"PO-Revision-Date: 2026-05-11 19:25+0900\n"
+"POT-Creation-Date: 2026-05-30 14:49+0900\n"
+"PO-Revision-Date: 2026-05-30 14:57+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Poedit 3.9\n"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:2
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5 src/about.ui:7
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:4 src/about.ui:7
 #: src/window.ui:6
 msgid "Image Viewer"
 msgstr "画像ビューワ"
@@ -30,24 +30,24 @@ msgstr "画像を閲覧"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
-msgstr "GTK;"
+msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:7
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
 msgid "Browse and view image files"
-msgstr "画像ファイルを閲覧して表示する"
+msgstr "画像ファイルの参照と表示"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:21
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
 msgid ""
 "Image Viewer is a lightweight application for browsing and viewing image "
 "files. It is built with GTK4 and libadwaita and supports common image "
 "formats."
 msgstr ""
-"画像ビューワは、画像ファイルを閲覧・表示するための軽量アプリケーションです。"
-"GTK4とlibadwaitaを使用して構築されており、一般的な画像フォーマットをサポート"
+"Image Viewerは、画像ファイルの閲覧および表示用の軽量なアプリケーションで"
+"す。GTK4とlibadwaitaで構築されており、一般的な画像フォーマットをサポート"
 "しています。"
 
 #: src/about.ui:12
@@ -71,10 +71,18 @@ msgid "Close Image"
 msgstr "画像を閉じる"
 
 #: src/shortcuts.ui:27
+msgid "Previous Image"
+msgstr "前の画像"
+
+#: src/shortcuts.ui:33
+msgid "Next Image"
+msgstr "次の画像"
+
+#: src/shortcuts.ui:39
 msgid "Show Keyboard Shortcuts"
 msgstr "ショートカットの表示"
 
-#: src/shortcuts.ui:33
+#: src/shortcuts.ui:45
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 
@@ -89,18 +97,3 @@ msgstr "キーボードショートカット"
 #: src/window.ui:53
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
-
-#~ msgid "Keep the summary shorter, between 10 and 35 characters"
-#~ msgstr "要約は 10 から 35 文字程度の短い文字にしてください"
-
-#~ msgid "No description"
-#~ msgstr "説明なし"
-
-#~ msgid "Developer name"
-#~ msgstr "開発者"
-
-#~ msgid "A caption"
-#~ msgstr "キャプション"
-
-#~ msgid "translator-credits"
-#~ msgstr "翻訳者"
