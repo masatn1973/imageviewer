@@ -4,4 +4,4 @@
 *.flatpak
 builddir/
 repo/
-
+*.mo
