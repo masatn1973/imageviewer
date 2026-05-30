@@ -29,5 +29,11 @@
     <content_rating type="oars-1.1"/>
     <releases>
       <release version="0.1.1" date="2026-05-28"/>
+        <description>
+          <p translatable="yes">
+            Supports .bmp and .tiff file format.
+            Support Left and Right arrow key for view Previous and Next image.
+          </p>
+        </description>
     </releases>
 </component>
