@@ -22,7 +22,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Adw
+from gi.repository import Gdk, Gtk, Adw, GdkPixbuf
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
@@ -92,8 +92,7 @@ class ImageViewerDialog(Adw.Window):
 
         path = self.image_files[self.current_index]
 
-        self.set_title(os.path.basename(path))
-        self.picture.set_filename(path)
+        self.open_image(self.image_files[self.current_index])
 
     def show_next_image(self):
         if not self.image_files:
@@ -119,4 +118,11 @@ class ImageViewerDialog(Adw.Window):
 
     def open_image(self, path):
         self.set_title(os.path.basename(path))
-        self.picture.set_filename(path)
+
+        try:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+            texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+            self.picture.set_paintable(texture)
+        except Exception as e:
+            print(f"Failed to open image: {path}")
+            print(e)
