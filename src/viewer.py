@@ -91,8 +91,7 @@ class ImageViewerDialog(Adw.Window):
             return
 
         path = self.image_files[self.current_index]
-
-        self.open_image(self.image_files[self.current_index])
+        self.open_image(path)
 
     def show_next_image(self):
         if not self.image_files:
@@ -121,7 +120,11 @@ class ImageViewerDialog(Adw.Window):
 
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-            texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+            self.picture.set_pixbuf(pixbuf)
+
+            self.picture.set_hexpand(True)
+            self.picture.set_hexpand(True)
+
             self.picture.set_paintable(texture)
         except Exception as e:
             print(f"Failed to open image: {path}")

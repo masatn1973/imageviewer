@@ -53,10 +53,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def __init__(self, app):
         super().__init__(application=app)
 
-        self.app = app
         self.viewer = None
-
         self.image_files = []
+
+        self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+
+        self.flowbox.connect("child-activated", self.on_child_activated)
+
+        self.connect("close-request", self.on_close_request)
 
         # Action
         shortcuts_action = Gio.SimpleAction.new("shortcuts", None)
@@ -126,10 +130,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             if path:
                 self.load_folder(path)
 
-    def on_close_request(self, *args):
-        self.get_application().quit()
-        return False
-
     def on_about(self, action, param):
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/about.ui"
@@ -145,6 +145,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def load_folder(self, path):
         self.image_files = []
+
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
 
@@ -161,38 +162,42 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 )
 
                 pic = Gtk.Picture.new_for_pixbuf(pixbuf)
-
                 pic.set_size_request(THUMB, THUMB)
                 pic.set_content_fit(Gtk.ContentFit.COVER)
 
                 child = Gtk.FlowBoxChild()
                 child.set_child(pic)
-
                 child.image_path = filepath
 
-                gesture = Gtk.GestureClick()
-
-                def on_click(gesture, n, x, y, path=filepath):
-                    if self.viewer is not None:
-                        self.viewer.close()
-                        self.viewer = None
-
-                    viewer = ImageViewerDialog(
-                        self, self.image_files, self.image_files.index(path)
-                    )
-                    viewer.connect("close-request", self.on_viewer_close)
-                    viewer.present()
-
-                    self.viewer = viewer
-
-                gesture.connect("released", on_click)
-
-                child.add_controller(gesture)
                 self.flowbox.append(child)
 
             except Exception as e:
                 print("Failed to Read files:", filepath, e)
 
+    def on_child_activated(self, flowgox, child):
+        filepath = getattr(child, "image_path", None)
+        if not filepath:
+            return
+
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
+
+        viewer = ImageViewerDialog(
+            self,
+            self.image_files,
+            self.image_files.index(filepath) if filepath in self.image_files else 0,
+        )
+
+        viewer.connect("close-request", self.on_viewer_close)
+        viewer.present()
+
+        self.viewer = viewer
+
     def on_viewer_close(self, win):
         self.viewer = None
+        return False
+
+    def on_close_request(self, *args):
+        self.get_application().quit()
         return False
