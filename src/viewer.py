@@ -35,7 +35,7 @@ class ImageViewerDialog(Adw.Window):
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__(transient_for=parent)
 
-        prev_button = Gtk.Button(icon_name="show_previous-symbolic")
+        prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
 
         lext_button = Gtk.Button(icon_name="go-next-symbolic")
