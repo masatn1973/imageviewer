@@ -84,7 +84,54 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.open_selected_image()
             return True
 
-        return False
+        selected = self.flowbox.get_selected_children()
+
+        if not selected:
+            return False
+
+        child = selected[0]
+
+        index = child.get_index()
+        new_index = index
+        first_child = self.flowbox.get_child_at_index(0)
+
+        if first_child is None:
+            return False
+
+        item_width = (
+            first_child.get_allocated_width() + self.flowbox.get_column_spacing()
+        )
+
+        columns = max(
+            1,
+            self.flowbox.get_allocated_width() // item_width,
+        )
+
+        if keyval == Gdk.KEY_h:
+            new_index -= 1
+
+        elif keyval == Gdk.KEY_j:
+            new_index += columns
+
+        elif keyval == Gdk.KEY_k:
+            new_index -= columns
+
+        elif keyval == Gdk.KEY_l:
+            new_index += 1
+
+        else:
+            return False
+
+        new_index = max(0, min(new_index, len(self.image_files) - 1))
+
+        target = self.flowbox.get_child_at_index(new_index)
+
+        if target:
+            self.flowbox.unselect_all()
+            self.flowbox.select_child(target)
+            target.grab_focus()
+
+        return True
 
     def open_selected_image(self):
         selected = self.flowbox.get_selected_children()
@@ -173,6 +220,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
             except Exception as e:
                 print("Failed to Read files:", filepath, e)
+
+        if self.image_files:
+            first = self.flowbox.get_child_at_index(0)
+
+            if first:
+                self.flowbox.select_child(first)
 
     def on_child_activated(self, flowgox, child):
         filepath = getattr(child, "image_path", None)

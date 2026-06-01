@@ -76,11 +76,11 @@ class ImageViewerDialog(Adw.Window):
         self.add_controller(controller)
 
     def on_key_pressed(self, controller, keyval, keycode, state):
-        if keyval == Gdk.KEY_Right:
+        if keyval in (Gdk.KEY_Right, Gdk.KEY_l):
             self.show_next_image()
             return True
 
-        if keyval == Gdk.KEY_Left:
+        if keyval in (Gdk.KEY_Left, Gdk.KEY_h):
             self.show_previous_image()
             return True
 
@@ -120,10 +120,7 @@ class ImageViewerDialog(Adw.Window):
 
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-            self.picture.set_pixbuf(pixbuf)
-
-            self.picture.set_hexpand(True)
-            self.picture.set_hexpand(True)
+            texture = Gdk.Texture.new_for_pixbuf(pixbuf)
 
             self.picture.set_paintable(texture)
         except Exception as e:

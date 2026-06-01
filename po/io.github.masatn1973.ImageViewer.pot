@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 15:58+0900\n"
+"POT-Creation-Date: 2026-06-01 19:51+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,14 +47,18 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
-msgid "Supports .bmp and .tiff file format."
-msgstr ""
-
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
-msgid "Support Left and Right arrow key for view Previous and Next image."
+msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+msgid "Supports .bmp and .tiff file format."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
+msgid "Support Left and Right arrow key for view Previous and Next image."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
 msgid "Initial release"
 msgstr ""
 
