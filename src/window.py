@@ -49,6 +49,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     __gtype_name__ = "ImageViewerWindow"
 
     flowbox = Gtk.Template.Child()
+    status_label = Gtk.Template.Child()
+    scrolled_window = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__(application=app)
@@ -76,20 +78,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.connect("close-request", self.on_close_request)
 
         controller = Gtk.EventControllerKey()
+        controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
 
     def on_key_pressed(self, controller, keyval, keycode, state):
-        if keyval in (Gdk.KEY_space, Gdk.KEY_Return):
-            self.open_selected_image()
-            return True
-
         selected = self.flowbox.get_selected_children()
 
         if not selected:
             return False
 
         child = selected[0]
+
+        if keyval in (Gdk.KEY_space, Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            self.on_child_activated(self.flowbox, selected[0])
+            return True
 
         index = child.get_index()
         new_index = index
@@ -107,17 +110,105 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.flowbox.get_allocated_width() // item_width,
         )
 
-        if keyval == Gdk.KEY_h:
-            new_index -= 1
+        if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
+            if new_index > 0:
+                new_index -= 1
 
-        elif keyval == Gdk.KEY_j:
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval in (Gdk.KEY_j, Gdk.KEY_Down):
             new_index += columns
 
-        elif keyval == Gdk.KEY_k:
-            new_index -= columns
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
 
-        elif keyval == Gdk.KEY_l:
+        elif keyval in (Gdk.KEY_k, Gdk.KEY_Up):
+            if (new_index - columns) >= 0:
+                new_index -= columns
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval in (Gdk.KEY_l, Gdk.KEY_Right, Gdk.KEY_Tab):
             new_index += 1
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval == Gdk.KEY_Home:
+            new_index = 0
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval == Gdk.KEY_End:
+            new_index = len(self.image_files) - 1
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval == Gdk.KEY_Page_Up:
+            vadj = self.scrolled_window.get_vadjustment()
+            page_height = vadj.get_page_size()
+
+            row_height = (
+                first_child.get_allocated_height() + self.flowbox.get_row_spacing()
+            )
+
+            visible_rows = max(1, int(page_height // row_height))
+            page_size = visible_rows * columns
+
+            if (new_index - page_size) > 0:
+                new_index -= page_size
+            else:
+                new_index = 0
+
+            target = self.flowbox.get_child_at_index(new_index)
+            if target:
+                self.flowbox.select_child(target)
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
+
+        elif keyval == Gdk.KEY_Page_Down:
+            vadj = self.scrolled_window.get_vadjustment()
+            page_height = vadj.get_page_size()
+
+            row_height = (
+                first_child.get_allocated_height() + self.flowbox.get_row_spacing()
+            )
+
+            visible_rows = max(1, int(page_height // row_height))
+            page_size = visible_rows * columns
+
+            if (new_index + page_size) <= len(self.image_files):
+                new_index += page_size
+            else:
+                new_index = len(self.image_files) - 1
+
+            target = self.flowbox.get_child_at_index(new_index)
+            if target:
+                self.flowbox.select_child(target)
+
+            filename = os.path.basename(self.image_files[new_index])
+            self.status_label.set_text(
+                f"{new_index + 1}/{len(self.image_files)} : {filename}"
+            )
 
         else:
             return False
@@ -164,7 +255,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         dialog.select_folder(self, None, self.on_folder_selected)
 
     def on_folder_selected(self, dialog, result):
-
         try:
             folder = dialog.select_folder_finish(result)
 
@@ -196,6 +286,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
 
+        i = 0
+        self.status_label.set_text(f"{i}")
         for name in sorted(os.listdir(path)):
             if not name.lower().endswith(IMAGE_EXTS):
                 continue
@@ -217,6 +309,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 child.image_path = filepath
 
                 self.flowbox.append(child)
+
+                i += 1
+                self.status_label.set_text(f"{i} image(s) loaded.")
 
             except Exception as e:
                 print("Failed to Read files:", filepath, e)
@@ -246,6 +341,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         viewer.present()
 
         self.viewer = viewer
+
+        index = self.image_files.index(filepath)
+        filename = os.path.basename(filepath)
+
+        self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
 
     def on_viewer_close(self, win):
         self.viewer = None
