@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 19:51+0900\n"
+"POT-Creation-Date: 2026-06-03 00:55+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,19 +47,31 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
-msgid "Supports vim like keyboard operation. (h, j, k, l)"
+msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
-msgid "Supports .bmp and .tiff file format."
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
+msgid "Supports vim like keyboard operation. (h, j, k, l)"
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+msgid "Supports .bmp and .tiff file format."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:50
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Initial release"
+msgstr ""
+
+#: src/window.py:314
+msgid "image(s) loaded."
 msgstr ""
 
 #: src/about.ui:12
@@ -98,14 +110,18 @@ msgstr ""
 msgid "Show About Dialog"
 msgstr ""
 
-#: src/window.ui:43
+#: src/window.ui:37
+msgid "Ready."
+msgstr ""
+
+#: src/window.ui:61
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:49
+#: src/window.ui:67
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/window.ui:53
+#: src/window.ui:71
 msgid "About ImageViewer"
 msgstr ""

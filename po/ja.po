@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 19:51+0900\n"
-"PO-Revision-Date: 2026-06-01 20:05+0900\n"
+"POT-Creation-Date: 2026-06-03 00:55+0900\n"
+"PO-Revision-Date: 2026-06-03 01:16+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -51,20 +51,32 @@ msgstr ""
 "しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid "Added status bar."
+msgstr "ステータスバーの追加"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+msgid "Supports Home, End, PageUp, PageDown keys."
+msgstr "Home, End, PageUp, PageDown キーのサポート"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr "vim 風のキーボード操作のサポート(h, j, k, l)"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
 msgid "Supports .bmp and .tiff file format."
 msgstr ".bmp および .tiff 形式のファイルのサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:50
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr "左および右矢印キーによる、前の画像または次の画像の表示をサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Initial release"
 msgstr "最初のリリース"
+
+#: src/window.py:314
+msgid "image(s) loaded."
+msgstr "枚の画像をロードしました"
 
 #: src/about.ui:12
 msgid "Simple GTK4 Image Viewer"
@@ -102,14 +114,18 @@ msgstr "ショートカットの表示"
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 
-#: src/window.ui:43
+#: src/window.ui:37
+msgid "Ready."
+msgstr "準備完了"
+
+#: src/window.ui:61
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:49
+#: src/window.ui:67
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: src/window.ui:53
+#: src/window.ui:71
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"

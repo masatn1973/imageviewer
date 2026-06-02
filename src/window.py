@@ -311,7 +311,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 self.flowbox.append(child)
 
                 i += 1
-                self.status_label.set_text(f"{i} image(s) loaded.")
+                self.status_label.set_text(f"{i} " + _("image(s) loaded."))
 
             except Exception as e:
                 print("Failed to Read files:", filepath, e)
