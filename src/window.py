@@ -113,6 +113,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
             if new_index > 0:
                 new_index -= 1
+                print(new_index)
 
             filename = os.path.basename(self.image_files[new_index])
             self.status_label.set_text(
@@ -120,7 +121,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             )
 
         elif keyval in (Gdk.KEY_j, Gdk.KEY_Down):
-            new_index += columns
+            if (new_index + columns) < len(self.image_files):
+                new_index += columns
+                print(new_index)
 
             filename = os.path.basename(self.image_files[new_index])
             self.status_label.set_text(
@@ -130,6 +133,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         elif keyval in (Gdk.KEY_k, Gdk.KEY_Up):
             if (new_index - columns) >= 0:
                 new_index -= columns
+                print(new_index)
 
             filename = os.path.basename(self.image_files[new_index])
             self.status_label.set_text(
@@ -137,7 +141,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             )
 
         elif keyval in (Gdk.KEY_l, Gdk.KEY_Right, Gdk.KEY_Tab):
-            new_index += 1
+            if (new_index + 1) < len(self.image_files):
+                new_index += 1
+                print(new_index)
 
             filename = os.path.basename(self.image_files[new_index])
             self.status_label.set_text(
