@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 00:55+0900\n"
-"PO-Revision-Date: 2026-06-03 01:16+0900\n"
+"POT-Creation-Date: 2026-06-03 10:33+0900\n"
+"PO-Revision-Date: 2026-06-03 10:41+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -95,22 +95,50 @@ msgid "Open Folder"
 msgstr "フォルダを開く"
 
 #: src/shortcuts.ui:21
+msgid "Open Image"
+msgstr "画像を開く"
+
+#: src/shortcuts.ui:27
 msgid "Close Image"
 msgstr "画像を閉じる"
 
-#: src/shortcuts.ui:27
+#: src/shortcuts.ui:33
+msgid "Image Above"
+msgstr "上の画像"
+
+#: src/shortcuts.ui:39
 msgid "Previous Image"
 msgstr "前の画像"
 
-#: src/shortcuts.ui:33
+#: src/shortcuts.ui:45
 msgid "Next Image"
 msgstr "次の画像"
 
-#: src/shortcuts.ui:39
+#: src/shortcuts.ui:51
+msgid "Image Below"
+msgstr "下の画像"
+
+#: src/shortcuts.ui:57
+msgid "First Image"
+msgstr "最初の画像"
+
+#: src/shortcuts.ui:63
+msgid "Last Image"
+msgstr "最後の画像"
+
+#: src/shortcuts.ui:69
+msgid "Previous Page"
+msgstr "前のページ"
+
+#: src/shortcuts.ui:75
+msgid "Next Page"
+msgstr "次のページ"
+
+#: src/shortcuts.ui:81
 msgid "Show Keyboard Shortcuts"
 msgstr "ショートカットの表示"
 
-#: src/shortcuts.ui:45
+#: src/shortcuts.ui:87
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 00:55+0900\n"
+"POT-Creation-Date: 2026-06-03 10:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,22 +91,50 @@ msgid "Open Folder"
 msgstr ""
 
 #: src/shortcuts.ui:21
-msgid "Close Image"
+msgid "Open Image"
 msgstr ""
 
 #: src/shortcuts.ui:27
-msgid "Previous Image"
+msgid "Close Image"
 msgstr ""
 
 #: src/shortcuts.ui:33
-msgid "Next Image"
+msgid "Image Above"
 msgstr ""
 
 #: src/shortcuts.ui:39
-msgid "Show Keyboard Shortcuts"
+msgid "Previous Image"
 msgstr ""
 
 #: src/shortcuts.ui:45
+msgid "Next Image"
+msgstr ""
+
+#: src/shortcuts.ui:51
+msgid "Image Below"
+msgstr ""
+
+#: src/shortcuts.ui:57
+msgid "First Image"
+msgstr ""
+
+#: src/shortcuts.ui:63
+msgid "Last Image"
+msgstr ""
+
+#: src/shortcuts.ui:69
+msgid "Previous Page"
+msgstr ""
+
+#: src/shortcuts.ui:75
+msgid "Next Page"
+msgstr ""
+
+#: src/shortcuts.ui:81
+msgid "Show Keyboard Shortcuts"
+msgstr ""
+
+#: src/shortcuts.ui:87
 msgid "Show About Dialog"
 msgstr ""
 

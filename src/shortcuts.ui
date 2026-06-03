@@ -18,20 +18,62 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Open Image</property>
+                <property name="accelerator">space Return KP_Enter</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Close Image</property>
                 <property name="accelerator">Escape</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Image Above</property>
+                <property name="accelerator">Up k</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Previous Image</property>
-                <property name="accelerator">Left</property>
+                <property name="accelerator">Left h</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Next Image</property>
-                <property name="accelerator">Right</property>
+                <property name="accelerator">Right l</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Image Below</property>
+                <property name="accelerator">Down j</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">First Image</property>
+                <property name="accelerator">Home</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Last Image</property>
+                <property name="accelerator">End</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Previous Page</property>
+                <property name="accelerator">Page_Up</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Next Page</property>
+                <property name="accelerator">Page_Down</property>
               </object>
             </child>
             <child>
