@@ -113,58 +113,24 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
             if new_index > 0:
                 new_index -= 1
-                print(new_index)
-
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
 
         elif keyval in (Gdk.KEY_j, Gdk.KEY_Down):
             if (new_index + columns) < len(self.image_files):
                 new_index += columns
-                print(new_index)
-
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
 
         elif keyval in (Gdk.KEY_k, Gdk.KEY_Up):
             if (new_index - columns) >= 0:
                 new_index -= columns
-                print(new_index)
-
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
 
         elif keyval in (Gdk.KEY_l, Gdk.KEY_Right, Gdk.KEY_Tab):
             if (new_index + 1) < len(self.image_files):
                 new_index += 1
-                print(new_index)
-
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
 
         elif keyval == Gdk.KEY_Home:
             new_index = 0
 
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
-
         elif keyval == Gdk.KEY_End:
             new_index = len(self.image_files) - 1
-
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
 
         elif keyval == Gdk.KEY_Page_Up:
             vadj = self.scrolled_window.get_vadjustment()
@@ -186,11 +152,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             if target:
                 self.flowbox.select_child(target)
 
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
-
         elif keyval == Gdk.KEY_Page_Down:
             vadj = self.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
@@ -211,13 +172,13 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             if target:
                 self.flowbox.select_child(target)
 
-            filename = os.path.basename(self.image_files[new_index])
-            self.status_label.set_text(
-                f"{new_index + 1}/{len(self.image_files)} : {filename}"
-            )
-
         else:
             return False
+
+        filename = os.path.basename(self.image_files[new_index])
+        self.status_label.set_text(
+            f"{new_index + 1}/{len(self.image_files)} : {filename}"
+        )
 
         new_index = max(0, min(new_index, len(self.image_files) - 1))
 
