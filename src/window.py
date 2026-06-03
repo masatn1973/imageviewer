@@ -36,7 +36,7 @@ from gettext import gettext as _
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf
+from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf, GLib
 from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
 
@@ -253,41 +253,52 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
 
-        i = 0
-        self.status_label.set_text(f"{i}")
+        self.pending_files = []
+
         for name in sorted(os.listdir(path)):
-            if not name.lower().endswith(IMAGE_EXTS):
-                continue
+            if name.lower().endswith(IMAGE_EXTS):
+                filepath = os.path.join(path, name)
+                self.image_files.append(filepath)
+                self.pending_files.append(filepath)
 
-            filepath = os.path.join(path, name)
-            self.image_files.append(filepath)
+        self.loaded_count = 0
 
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                    filepath, THUMB, THUMB, True
-                )
+        GLib.idle_add(self.load_next_thumbnail)
 
-                pic = Gtk.Picture.new_for_pixbuf(pixbuf)
-                pic.set_size_request(THUMB, THUMB)
-                pic.set_content_fit(Gtk.ContentFit.COVER)
+    def load_next_thumbnail(self):
+        if not self.pending_files:
+            if self.image_files:
+                first = self.flowbox.get_child_at_index(0)
+                if first:
+                    self.flowbox.select_child(first)
 
-                child = Gtk.FlowBoxChild()
-                child.set_child(pic)
-                child.image_path = filepath
+            return False
 
-                self.flowbox.append(child)
+        filepath = self.pending_files.pop(0)
 
-                i += 1
-                self.status_label.set_text(f"{i} " + _("image(s) loaded."))
+        try:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                filepath, THUMB, THUMB, True
+            )
 
-            except Exception as e:
-                print("Failed to Read files:", filepath, e)
+            pic = Gtk.Picture.new_for_pixbuf(pixbuf)
+            pic.set_size_request(THUMB, THUMB)
+            pic.set_content_fit(Gtk.ContentFit.COVER)
 
-        if self.image_files:
-            first = self.flowbox.get_child_at_index(0)
+            child = Gtk.FlowBoxChild()
+            child.set_child(pic)
+            child.image_path = filepath
 
-            if first:
-                self.flowbox.select_child(first)
+            self.flowbox.append(child)
+
+            self.loaded_count += 1
+
+            self.status_label.set_text(f"{self.loaded_count} " + _("image(s) loaded."))
+
+        except Exception as e:
+            print("Failed to Read files:", filepath, e)
+
+        return True
 
     def on_child_activated(self, flowgox, child):
         filepath = getattr(child, "image_path", None)
