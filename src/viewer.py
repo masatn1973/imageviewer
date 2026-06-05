@@ -38,11 +38,11 @@ class ImageViewerDialog(Adw.Window):
         prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
 
-        lext_button = Gtk.Button(icon_name="go-next-symbolic")
-        lext_button.connect("clicked", lambda *_: self.show_next_image())
+        next_button = Gtk.Button(icon_name="go-next-symbolic")
+        next_button.connect("clicked", lambda *_: self.show_next_image())
 
         self.headerbar.pack_start(prev_button)
-        self.headerbar.pack_start(lext_button)
+        self.headerbar.pack_start(next_button)
 
         self.image_files = image_files or []
         self.current_index = current_index
