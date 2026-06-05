@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:33+0900\n"
+"POT-Creation-Date: 2026-06-05 22:12+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-#: src/window.py:314
+#: src/window.py:296
 msgid "image(s) loaded."
 msgstr ""
 
@@ -115,26 +115,30 @@ msgid "Image Below"
 msgstr ""
 
 #: src/shortcuts.ui:57
-msgid "First Image"
+msgid "Rotate Image"
 msgstr ""
 
 #: src/shortcuts.ui:63
-msgid "Last Image"
+msgid "First Image"
 msgstr ""
 
 #: src/shortcuts.ui:69
-msgid "Previous Page"
+msgid "Last Image"
 msgstr ""
 
 #: src/shortcuts.ui:75
-msgid "Next Page"
+msgid "Previous Page"
 msgstr ""
 
 #: src/shortcuts.ui:81
-msgid "Show Keyboard Shortcuts"
+msgid "Next Page"
 msgstr ""
 
 #: src/shortcuts.ui:87
+msgid "Show Keyboard Shortcuts"
+msgstr ""
+
+#: src/shortcuts.ui:93
 msgid "Show About Dialog"
 msgstr ""
 

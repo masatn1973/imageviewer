@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:33+0900\n"
-"PO-Revision-Date: 2026-06-03 10:41+0900\n"
+"POT-Creation-Date: 2026-06-05 22:12+0900\n"
+"PO-Revision-Date: 2026-06-05 22:28+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -74,7 +74,7 @@ msgstr "左および右矢印キーによる、前の画像または次の画像
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/window.py:314
+#: src/window.py:296
 msgid "image(s) loaded."
 msgstr "枚の画像をロードしました"
 
@@ -119,26 +119,30 @@ msgid "Image Below"
 msgstr "下の画像"
 
 #: src/shortcuts.ui:57
+msgid "Rotate Image"
+msgstr "画像を回転させる"
+
+#: src/shortcuts.ui:63
 msgid "First Image"
 msgstr "最初の画像"
 
-#: src/shortcuts.ui:63
+#: src/shortcuts.ui:69
 msgid "Last Image"
 msgstr "最後の画像"
 
-#: src/shortcuts.ui:69
+#: src/shortcuts.ui:75
 msgid "Previous Page"
 msgstr "前のページ"
 
-#: src/shortcuts.ui:75
+#: src/shortcuts.ui:81
 msgid "Next Page"
 msgstr "次のページ"
 
-#: src/shortcuts.ui:81
+#: src/shortcuts.ui:87
 msgid "Show Keyboard Shortcuts"
 msgstr "ショートカットの表示"
 
-#: src/shortcuts.ui:87
+#: src/shortcuts.ui:93
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 

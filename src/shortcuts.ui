@@ -54,6 +54,12 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Rotate Image</property>
+                <property name="accelerator">r &lt;Shift&gt;r</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">First Image</property>
                 <property name="accelerator">Home</property>
               </object>

@@ -35,6 +35,9 @@ class ImageViewerDialog(Adw.Window):
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__(transient_for=parent)
 
+        self.original_pixbuf = None
+        self.rotation = 0
+
         prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
 
@@ -84,7 +87,34 @@ class ImageViewerDialog(Adw.Window):
             self.show_previous_image()
             return True
 
+        if keyval == Gdk.KEY_r:
+            self.rotation = (self.rotation + 90) % 360
+            self.update_image()
+            return True
+
+        elif keyval == Gdk.KEY_R:
+            self.rotation = (self.rotation - 90) % 360
+            self.update_image()
+            return True
+
         return False
+
+    def update_image(self):
+        pixbuf = self.original_pixbuf
+
+        if pixbuf is None:
+            return
+
+        if self.rotation == 90:
+            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
+
+        elif self.rotation == 180:
+            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
+
+        elif self.rotation == 270:
+            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
+
+        self.picture.set_paintable(Gdk.Texture.new_for_pixbuf(pixbuf))
 
     def show_current_image(self):
         if not self.image_files:
@@ -119,10 +149,13 @@ class ImageViewerDialog(Adw.Window):
         self.set_title(os.path.basename(path))
 
         try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-            texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+            self.rotation = 0
 
-            self.picture.set_paintable(texture)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+            self.original_pixbuf = pixbuf
+
+            self.update_image()
+
         except Exception as e:
             print(f"Failed to open image: {path}")
             print(e)
