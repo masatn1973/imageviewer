@@ -102,10 +102,6 @@ class ImageViewerDialog(Adw.Window):
         if self.image_files:
             self.show_current_image()
 
-        controller = Gtk.EventControllerKey()
-        controller.connect("key-pressed", self.on_key_pressed)
-        self.add_controller(controller)
-
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval in (Gdk.KEY_Right, Gdk.KEY_l):
             self.show_next_image()
