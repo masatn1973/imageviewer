@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-05 22:12+0900\n"
-"PO-Revision-Date: 2026-06-05 22:28+0900\n"
+"POT-Creation-Date: 2026-06-08 20:05+0900\n"
+"PO-Revision-Date: 2026-06-08 20:07+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -51,28 +51,68 @@ msgstr ""
 "しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid "EXIF information display is now supported."
+msgstr "EXIF 情報の表示をサポート"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+msgid "Image rotation is now supported."
+msgstr "画像の回転をサポート"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
 msgid "Added status bar."
 msgstr "ステータスバーの追加"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr "Home, End, PageUp, PageDown キーのサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr "vim 風のキーボード操作のサポート(h, j, k, l)"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
 msgid "Supports .bmp and .tiff file format."
 msgstr ".bmp および .tiff 形式のファイルのサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:50
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:64
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr "左および右矢印キーによる、前の画像または次の画像の表示をサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
 msgid "Initial release"
 msgstr "最初のリリース"
+
+#: src/viewer.py:192 src/viewer.py:195
+msgid "Camera: "
+msgstr "カメラ: "
+
+#: src/viewer.py:199 src/viewer.py:201
+msgid "Shooting Datetime: "
+msgstr "撮影日時: "
+
+#: src/viewer.py:204 src/viewer.py:207
+msgid "Pixel Size: "
+msgstr "ピクセルサイズ: "
+
+#: src/viewer.py:212 src/viewer.py:214
+msgid "Orientation: "
+msgstr "向き: "
+
+#: src/viewer.py:217 src/viewer.py:220 src/viewer.py:226
+msgid "Shutter Speed: "
+msgstr "露出時間: "
+
+#: src/viewer.py:229 src/viewer.py:233
+msgid "FNumber: "
+msgstr "絞り: "
+
+#: src/viewer.py:236 src/viewer.py:238
+msgid "ISO: "
+msgstr ""
+
+#: src/viewer.py:241 src/viewer.py:243
+msgid "Focal Length: "
+msgstr "焦点距離: "
 
 #: src/window.py:296
 msgid "image(s) loaded."
@@ -139,10 +179,14 @@ msgid "Next Page"
 msgstr "次のページ"
 
 #: src/shortcuts.ui:87
+msgid "Show/Hide EXIF data"
+msgstr "EXIF データを表示する/隠す"
+
+#: src/shortcuts.ui:93
 msgid "Show Keyboard Shortcuts"
 msgstr "ショートカットの表示"
 
-#: src/shortcuts.ui:93
+#: src/shortcuts.ui:99
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 
@@ -161,3 +205,6 @@ msgstr "キーボードショートカット"
 #: src/window.ui:71
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
+
+#~ msgid "ShutterSpeed: "
+#~ msgstr "露出時間: "

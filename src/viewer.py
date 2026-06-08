@@ -17,12 +17,26 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 import os
+import gettext
+import locale
 import gi
+
+APP_ID = "io.github.masatn1973.ImageViewer"
+
+locale.bindtextdomain(APP_ID, "/app/share/locale")
+locale.textdomain(APP_ID)
+
+gettext.bindtextdomain(APP_ID, "/app/share/locale")
+gettext.textdomain(APP_ID)
+
+from gettext import gettext as _
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
+gi.require_version("GExiv2", "0.16")
 
-from gi.repository import Gdk, Gtk, Adw, GdkPixbuf
+from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio
+from gi.repository import GExiv2
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
@@ -32,11 +46,24 @@ class ImageViewerDialog(Adw.Window):
     picture = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
 
+    info_box = Gtk.Template.Child()
+    Camera_label = Gtk.Template.Child()
+    Date_label = Gtk.Template.Child()
+    Pixel_size = Gtk.Template.Child()
+    Orientation = Gtk.Template.Child()
+    ShutterSpeed = Gtk.Template.Child()
+    FNumber = Gtk.Template.Child()
+    ISO = Gtk.Template.Child()
+    FocalLength = Gtk.Template.Child()
+
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__(transient_for=parent)
 
+        self.info_box.add_css_class("exif-overlay")
+
         self.original_pixbuf = None
         self.rotation = 0
+        self.file_path = None
 
         prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
@@ -49,6 +76,7 @@ class ImageViewerDialog(Adw.Window):
 
         self.image_files = image_files or []
         self.current_index = current_index
+        self.is_show_exif_data = False
 
         self.add_shortcut(
             Gtk.Shortcut.new(
@@ -97,7 +125,122 @@ class ImageViewerDialog(Adw.Window):
             self.update_image()
             return True
 
+        if keyval == Gdk.KEY_e:
+            if not self.is_show_exif_data:
+                self.info_box.set_visible(True)
+                self.show_exif_data()
+                self.is_show_exif_data = True
+
+            else:
+                self.info_box.set_visible(False)
+                self.is_show_exif_data = False
+
+            return True
+
         return False
+
+    def get_exif_info(self):
+        info = {
+            "Make": "",
+            "Model": "",
+            "Date": "",
+            "PixelXDimension": "",
+            "PixelYDimension": "",
+            "Orientation": "",
+            "ShutterSpeed": "",
+            "FNumber": "",
+            "ISO": "",
+            "FocalLength": "",
+        }
+
+        try:
+            meta = GExiv2.Metadata()
+            meta.open_path(self.file_path)
+
+            info["Make"] = meta.try_get_tag_string("Exif.Image.Make") or ""
+            info["Model"] = meta.try_get_tag_string("Exif.Image.Model") or ""
+            info["Date"] = (
+                meta.try_get_tag_string("Exif.Photo.DateTimeOriginal")
+                or meta.try_get_tag_string("Exif.Image.DateTime")
+                or ""
+            )
+            info["PixelXDimension"] = (
+                meta.try_get_tag_string("Exif.Photo.PixelXDimension")
+                or meta.get_pixel_width()
+            )
+            info["PixelYDimension"] = (
+                meta.try_get_tag_string("Exif.Photo.PixelYDimension")
+                or meta.get_pixel_height()
+            )
+            info["Orientation"] = (
+                meta.try_get_tag_string("Exif.Image.Orientation") or ""
+            )
+            info["ShutterSpeed"] = meta.try_get_exposure_time() or ""
+            info["FNumber"] = meta.try_get_tag_string("Exif.Photo.FNumber") or ""
+            info["ISO"] = meta.try_get_tag_string("Exif.Photo.ISOSpeedRatings") or ""
+            info["FocalLength"] = meta.try_get_focal_length() or ""
+
+        except Exception as e:
+            print("EXIF:", e)
+
+        return info
+
+    def show_exif_data(self):
+        info = self.get_exif_info()
+
+        if info["Make"] == "":
+            self.Camera_label.set_text(_("Camera: "))
+        else:
+            self.Camera_label.set_text(
+                _("Camera: ") + f"{info['Make']} {info['Model']}".strip()
+            )
+
+        if info["Date"] == "":
+            self.Date_label.set_text(_("Shooting Datetime: "))
+        else:
+            self.Date_label.set_text(_("Shooting Datetime: ") + info["Date"])
+
+        if info["PixelXDimension"] == "" or info["PixelYDimension"] == "":
+            self.Pixel_size.set_text(_("Pixel Size: "))
+        else:
+            self.Pixel_size.set_text(
+                _("Pixel Size: ")
+                + f"{info['PixelXDimension']} x {info['PixelYDimension']}"
+            )
+
+        if info["Orientation"] == "":
+            self.Orientation.set_text(_("Orientation: "))
+        else:
+            self.Orientation.set_text(_("Orientation: ") + f"{info['Orientation']}")
+
+        if info["ShutterSpeed"] == "":
+            self.ShutterSpeed.set_text(_("Shutter Speed: "))
+
+        elif (info["ShutterSpeed"][0] == 0) and (info["ShutterSpeed"][1] == 0):
+            self.ShutterSpeed.set_text(_("Shutter Speed: "))
+        else:
+            nom = info["ShutterSpeed"][0]
+            den = info["ShutterSpeed"][1]
+
+            shutter_speed = int(den) / int(nom)
+            self.ShutterSpeed.set_text(_("Shutter Speed: ") + f"1/{shutter_speed:.0f}")
+
+        if info["FNumber"] == "":
+            self.FNumber.set_text(_("FNumber: "))
+        else:
+            a, b = info["FNumber"].split("/")
+            fnumber = f"f/{int(a) / int(b)}"
+            self.FNumber.set_text(_("FNumber: ") + f"{fnumber}")
+
+        if info["ISO"] == "":
+            self.ISO.set_text(_("ISO: "))
+        else:
+            self.ISO.set_text(_("ISO: ") + f"{info['ISO']}")
+
+        if info["FocalLength"] == "":
+            self.FocalLength.set_text(_("Focal Length: "))
+        else:
+            self.FocalLength.set_text(_("Focal Length: ") + f"{info['FocalLength']}")
 
     def update_image(self):
         pixbuf = self.original_pixbuf
@@ -116,12 +259,19 @@ class ImageViewerDialog(Adw.Window):
 
         self.picture.set_paintable(Gdk.Texture.new_for_pixbuf(pixbuf))
 
+        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+
+        self.picture.set_paintable(texture)
+
     def show_current_image(self):
         if not self.image_files:
             return
 
         path = self.image_files[self.current_index]
         self.open_image(path)
+        self.file_path = path
+        if self.is_show_exif_data:
+            self.show_exif_data()
 
     def show_next_image(self):
         if not self.image_files:
@@ -155,6 +305,10 @@ class ImageViewerDialog(Adw.Window):
             self.original_pixbuf = pixbuf
 
             self.update_image()
+
+            file = Gio.File.new_for_path(path)
+
+            info = file.query_info("*", Gio.FileQueryInfoFlags.NONE, None)
 
         except Exception as e:
             print(f"Failed to open image: {path}")

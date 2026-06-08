@@ -24,38 +24,51 @@
     </screenshot>
   </screenshots>
 
-    <url type="homepage">https://github.com/masatn1973/imageviewer</url>
-    <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
-    <content_rating type="oars-1.1"/>
-    <releases>
-      <release version="0.1.3" date="2026-06-03">
-        <description>
-          <ul>
-            <li translatable="yes">Added status bar.</li>
-            <li translatable="yes">Supports Home, End, PageUp, PageDown keys.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="0.1.2" date="2026-06-01">
-        <description>
-          <ul>
-            <li translatable="yes">Supports vim like keyboard operation. (h, j, k, l)</li>
-          </ul>
-        </description>
-      </release>
-      <release version="0.1.1" date="2026-05-30">
-        <description>
-          <ul>
-            <li translatable="yes">Supports .bmp and .tiff file format.</li>
-            <li translatable="yes">Support Left and Right arrow key for view Previous and Next image.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="0.1.0" date="2026-05-26">
-        <description>
-          <p translatable="yes">Initial release</p>
-        </description>
-      </release>
-    </releases>
+<url type="homepage">https://github.com/masatn1973/imageviewer</url>
+<url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
+<content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.5" date="2026-06-08">
+      <description>
+        <ul>
+        <li translatable="yes">EXIF information display is now supported.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.4" date="2026-06-05">
+      <description>
+        <ul>
+        <li translatable="yes">Image rotation is now supported.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.3" date="2026-06-03">
+      <description>
+        <ul>
+        <li translatable="yes">Added status bar.</li>
+        <li translatable="yes">Supports Home, End, PageUp, PageDown keys.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.2" date="2026-06-01">
+      <description>
+        <ul>
+        <li translatable="yes">Supports vim like keyboard operation. (h, j, k, l)</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.1" date="2026-05-30">
+      <description>
+        <ul>
+        <li translatable="yes">Supports .bmp and .tiff file format.</li>
+        <li translatable="yes">Support Left and Right arrow key for view Previous and Next image.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.0" date="2026-05-26">
+      <description>
+        <p translatable="yes">Initial release</p>
+      </description>
+    </release>
+  </releases>
 </component>
-

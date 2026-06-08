@@ -1,0 +1,9 @@
+.exif-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.exif-overlay label {
+    color: white;
+}

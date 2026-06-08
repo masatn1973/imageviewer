@@ -83,6 +83,12 @@
               </object>
             </child>
             <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Show/Hide EXIF data</property>
+                <property name="accelerator">e</property>
+              </object>
+            </child>
+            <child>
                 <object class="GtkShortcutsShortcut">
                     <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
                     <property name="accelerator">&lt;Ctrl&gt;question</property>

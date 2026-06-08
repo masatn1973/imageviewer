@@ -35,7 +35,7 @@ from gettext import gettext as _
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gdk, Gio, Adw
 
 resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
 resource._register()
@@ -66,11 +66,12 @@ class ImageviewerApplication(Adw.Application):
             win.on_open(action, param)
 
     def do_activate(self):
-        """Called when the application is activated.
+        css = Gtk.CssProvider()
+        css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
 
-        We raise the application's main window, creating it if
-        necessary.
-        """
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
         self.win = self.get_active_window()
         if not self.win:
             self.win = ImageViewerWindow(self)
