@@ -300,7 +300,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         return True
 
-    def on_child_activated(self, flowgox, child):
+    def on_child_activated(self, flowbox, child):
         filepath = getattr(child, "image_path", None)
         if not filepath:
             return
