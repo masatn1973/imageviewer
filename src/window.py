@@ -225,14 +225,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         try:
             folder = dialog.select_folder_finish(result)
 
-        except Exception:
+        except Exception as e:
+            print("select_folder_finish:", e)
             return
 
         if folder:
-            path = folder.get_path()
-
-            if path:
-                self.load_folder(path)
+            self.load_folder(folder)
 
     def on_about(self, action, param):
         builder = Gtk.Builder.new_from_resource(
@@ -247,19 +245,27 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         win = ImageviewerShortcuts(self)
         win.present()
 
-    def load_folder(self, path):
-        self.image_files = []
+    def load_folder(self, folder):
+        files = []
 
-        while child := self.flowbox.get_first_child():
-            self.flowbox.remove(child)
+        enumerator = folder.enumerate_children(
+            "standard::*", Gio.FileQueryInfoFlags.NONE, None
+        )
 
-        self.pending_files = []
+        while True:
+            info = enumerator.next_file(None)
 
-        for name in sorted(os.listdir(path)):
+            if info is None:
+                break
+
+            name = info.get_name()
+
             if name.lower().endswith(IMAGE_EXTS):
-                filepath = os.path.join(path, name)
-                self.image_files.append(filepath)
-                self.pending_files.append(filepath)
+                gfile = folder.get_child(name)
+                files.append(gfile)
+
+        self.image_files = files
+        self.pending_files = files.copy()
 
         self.loaded_count = 0
 
@@ -267,27 +273,24 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def load_next_thumbnail(self):
         if not self.pending_files:
-            if self.image_files:
-                first = self.flowbox.get_child_at_index(0)
-                if first:
-                    self.flowbox.select_child(first)
-
             return False
 
-        filepath = self.pending_files.pop(0)
+        gfile = self.pending_files.pop(0)
 
         try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                filepath, THUMB, THUMB, True
+            stream = gfile.read(None)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_stream_at_scale(
+                stream, THUMB, THUMB, True, None
             )
 
-            pic = Gtk.Picture.new_for_pixbuf(pixbuf)
+            texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+            pic = Gtk.Picture.new_for_paintable(texture)
             pic.set_size_request(THUMB, THUMB)
             pic.set_content_fit(Gtk.ContentFit.COVER)
 
             child = Gtk.FlowBoxChild()
             child.set_child(pic)
-            child.image_path = filepath
+            child.image_path = gfile
 
             self.flowbox.append(child)
 
@@ -296,13 +299,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.status_label.set_text(f"{self.loaded_count} " + _("image(s) loaded."))
 
         except Exception as e:
-            print("Failed to Read files:", filepath, e)
+            print("Failed to Read files:", e)
 
-        return True
+        return len(self.pending_files) > 0
 
     def on_child_activated(self, flowbox, child):
-        filepath = getattr(child, "image_path", None)
-        if not filepath:
+        gfile = getattr(child, "image_path", None)
+
+        if not gfile:
             return
 
         if self.viewer is not None:
@@ -312,7 +316,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         viewer = ImageViewerDialog(
             self,
             self.image_files,
-            self.image_files.index(filepath) if filepath in self.image_files else 0,
+            self.image_files.index(gfile) if gfile in self.image_files else 0,
         )
 
         viewer.connect("close-request", self.on_viewer_close)
@@ -320,8 +324,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.viewer = viewer
 
-        index = self.image_files.index(filepath)
-        filename = os.path.basename(filepath)
+        index = self.image_files.index(gfile)
+        filename = os.path.basename(gfile)
 
         self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
 

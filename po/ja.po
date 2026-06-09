@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-09 13:35+0900\n"
-"PO-Revision-Date: 2026-06-09 13:29+0900\n"
+"PO-Revision-Date: 2026-06-09 16:12+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -26,7 +26,6 @@ msgstr "画像ビューワ"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:3
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
-#, fuzzy
 msgid "Folder-oriented thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 

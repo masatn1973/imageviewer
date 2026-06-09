@@ -20,6 +20,7 @@ import os
 import gettext
 import locale
 import gi
+from gi.repository.GLib import get_filename_charsets
 
 APP_ID = "io.github.masatn1973.ImageViewer"
 
@@ -151,7 +152,8 @@ class ImageViewerDialog(Adw.Window):
 
         try:
             meta = GExiv2.Metadata()
-            meta.open_path(self.file_path)
+            path = self.current_file.get_path()
+            meta.open_path(path)
 
             info["Make"] = meta.try_get_tag_string("Exif.Image.Make") or ""
             info["Model"] = meta.try_get_tag_string("Exif.Image.Model") or ""
@@ -263,9 +265,10 @@ class ImageViewerDialog(Adw.Window):
         if not self.image_files:
             return
 
-        path = self.image_files[self.current_index]
-        self.open_image(path)
-        self.file_path = path
+        gfile = self.image_files[self.current_index]
+        self.current_file = gfile
+        self.open_image(gfile)
+
         if self.is_show_exif_data:
             self.show_exif_data()
 
@@ -291,20 +294,22 @@ class ImageViewerDialog(Adw.Window):
 
         self.show_current_image()
 
-    def open_image(self, path):
-        self.set_title(os.path.basename(path))
+    def open_image(self, gfile):
+        path = gfile.get_path()
+
+        self.set_title(gfile.get_basename())
 
         try:
             self.rotation = 0
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+            stream = gfile.read(None)
+
+            pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
             self.original_pixbuf = pixbuf
 
             self.update_image()
 
-            file = Gio.File.new_for_path(path)
-
-            info = file.query_info("*", Gio.FileQueryInfoFlags.NONE, None)
+            info = gfile.query_info("*", Gio.FileQueryInfoFlags.NONE, None)
 
         except Exception as e:
             print(f"Failed to open image: {path}")
