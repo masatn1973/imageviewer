@@ -36,6 +36,11 @@ from gettext import gettext as _
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
+gi.require_version("GExiv2", "0.16")
+
+from datetime import datetime
+from gi.repository import GExiv2
+
 from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf, GLib
 from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
@@ -81,6 +86,20 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
+
+    def get_image_date(self, gfile):
+        try:
+            meta = GExiv2.Metadata(gfile.get_path())
+
+            date_str = meta.get_tag_string("Exif.Photo.DateTimeOriginal")
+
+            if date_str:
+                return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
+
+        except Exception:
+            pass
+
+        return datetime.fromtimestamp(os.path.getmtime(gfile.get_path()))
 
     def on_key_pressed(self, controller, keyval, keycode, state):
         selected = self.flowbox.get_selected_children()
@@ -263,6 +282,22 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             if name.lower().endswith(IMAGE_EXTS):
                 gfile = folder.get_child(name)
                 files.append(gfile)
+
+        files.sort(key=self.get_image_date)
+
+        while True:
+            info = enumerator.next_file(None)
+
+            if info is None:
+                break
+
+            name = info.get_name()
+
+            if name.lower().endswith(IMAGE_EXTS):
+                gfile = folder.get_child(name)
+                files.append(gfile)
+
+        files.sort(key=self.get_image_date)
 
         self.image_files = files
         self.pending_files = files.copy()
