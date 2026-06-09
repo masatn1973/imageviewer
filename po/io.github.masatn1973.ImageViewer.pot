@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 20:05+0900\n"
+"POT-Creation-Date: 2026-06-09 13:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,15 +24,12 @@ msgid "Image Viewer"
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:3
-msgid "Browse Images"
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
+msgid "Folder-oriented thumbnail image browser"
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
-msgstr ""
-
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
-msgid "Browse and view image files"
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
@@ -41,9 +38,9 @@ msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
 msgid ""
-"Image Viewer is a lightweight application for browsing and viewing image "
-"files. It is built with GTK4 and libadwaita and supports common image "
-"formats."
+"ImageViewer is a folder-oriented thumbnail browser for quickly browsing "
+"image collections. It is built with GTK4 and libadwaita and supports common "
+"image formats."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
@@ -78,35 +75,35 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:192 src/viewer.py:195
+#: src/viewer.py:188 src/viewer.py:191
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:199 src/viewer.py:201
+#: src/viewer.py:195 src/viewer.py:197
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:204 src/viewer.py:207
+#: src/viewer.py:200 src/viewer.py:203
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:212 src/viewer.py:214
+#: src/viewer.py:208 src/viewer.py:210
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:217 src/viewer.py:220 src/viewer.py:226
+#: src/viewer.py:213 src/viewer.py:216 src/viewer.py:222
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:229 src/viewer.py:233
+#: src/viewer.py:225 src/viewer.py:229
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:236 src/viewer.py:238
+#: src/viewer.py:232 src/viewer.py:234
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:241 src/viewer.py:243
+#: src/viewer.py:237 src/viewer.py:239
 msgid "Focal Length: "
 msgstr ""
 
@@ -115,7 +112,7 @@ msgid "image(s) loaded."
 msgstr ""
 
 #: src/about.ui:12
-msgid "Simple GTK4 Image Viewer"
+msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
 #: src/shortcuts.ui:9

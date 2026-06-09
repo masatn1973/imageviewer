@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 20:05+0900\n"
-"PO-Revision-Date: 2026-06-08 20:07+0900\n"
+"POT-Creation-Date: 2026-06-09 13:35+0900\n"
+"PO-Revision-Date: 2026-06-09 13:29+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -25,16 +25,14 @@ msgid "Image Viewer"
 msgstr "画像ビューワ"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:3
-msgid "Browse Images"
-msgstr "画像を閲覧"
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
+#, fuzzy
+msgid "Folder-oriented thumbnail image browser"
+msgstr "フォルダー別サムネイル画像ビューアー"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
 msgstr ""
-
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
-msgid "Browse and view image files"
-msgstr "画像ファイルの参照と表示"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
@@ -42,13 +40,13 @@ msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
 msgid ""
-"Image Viewer is a lightweight application for browsing and viewing image "
-"files. It is built with GTK4 and libadwaita and supports common image "
-"formats."
+"ImageViewer is a folder-oriented thumbnail browser for quickly browsing "
+"image collections. It is built with GTK4 and libadwaita and supports common "
+"image formats."
 msgstr ""
-"画像ビューワは、画像ファイルの閲覧および表示用の軽量なアプリケーションで"
-"す。GTK4とlibadwaitaで構築されており、一般的な画像フォーマットをサポート"
-"しています。"
+"画像ビューワは、画像コレクションをすばやく閲覧するためのフォルダベースのサム"
+"ネイルブラウザです。GTK4とlibadwaitaを用いて構築されており、一般的な画像形式"
+"に対応しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
 msgid "EXIF information display is now supported."
@@ -82,35 +80,35 @@ msgstr "左および右矢印キーによる、前の画像または次の画像
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/viewer.py:192 src/viewer.py:195
+#: src/viewer.py:188 src/viewer.py:191
 msgid "Camera: "
 msgstr "カメラ: "
 
-#: src/viewer.py:199 src/viewer.py:201
+#: src/viewer.py:195 src/viewer.py:197
 msgid "Shooting Datetime: "
 msgstr "撮影日時: "
 
-#: src/viewer.py:204 src/viewer.py:207
+#: src/viewer.py:200 src/viewer.py:203
 msgid "Pixel Size: "
 msgstr "ピクセルサイズ: "
 
-#: src/viewer.py:212 src/viewer.py:214
+#: src/viewer.py:208 src/viewer.py:210
 msgid "Orientation: "
 msgstr "向き: "
 
-#: src/viewer.py:217 src/viewer.py:220 src/viewer.py:226
+#: src/viewer.py:213 src/viewer.py:216 src/viewer.py:222
 msgid "Shutter Speed: "
 msgstr "露出時間: "
 
-#: src/viewer.py:229 src/viewer.py:233
+#: src/viewer.py:225 src/viewer.py:229
 msgid "FNumber: "
 msgstr "絞り: "
 
-#: src/viewer.py:236 src/viewer.py:238
+#: src/viewer.py:232 src/viewer.py:234
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:241 src/viewer.py:243
+#: src/viewer.py:237 src/viewer.py:239
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
@@ -119,8 +117,8 @@ msgid "image(s) loaded."
 msgstr "枚の画像をロードしました"
 
 #: src/about.ui:12
-msgid "Simple GTK4 Image Viewer"
-msgstr "シンプルな GTK4 の画像ビューワ"
+msgid "Folder-orientad thumbnail image browser"
+msgstr "フォルダー別サムネイル画像ビューアー"
 
 #: src/shortcuts.ui:9
 msgid "Keyboard shortcuts"
@@ -205,6 +203,19 @@ msgstr "キーボードショートカット"
 #: src/window.ui:71
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
+
+#, fuzzy
+#~ msgid "Folder-oriented thumbnail images browser"
+#~ msgstr "フォルダー別サムネイル画像ビューアー"
+
+#~ msgid "Browse Images"
+#~ msgstr "画像を閲覧"
+
+#~ msgid "Browse and view image files"
+#~ msgstr "画像ファイルの参照と表示"
+
+#~ msgid "Simple GTK4 Image Viewer"
+#~ msgstr "シンプルな GTK4 の画像ビューワ"
 
 #~ msgid "ShutterSpeed: "
 #~ msgstr "露出時間: "

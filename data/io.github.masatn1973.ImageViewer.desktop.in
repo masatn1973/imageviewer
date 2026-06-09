@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Image Viewer
-Comment=Browse Images
+Comment=Folder-oriented thumbnail image browser
 Exec=imageviewer
 Icon=io.github.masatn1973.ImageViewer
 Terminal=false
