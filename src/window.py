@@ -21,6 +21,8 @@ import gettext
 import locale
 import gi
 
+import time
+
 APP_ID = "/io/github/masatn1973/ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
@@ -40,6 +42,7 @@ gi.require_version("GExiv2", "0.16")
 
 from datetime import datetime
 from gi.repository import GExiv2
+from collections import deque
 
 from gi.repository import Gdk, Gtk, Adw, Gio, GObject, GdkPixbuf, GLib
 from shortcuts import ImageviewerShortcuts
@@ -88,18 +91,19 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_controller(controller)
 
     def get_image_date(self, gfile):
+        path = gfile.get_path()
         try:
-            meta = GExiv2.Metadata(gfile.get_path())
+            meta = GExiv2.Metadata(path)
 
-            date_str = meta.get_tag_string("Exif.Photo.DateTimeOriginal")
+            if meta.has_tag("Exif.Photo.DateTimeOriginal"):
+                date_str = meta.get_tag_string("Exif.Photo.DateTimeOriginal")
 
-            if date_str:
                 return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
 
         except Exception:
             pass
 
-        return datetime.fromtimestamp(os.path.getmtime(gfile.get_path()))
+        return datetime.fromtimestamp(os.path.getmtime(path))
 
     def on_key_pressed(self, controller, keyval, keycode, state):
         selected = self.flowbox.get_selected_children()
@@ -265,6 +269,19 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         win.present()
 
     def load_folder(self, folder):
+        # delete old thumbnails
+        child = self.flowbox.get_first_child()
+        count = 0
+
+        while child:
+            next_child = child.get_next_sibling()
+            self.flowbox.remove(child)
+            child = next_child
+            count += 1
+
+        self.pending_files = []
+        self.image_files = []
+
         files = []
 
         enumerator = folder.enumerate_children(
@@ -280,13 +297,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             name = info.get_name()
 
             if name.lower().endswith(IMAGE_EXTS):
-                gfile = folder.get_child(name)
-                files.append(gfile)
+                files.append(folder.get_child(name))
 
-        files.sort(key=self.get_image_date)
+        enumerator.close(None)
+
+        files.sort(key=lambda f: os.path.getmtime(f.get_path()))
 
         self.image_files = files
-        self.pending_files = files.copy()
+        self.pending_files = deque(files)
 
         self.loaded_count = 0
 
@@ -296,10 +314,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if not self.pending_files:
             return False
 
-        gfile = self.pending_files.pop(0)
+        gfile = self.pending_files.popleft()
 
+        stream = gfile.read(None)
         try:
-            stream = gfile.read(None)
             pixbuf = GdkPixbuf.Pixbuf.new_from_stream_at_scale(
                 stream, THUMB, THUMB, True, None
             )
@@ -321,6 +339,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         except Exception as e:
             print("Failed to Read files:", e)
+
+        finally:
+            stream.close(None)
 
         return len(self.pending_files) > 0
 
