@@ -285,20 +285,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         files.sort(key=self.get_image_date)
 
-        while True:
-            info = enumerator.next_file(None)
-
-            if info is None:
-                break
-
-            name = info.get_name()
-
-            if name.lower().endswith(IMAGE_EXTS):
-                gfile = folder.get_child(name)
-                files.append(gfile)
-
-        files.sort(key=self.get_image_date)
-
         self.image_files = files
         self.pending_files = files.copy()
 
