@@ -22,6 +22,7 @@ import locale
 import gi
 from gi.repository.GLib import get_filename_charsets
 
+
 APP_ID = "io.github.masatn1973.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
@@ -39,6 +40,14 @@ gi.require_version("GExiv2", "0.16")
 from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio
 from gi.repository import GExiv2
 
+VIDEO_EXTS = (
+    ".mp4",
+    ".mkv",
+    ".webm",
+    ".avi",
+    ".mov",
+)
+
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
@@ -46,6 +55,9 @@ class ImageViewerDialog(Adw.Window):
 
     picture = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
+
+    media_stack = Gtk.Template.Child()
+    video = Gtk.Template.Child()
 
     info_box = Gtk.Template.Child()
     Camera_label = Gtk.Template.Child()
@@ -184,6 +196,11 @@ class ImageViewerDialog(Adw.Window):
         return info
 
     def show_exif_data(self):
+        ext = os.path.splitext(self.current_file.get_basename())[1].lower()
+
+        if ext in VIDEO_EXTS:
+            return
+
         info = self.get_exif_info()
 
         if info["Make"] == "":
@@ -261,13 +278,30 @@ class ImageViewerDialog(Adw.Window):
 
         self.picture.set_paintable(texture)
 
+    def open_video(self, gfile):
+        self.set_title(gfile.get_basename())
+
+        self.media_stack.set_visible_child(self.video)
+
+        self.video.set_file(gfile)
+        self.video.set_autoplay(True)
+
+    def open_media(self, gfile):
+        ext = os.path.splitext(gfile.get_basename())[1].lower()
+
+        if ext in (".mp4", ".mkv", ".webm", ".avi", ".mov"):
+            self.open_video(gfile)
+
+        else:
+            self.open_image(gfile)
+
     def show_current_image(self):
         if not self.image_files:
             return
 
         gfile = self.image_files[self.current_index]
         self.current_file = gfile
-        self.open_image(gfile)
+        self.open_media(gfile)
 
         if self.is_show_exif_data:
             self.show_exif_data()
@@ -295,6 +329,8 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     def open_image(self, gfile):
+        self.media_stack.set_visible_child(self.picture)
+
         path = gfile.get_path()
 
         self.set_title(gfile.get_basename())

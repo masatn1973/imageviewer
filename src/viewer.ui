@@ -15,9 +15,16 @@
             <property name="child">
               <object class="GtkOverlay">
                 <property name="child">
-                  <object class="GtkPicture" id="picture">
-                    <property name="can-shrink">True</property>
-                    <property name="content-fit">contain</property>
+                  <object class="GtkStack" id="media_stack">
+                    <child>
+                      <object class="GtkPicture" id="picture">
+                        <property name="can-shrink">True</property>
+                        <property name="content-fit">contain</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkVideo" id="video"/>
+                    </child>
                   </object>
                 </property>
                 <child type="overlay">
