@@ -425,6 +425,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                     pixbuf = GdkPixbuf.Pixbuf.new_from_stream_at_scale(
                         stream, THUMB, THUMB, True, None
                     )
+                    pixbuf = pixbuf.apply_embedded_orientation()
 
                     texture = Gdk.Texture.new_for_pixbuf(pixbuf)
 
