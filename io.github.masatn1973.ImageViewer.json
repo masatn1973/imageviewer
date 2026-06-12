@@ -9,7 +9,8 @@
         "--share=ipc",
         "--device=dri",
         "--socket=fallback-x11",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--socket=pulseaudio"
     ],
     "cleanup": [
         "/include",
@@ -82,7 +83,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/masatn1973/imageviewer.git",
-                    "branch": "main"
+                    "tag": "0.1.7"
                 }
             ]
         }

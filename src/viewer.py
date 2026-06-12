@@ -281,7 +281,12 @@ class ImageViewerDialog(Adw.Window):
     def open_video(self, gfile):
         self.set_title(gfile.get_basename())
 
+        media = Gtk.MediaFile.new_for_file(gfile)
+
+        self.video.set_media_stream(media)
         self.media_stack.set_visible_child(self.video)
+
+        media.play()
 
         self.video.set_file(gfile)
         self.video.set_autoplay(True)
@@ -289,7 +294,7 @@ class ImageViewerDialog(Adw.Window):
     def open_media(self, gfile):
         ext = os.path.splitext(gfile.get_basename())[1].lower()
 
-        if ext in (".mp4", ".mkv", ".webm", ".avi", ".mov"):
+        if ext in VIDEO_EXTS:
             self.open_video(gfile)
 
         else:

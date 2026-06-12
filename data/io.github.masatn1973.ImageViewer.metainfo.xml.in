@@ -28,6 +28,13 @@
   <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.1.7" date="2026-06-13">
+      <description>
+        <ul>
+        <li translatable="yes">Fixed an issue where no sound was playing when videos were played.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.6" date="2026-06-11">
       <description>
         <ul>
