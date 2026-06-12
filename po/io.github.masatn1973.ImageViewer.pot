@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 00:56+0900\n"
+"POT-Creation-Date: 2026-06-13 02:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,6 +189,10 @@ msgstr ""
 
 #: src/shortcuts.ui:99
 msgid "Show About Dialog"
+msgstr ""
+
+#: src/shortcuts.ui:105
+msgid "Quit Image Viewer"
 msgstr ""
 
 #: src/window.ui:37

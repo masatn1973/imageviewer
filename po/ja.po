@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 00:56+0900\n"
-"PO-Revision-Date: 2026-06-13 01:01+0900\n"
+"POT-Creation-Date: 2026-06-13 02:47+0900\n"
+"PO-Revision-Date: 2026-06-13 02:54+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -195,6 +195,10 @@ msgstr "ショートカットの表示"
 #: src/shortcuts.ui:99
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
+
+#: src/shortcuts.ui:105
+msgid "Quit Image Viewer"
+msgstr "画像ビューワを終了する"
 
 #: src/window.ui:37
 msgid "Ready."
