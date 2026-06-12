@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 13:35+0900\n"
+"POT-Creation-Date: 2026-06-12 18:26+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,70 +44,74 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
-msgid "EXIF information display is now supported."
+msgid "Add video playback support."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
-msgid "Image rotation is now supported."
+msgid "EXIF information display is now supported."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+msgid "Image rotation is now supported."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:55
 msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
 msgid "Supports .bmp and .tiff file format."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:64
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:71
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:188 src/viewer.py:191
+#: src/viewer.py:207 src/viewer.py:210
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:195 src/viewer.py:197
+#: src/viewer.py:214 src/viewer.py:216
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:200 src/viewer.py:203
+#: src/viewer.py:219 src/viewer.py:222
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:208 src/viewer.py:210
+#: src/viewer.py:227 src/viewer.py:229
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:213 src/viewer.py:216 src/viewer.py:222
+#: src/viewer.py:232 src/viewer.py:235 src/viewer.py:241
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:225 src/viewer.py:229
+#: src/viewer.py:244 src/viewer.py:248
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:232 src/viewer.py:234
+#: src/viewer.py:251 src/viewer.py:253
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:237 src/viewer.py:239
+#: src/viewer.py:256 src/viewer.py:258
 msgid "Focal Length: "
 msgstr ""
 
-#: src/window.py:296
+#: src/window.py:505
 msgid "image(s) loaded."
 msgstr ""
 

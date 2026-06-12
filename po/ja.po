@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 13:35+0900\n"
-"PO-Revision-Date: 2026-06-09 16:12+0900\n"
+"POT-Creation-Date: 2026-06-12 18:26+0900\n"
+"PO-Revision-Date: 2026-06-12 18:41+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -48,70 +48,74 @@ msgstr ""
 "に対応しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid "Add video playback support."
+msgstr "動画の再生機能を追加しました"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
 msgid "EXIF information display is now supported."
 msgstr "EXIF 情報の表示をサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
 msgid "Image rotation is now supported."
 msgstr "画像の回転をサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:55
 msgid "Added status bar."
 msgstr "ステータスバーの追加"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr "Home, End, PageUp, PageDown キーのサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr "vim 風のキーボード操作のサポート(h, j, k, l)"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
 msgid "Supports .bmp and .tiff file format."
 msgstr ".bmp および .tiff 形式のファイルのサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:64
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:71
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr "左および右矢印キーによる、前の画像または次の画像の表示をサポート"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/viewer.py:188 src/viewer.py:191
+#: src/viewer.py:207 src/viewer.py:210
 msgid "Camera: "
 msgstr "カメラ: "
 
-#: src/viewer.py:195 src/viewer.py:197
+#: src/viewer.py:214 src/viewer.py:216
 msgid "Shooting Datetime: "
 msgstr "撮影日時: "
 
-#: src/viewer.py:200 src/viewer.py:203
+#: src/viewer.py:219 src/viewer.py:222
 msgid "Pixel Size: "
 msgstr "ピクセルサイズ: "
 
-#: src/viewer.py:208 src/viewer.py:210
+#: src/viewer.py:227 src/viewer.py:229
 msgid "Orientation: "
 msgstr "向き: "
 
-#: src/viewer.py:213 src/viewer.py:216 src/viewer.py:222
+#: src/viewer.py:232 src/viewer.py:235 src/viewer.py:241
 msgid "Shutter Speed: "
 msgstr "露出時間: "
 
-#: src/viewer.py:225 src/viewer.py:229
+#: src/viewer.py:244 src/viewer.py:248
 msgid "FNumber: "
 msgstr "絞り: "
 
-#: src/viewer.py:232 src/viewer.py:234
+#: src/viewer.py:251 src/viewer.py:253
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:237 src/viewer.py:239
+#: src/viewer.py:256 src/viewer.py:258
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:296
+#: src/window.py:505
 msgid "image(s) loaded."
 msgstr "枚の画像をロードしました"
 
