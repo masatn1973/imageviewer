@@ -7,3 +7,13 @@
 .exif-overlay label {
     color: white;
 }
+
+.video-play-circle {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    padding: 8px;
+}
+
+.video-play-icon {
+    color: black;
+}

@@ -20,7 +20,8 @@ import os
 import gettext
 import locale
 import gi
-import tempfile
+import hashlib
+
 
 APP_ID = "/io/github/masatn1973/ImageViewer"
 
@@ -69,11 +70,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         Gst.init(None)
 
-        playbin = Gst.ElementFactory.make("playbin")
-        print(playbin)
-
         self.viewer = None
         self.image_files = []
+
+        self.thumbnail_idle_id = None
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
@@ -100,6 +100,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_controller(controller)
 
     def craete_video_thumbnail(self, gfile):
+        uri = gfile.get_uri()
+
+        thumb = (
+            os.path.expanduser("~/.cache/thumbnails/normal/")
+            + hashlib.md5(uri.encode("utf-8")).hexdigest()
+            + ".png"
+        )
+
         try:
             playbin = Gst.ElementFactory.make("playbin")
             playbin.set_properties("uri", gfile.get_uri())
@@ -374,53 +382,34 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.loaded_count = 0
 
-        GLib.idle_add(self.load_next_thumbnail)
+        self.thumbnail_idle_id = GLib.idle_add(self.load_next_thumbnail)
 
     def create_video_thumbnail(self, gfile):
-        print("uri =", gfile.get_uri())
-        print("path =", gfile.get_path())
-        print("exists =", gfile.query_exists(None))
-
         try:
             playbin = Gst.ElementFactory.make("playbin")
+            sink = Gst.ElementFactory.make("gdkpixbufsink")
 
-            ret = playbin.set_state(Gst.State.PAUSED)
-
-            print("ret =", ret)
-
-            bus = playbin.get_bus()
-
-            msg = bus.timed_pop_filtered(5 * Gst.SECOND, Gst.MessageType.ERROR)
-
-            if msg:
-                err, debug = msg.parse_error()
-
-                print("ERROR =", err)
-                print("DEBUG =", debug)
-
-            ret2, state, pending = playbin.get_state(5 * Gst.SECOND)
-
-            print("ret2 =", ret2)
-            print("state =", state.value_nick)
-            print("pending =", pending.value_nick)
-
-            playbin.set_properties("uri", gfile.get_uri())
+            playbin.set_property("video-sink", sink)
+            playbin.set_property("uri", gfile.get_uri())
 
             playbin.set_state(Gst.State.PAUSED)
 
-            ret, state, pending = playbin.get_state(5 * Gst.SECOND)
+            playbin.get_state(5 * Gst.SECOND)
 
-            print("state:", state.value_nick)
-
+            pixbuf = sink.get_property("last-pixbuf")
             playbin.set_state(Gst.State.NULL)
 
-            return None
+            return pixbuf
 
         except Exception as e:
             print("thumbnail error:", e)
             return None
 
     def load_next_thumbnail(self):
+        if not self.pending_files:
+            self.thumbnail_idle_id = None
+            return False
+
         if not self.pending_files:
             return False
 
@@ -440,7 +429,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                     texture = Gdk.Texture.new_for_pixbuf(pixbuf)
 
                     widget = Gtk.Picture.new_for_paintable(texture)
-                    # widget.set_size_request(THUMB, THUMB)
                     widget.set_can_shrink(True)
                     widget.set_content_fit(Gtk.ContentFit.CONTAIN)
 
@@ -450,27 +438,61 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             elif ext in VIDEO_EXTS:
                 pixbuf = self.create_video_thumbnail(gfile)
 
-                widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
+                if pixbuf is None:
+                    widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
+                    widget.set_pixel_size(96)
 
-                if pixbuf:
+                else:
+                    w = pixbuf.get_width()
+                    h = pixbuf.get_height()
+
+                    scale = min(THUMB / w, THUMB / h)
+
+                    new_w = int(w * scale)
+                    new_h = int(h * scale)
+
                     pixbuf = pixbuf.scale_simple(
-                        THUMB, THUMB, GdkPixbuf.InterpType.BILINEAR
+                        new_w, new_h, GdkPixbuf.InterpType.BILINEAR
                     )
 
                     texture = Gdk.Texture.new_for_pixbuf(pixbuf)
 
-                    widget = Gtk.Picture.new_for_paintable(texture)
-                    widget.set_can_shrink(True)
-                    widget.set_content_fit(Gtk.ContentFit.CONTAIN)
+                    picture = Gtk.Picture.new_for_paintable(texture)
+                    picture.set_size_request(THUMB, THUMB)
+                    picture.set_can_shrink(True)
+                    picture.set_content_fit(Gtk.ContentFit.CONTAIN)
 
-                else:
-                    widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
-                    widget.set_pixel_size(96)
+                    overlay = Gtk.Overlay()
+                    overlay.set_child(picture)
+
+                    circle = Gtk.Box()
+                    circle.add_css_class("video-play-circle")
+
+                    play_icon = Gtk.Image.new_from_icon_name(
+                        "media-playback-start-symbolic"
+                    )
+                    play_icon.add_css_class("video-play-icon")
+                    play_icon.set_pixel_size(48)
+
+                    circle.append(play_icon)
+
+                    circle.set_halign(Gtk.Align.CENTER)
+                    circle.set_valign(Gtk.Align.CENTER)
+
+                    overlay.add_overlay(circle)
+
+                    overlay.set_size_request(THUMB, THUMB)
+                    widget = overlay
+
+                    # else:
+                    # widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
+                    # widget.set_pixel_size(96)
 
             else:
                 return len(self.pending_files) > 0
 
             child = Gtk.FlowBoxChild()
+            child.set_size_request(THUMB, THUMB)
             child.set_child(widget)
 
             child.image_path = gfile
@@ -483,7 +505,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.status_label.set_text(f"{self.loaded_count} " + _("image(s) loaded."))
 
         except Exception as e:
-            print("Failed", e)
+            print("FAILED:", gfile.get_basename())
 
         return len(self.pending_files) > 0
 
@@ -518,5 +540,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     def on_close_request(self, *args):
-        self.get_application().quit()
+        while child := self.flowbox.get_first_child():
+            self.flowbox.remove(child)
+
         return False
