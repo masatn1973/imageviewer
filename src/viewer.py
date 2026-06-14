@@ -346,6 +346,7 @@ class ImageViewerDialog(Adw.Window):
             stream = gfile.read(None)
 
             pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
+            pixbuf = pixbuf.apply_embedded_orientation()
             self.original_pixbuf = pixbuf
 
             self.update_image()

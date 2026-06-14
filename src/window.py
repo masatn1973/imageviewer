@@ -40,13 +40,14 @@ gi.require_version("Adw", "1")
 
 gi.require_version("GExiv2", "0.16")
 gi.require_version("Gst", "1.0")
+gi.require_version("GstPbutils", "1.0")
 
 from datetime import datetime
 from collections import deque
 
 from gi.repository import GExiv2
 from gi.repository import Gdk, Gtk, Adw, Gio
-from gi.repository import GObject, GdkPixbuf, GLib, Gst
+from gi.repository import GObject, GdkPixbuf, GLib, Gst, GstPbutils
 
 from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
@@ -386,6 +387,15 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def create_video_thumbnail(self, gfile):
         try:
+            discoverer = GstPbutils.Discoverer.new(5 * Gst.SECOND)
+            info = discoverer.discover_uri(gfile.get_uri())
+
+            orientation = 0
+
+            tags = info.get_tags()
+            if tags:
+                ok, orientation = tags.get_string("image-orientation")
+
             playbin = Gst.ElementFactory.make("playbin")
             sink = Gst.ElementFactory.make("gdkpixbufsink")
 
@@ -393,11 +403,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             playbin.set_property("uri", gfile.get_uri())
 
             playbin.set_state(Gst.State.PAUSED)
-
             playbin.get_state(5 * Gst.SECOND)
 
             pixbuf = sink.get_property("last-pixbuf")
+
             playbin.set_state(Gst.State.NULL)
+
+            if pixbuf and orientation:
+                if orientation == "rotate-90":
+                    pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
+                elif orientation == "rotate-180":
+                    pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
+                elif orientation == "rotate-270":
+                    pixbuf = pixbuf.rotate_simple(
+                        GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE
+                    )
 
             return pixbuf
 
