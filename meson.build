@@ -1,5 +1,5 @@
 project('imageviewer',
-          version: '0.1.7',
+          version: '0.1.8',
     meson_version: '>= 1.0.0',
     license: 'GPL-3.0-or-later',
   default_options: [ 'warning_level=2', 'werror=false', ],

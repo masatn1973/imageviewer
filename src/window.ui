@@ -64,6 +64,12 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">Start Slideshow</attribute>
+        <attribute name="action">win.slideshow</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
         <attribute name="action">win.shortcuts</attribute>
       </item>

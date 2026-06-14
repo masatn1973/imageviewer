@@ -76,6 +76,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.thumbnail_idle_id = None
 
+        self.slideshow_id = None
+
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
         self.flowbox.connect("child-activated", self.on_child_activated)
@@ -88,6 +90,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_action(shortcuts_action)
         app.set_accels_for_action("win.shortcuts", ["<primary>question"])
 
+        slideshow_action = Gio.SimpleAction.new("slideshow", None)
+        slideshow_action.connect("activate", self.on_slideshow)
+        slideshow_action.set_enabled(False)
+        self.add_action(slideshow_action)
+
+        self.slideshow_action = slideshow_action
+        app.set_accels_for_action("win.slideshow", ["<Ctrl>S"])
+
         about_action = Gio.SimpleAction.new("about", None)
         about_action.connect("activate", self.on_about)
         self.add_action(about_action)
@@ -99,6 +109,54 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
+
+    def on_slideshow(self, action, param):
+        if self.slideshow_id is None:
+            self.start_slideshow()
+
+        else:
+            self.stop_slideshow()
+
+    def stop_slideshow(self):
+        if self.slideshow_id is not None:
+            GLib.source_remove(self.slideshow_id)
+            self.slideshow_id = None
+
+    def slideshow_next(self):
+        if not self.image_files:
+            self.stop_slideshow()
+            return False
+
+        if self.viewer is None:
+            self.stop_slideshow()
+            return False
+
+        self.viewer.show_next_image()
+
+        return True
+
+    def start_slideshow(self):
+        if self.slideshow_id is not None:
+            return
+
+        if self.viewer is None:
+            selected = self.flowbox.get_selected_children()
+
+            if not selected:
+                child = self.flowbox.get_child_at_index(0)
+
+                if child:
+                    self.flowbox.select_child(child)
+
+            self.open_selected_image()
+
+        if self.viewer is None:
+            return
+
+        self.slideshow_id = GLib.timeout_add(
+            3000,  # 3 seconds
+            self.slideshow_next,
+        )
 
     def craete_video_thumbnail(self, gfile):
         uri = gfile.get_uri()
@@ -385,6 +443,13 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.thumbnail_idle_id = GLib.idle_add(self.load_next_thumbnail)
 
+        child = self.flowbox.get_child_at_index(0)
+
+        if child:
+            self.flowbox.select_child(child)
+
+        self.slideshow_action.set_enabled(len(self.image_files) > 0)
+
     def create_video_thumbnail(self, gfile):
         try:
             discoverer = GstPbutils.Discoverer.new(5 * Gst.SECOND)
@@ -521,6 +586,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
             self.flowbox.append(child)
 
+            if self.loaded_count == 0:
+                self.flowbox.select_child(child)
+
             self.loaded_count += 1
 
             self.status_label.set_text(f"{self.loaded_count} " + _("image(s) loaded."))
@@ -557,6 +625,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
 
     def on_viewer_close(self, win):
+        self.stop_slideshow()
         self.viewer = None
         return False
 

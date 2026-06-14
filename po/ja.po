@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 02:47+0900\n"
-"PO-Revision-Date: 2026-06-13 02:54+0900\n"
+"POT-Creation-Date: 2026-06-15 05:53+0900\n"
+"PO-Revision-Date: 2026-06-15 05:55+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -48,43 +48,47 @@ msgstr ""
 "に対応しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid "Support slideshow."
+msgstr "スライドショーをサポートしました"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
 msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr "動画の再生時に、音声が出ない問題を修正しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
 msgid "Add video playback support."
 msgstr "動画の再生機能を追加しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:55
 msgid "EXIF information display is now supported."
 msgstr "EXIF 情報の表示をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:55
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:62
 msgid "Image rotation is now supported."
 msgstr "画像の回転をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:62
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:69
 msgid "Added status bar."
 msgstr "ステータスバーを追加しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:63
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr "Home, End, PageUp, PageDown キーをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr "vim 風のキーボード操作 (h, j, k, l) をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:84
 msgid "Supports .bmp and .tiff file format."
 msgstr ".bmp および .tiff 形式のファイルをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:78
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:85
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 "左および右矢印キーによる、前の画像または次の画像の表示をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:84
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:91
 msgid "Initial release"
 msgstr "最初のリリース"
 
@@ -120,7 +124,7 @@ msgstr ""
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:506
+#: src/window.py:594
 msgid "image(s) loaded."
 msgstr "枚の画像をロードしました"
 
@@ -209,10 +213,14 @@ msgid "Open"
 msgstr "開く"
 
 #: src/window.ui:67
+msgid "Start Slideshow"
+msgstr "スライドショーの開始"
+
+#: src/window.ui:73
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: src/window.ui:71
+#: src/window.ui:77
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 

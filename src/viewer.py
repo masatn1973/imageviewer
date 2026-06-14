@@ -301,6 +301,15 @@ class ImageViewerDialog(Adw.Window):
             self.open_image(gfile)
 
     def show_current_image(self):
+        media = self.video.set_media_stream()
+
+        if media:
+            media.pause()
+
+        self.video.set_media_stream(None)
+
+        self.media_stack.set_visible_child(self.picture)
+
         if not self.image_files:
             return
 
@@ -334,6 +343,11 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     def open_image(self, gfile):
+        media = self.video.set_media_stream()
+
+        if media:
+            media.pause()
+
         self.media_stack.set_visible_child(self.picture)
 
         path = gfile.get_path()

@@ -65,6 +65,12 @@ class ImageviewerApplication(Adw.Application):
         if win:
             win.on_open(action, param)
 
+    def on_slideshow(self, action, param):
+        win = self.props.active_window
+
+        if win:
+            win.on_slideshow(action, param)
+
     def do_activate(self):
         css = Gtk.CssProvider()
         css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
