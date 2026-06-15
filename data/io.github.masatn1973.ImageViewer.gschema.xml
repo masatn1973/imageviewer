@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="imageviewer">
-	<schema id="io.github.masatn1973.ImageViewer" path="/io/github/masatn1973/ImageViewer/">
+  <schema id="io.github.masatn1973.ImageViewer" path="/io/github/masatn1973/ImageViewer/">
+    <key name="slideshow-interval" type="u">
+      <default>3</default>
+      <summary>Slideshow slideshow-interval</summary>
+      <description>
+        Seconds between slides.
+      </description>
+    </key>
 	</schema>
 </schemalist>

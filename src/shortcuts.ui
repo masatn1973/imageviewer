@@ -90,6 +90,18 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Start Slideshow</property>
+                <property name="accelerator">&lt;Ctrl&gt;s</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Open Preference</property>
+                <property name="accelerator">&lt;Ctrl&gt;p</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
                 <property name="accelerator">&lt;Ctrl&gt;question</property>
               </object>

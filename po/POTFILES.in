@@ -7,7 +7,9 @@ src/about.py
 src/main.py
 src/viewer.py
 src/window.py
+src/preferences.py
 src/about.ui
 src/shortcuts.ui
 src/viewer.ui
 src/window.ui
+src/preferences.ui

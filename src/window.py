@@ -49,6 +49,7 @@ from gi.repository import GExiv2
 from gi.repository import Gdk, Gtk, Adw, Gio
 from gi.repository import GObject, GdkPixbuf, GLib, Gst, GstPbutils
 
+from preferences import PreferencesWindow
 from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
 
@@ -77,6 +78,22 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.thumbnail_idle_id = None
 
         self.slideshow_id = None
+
+        self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+
+        interval3_action = Gio.SimpleAction.new("slideshow3", None)
+        interval3_action.connect("activate", lambda *_: self.set_slideshow_interval(3))
+        self.add_action(interval3_action)
+
+        interval5_action = Gio.SimpleAction.new("slideshow5", None)
+        interval5_action.connect("activate", lambda *_: self.set_slideshow_interval(5))
+        self.add_action(interval5_action)
+
+        interval10_action = Gio.SimpleAction.new("slideshow10", None)
+        interval10_action.connect(
+            "activate", lambda *_: self.set_slideshow_interval(10)
+        )
+        self.add_action(interval10_action)
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
@@ -110,6 +127,18 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
 
+        prefs_action = Gio.SimpleAction.new("preferences", None)
+        prefs_action.connect("activate", self.on_preferences)
+        self.add_action(prefs_action)
+        app.set_accels_for_action("win.preferences", ["<primary>p"])
+
+    def on_preferences(self, action, param):
+        prefs = PreferencesWindow(self)
+        prefs.present()
+
+    def set_slideshow_interval(self, seconds):
+        self.slideshow_interval = seconds * 1000
+
     def on_slideshow(self, action, param):
         if self.slideshow_id is None:
             self.start_slideshow()
@@ -140,21 +169,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return
 
         if self.viewer is None:
-            selected = self.flowbox.get_selected_children()
-
-            if not selected:
-                child = self.flowbox.get_child_at_index(0)
-
-                if child:
-                    self.flowbox.select_child(child)
-
             self.open_selected_image()
 
         if self.viewer is None:
             return
 
+        interval = self.settings.get_uint("slideshow-interval")
         self.slideshow_id = GLib.timeout_add(
-            3000,  # 3 seconds
+            interval * 1000,
             self.slideshow_next,
         )
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 05:53+0900\n"
+"POT-Creation-Date: 2026-06-16 07:45+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,14 @@ msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:6
+msgid "Slideshow slideshow-interval"
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:16
+msgid "Seconds between slides."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
@@ -119,7 +127,7 @@ msgstr ""
 msgid "Focal Length: "
 msgstr ""
 
-#: src/window.py:594
+#: src/window.py:616
 msgid "image(s) loaded."
 msgstr ""
 
@@ -187,15 +195,23 @@ msgstr ""
 msgid "Show/Hide EXIF data"
 msgstr ""
 
-#: src/shortcuts.ui:93
-msgid "Show Keyboard Shortcuts"
+#: src/shortcuts.ui:93 src/window.ui:67
+msgid "Start Slideshow"
 msgstr ""
 
 #: src/shortcuts.ui:99
-msgid "Show About Dialog"
+msgid "Open Preference"
 msgstr ""
 
 #: src/shortcuts.ui:105
+msgid "Show Keyboard Shortcuts"
+msgstr ""
+
+#: src/shortcuts.ui:111
+msgid "Show About Dialog"
+msgstr ""
+
+#: src/shortcuts.ui:117
 msgid "Quit Image Viewer"
 msgstr ""
 
@@ -207,14 +223,22 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:67
-msgid "Start Slideshow"
+#: src/window.ui:73 src/preferences.ui:7
+msgid "Preferences"
 msgstr ""
 
-#: src/window.ui:73
+#: src/window.ui:79
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/window.ui:77
+#: src/window.ui:83
 msgid "About ImageViewer"
+msgstr ""
+
+#: src/preferences.ui:12
+msgid "Slideshow"
+msgstr ""
+
+#: src/preferences.ui:15
+msgid "Interval"
 msgstr ""

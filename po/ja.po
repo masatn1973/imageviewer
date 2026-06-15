@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 05:53+0900\n"
-"PO-Revision-Date: 2026-06-15 05:55+0900\n"
+"POT-Creation-Date: 2026-06-16 07:45+0900\n"
+"PO-Revision-Date: 2026-06-16 08:03+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -32,6 +32,14 @@ msgstr "フォルダー別サムネイル画像ビューアー"
 #: data/io.github.masatn1973.ImageViewer.desktop.in:9
 msgid "GTK;"
 msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:6
+msgid "Slideshow slideshow-interval"
+msgstr "スライドショー スライドショーの間隔"
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:16
+msgid "Seconds between slides."
+msgstr "スライド間の間隔(秒)"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
@@ -124,7 +132,7 @@ msgstr ""
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:594
+#: src/window.py:616
 msgid "image(s) loaded."
 msgstr "枚の画像をロードしました"
 
@@ -192,15 +200,23 @@ msgstr "次のページ"
 msgid "Show/Hide EXIF data"
 msgstr "EXIF データを表示する/隠す"
 
-#: src/shortcuts.ui:93
+#: src/shortcuts.ui:93 src/window.ui:67
+msgid "Start Slideshow"
+msgstr "スライドショーの開始"
+
+#: src/shortcuts.ui:99
+msgid "Open Preference"
+msgstr "設定画面を開く"
+
+#: src/shortcuts.ui:105
 msgid "Show Keyboard Shortcuts"
 msgstr "ショートカットの表示"
 
-#: src/shortcuts.ui:99
+#: src/shortcuts.ui:111
 msgid "Show About Dialog"
 msgstr "画像ビューワについてを開く"
 
-#: src/shortcuts.ui:105
+#: src/shortcuts.ui:117
 msgid "Quit Image Viewer"
 msgstr "画像ビューワを終了する"
 
@@ -212,17 +228,44 @@ msgstr "準備完了"
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:67
-msgid "Start Slideshow"
-msgstr "スライドショーの開始"
+#: src/window.ui:73 src/preferences.ui:7
+msgid "Preferences"
+msgstr "設定"
 
-#: src/window.ui:73
+#: src/window.ui:79
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: src/window.ui:77
+#: src/window.ui:83
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
+
+#: src/preferences.ui:12
+msgid "Slideshow"
+msgstr "スライドショー"
+
+#: src/preferences.ui:15
+msgid "Interval"
+msgstr "間隔"
+
+#, fuzzy
+#~ msgid ""
+#~ " Interval\n"
+#~ "                "
+#~ msgstr "間隔"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "     Preferences\n"
+#~ "    "
+#~ msgstr "設定"
+
+#~ msgid ""
+#~ "\n"
+#~ "                  Seconds between slides.\n"
+#~ "                "
+#~ msgstr "スライド間の間隔(秒)"
 
 #, fuzzy
 #~ msgid "Folder-oriented thumbnail images browser"
