@@ -1,9 +1,9 @@
 # Image Viewer
 
-Image Viewer is a lightweight application for browsing and viewing image files.
+ImageViewer is a folder-oriented thumbnail browser for quickly browsing image collections.
 It is built with GTK4 and libadwaita and supports common image formats.
-![Image 1](https://blog-imgs-201.fc2.com/p/l/a/plamokozo/image1.png)
-![Image 2](https://blog-imgs-201.fc2.com/p/l/a/plamokozo/image2.png)
+![Image 1](https://github.com/user-attachments/assets/ca99fb13-cd7b-4d13-aec3-c09f3dfbdfbf)
+![Image 2](https://github.com/user-attachments/assets/6ef008ce-2875-4b27-9ce9-b64ad94f273b)
 
 ## Installation before building
 
