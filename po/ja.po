@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-16 07:45+0900\n"
-"PO-Revision-Date: 2026-06-16 08:03+0900\n"
+"POT-Creation-Date: 2026-06-16 08:24+0900\n"
+"PO-Revision-Date: 2026-06-16 08:25+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -240,6 +240,10 @@ msgstr "キーボードショートカット"
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 
+#: src/window.ui:89
+msgid "Quit"
+msgstr "終了"
+
 #: src/preferences.ui:12
 msgid "Slideshow"
 msgstr "スライドショー"
@@ -247,6 +251,12 @@ msgstr "スライドショー"
 #: src/preferences.ui:15
 msgid "Interval"
 msgstr "間隔"
+
+#~ msgid "_Start Slideshow"
+#~ msgstr "スライドショーの開始(_S)"
+
+#~ msgid "_Preferences"
+#~ msgstr "設定(_P)"
 
 #, fuzzy
 #~ msgid ""

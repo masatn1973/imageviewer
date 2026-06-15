@@ -81,20 +81,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
-        interval3_action = Gio.SimpleAction.new("slideshow3", None)
-        interval3_action.connect("activate", lambda *_: self.set_slideshow_interval(3))
-        self.add_action(interval3_action)
-
-        interval5_action = Gio.SimpleAction.new("slideshow5", None)
-        interval5_action.connect("activate", lambda *_: self.set_slideshow_interval(5))
-        self.add_action(interval5_action)
-
-        interval10_action = Gio.SimpleAction.new("slideshow10", None)
-        interval10_action.connect(
-            "activate", lambda *_: self.set_slideshow_interval(10)
-        )
-        self.add_action(interval10_action)
-
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
         self.flowbox.connect("child-activated", self.on_child_activated)
@@ -113,7 +99,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_action(slideshow_action)
 
         self.slideshow_action = slideshow_action
-        app.set_accels_for_action("win.slideshow", ["<Ctrl>S"])
+        app.set_accels_for_action("win.slideshow", ["<Ctrl>s"])
 
         about_action = Gio.SimpleAction.new("about", None)
         about_action.connect("activate", self.on_about)
