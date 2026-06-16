@@ -41,6 +41,8 @@ resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
 resource._register()
 
 from window import ImageViewerWindow
+from shortcuts import ImageviewerShortcuts
+from preferences import PreferencesWindow
 
 
 class ImageviewerApplication(Adw.Application):
@@ -58,10 +60,41 @@ class ImageviewerApplication(Adw.Application):
         self.add_action(open_action)
         self.set_accels_for_action("app.open", ["<Ctrl>O"])
 
+        prefs_action = Gio.SimpleAction.new("preferences", None)
+        prefs_action.connect("activate", self.on_preferences)
+        self.add_action(prefs_action)
+        self.set_accels_for_action("app.preferences", ["<primary>p"])
+
+        shortcuts_action = Gio.SimpleAction.new("shortcuts", None)
+        shortcuts_action.connect("activate", self.on_shortcuts)
+        self.add_action(shortcuts_action)
+        self.set_accels_for_action("app.shortcuts", ["<primary>question"])
+
+        about_action = Gio.SimpleAction.new("about", None)
+        about_action.connect("activate", self.on_about)
+        self.add_action(about_action)
+        self.set_accels_for_action("app.about", ["<primary>a"])
+
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", lambda *_: self.quit())
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Ctrl>Q"])
+
+    def on_about(self, action, param):
+        builder = Gtk.Builder.new_from_resource(
+            "/io/github/masatn1973/ImageViewer/about.ui"
+        )
+
+        about = builder.get_object("about")
+        about.present(self.get_active_window())
+
+    def on_preferences(self, action, param):
+        prefs = PreferencesWindow(self.get_active_window())
+        prefs.present()
+
+    def on_shortcuts(self, action, param):
+        win = ImageviewerShortcuts(self.get_active_window())
+        win.present()
 
     def on_open(self, action, param):
         win = self.props.active_window

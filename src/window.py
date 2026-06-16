@@ -49,8 +49,6 @@ from gi.repository import GExiv2
 from gi.repository import Gdk, Gtk, Adw, Gio
 from gi.repository import GObject, GdkPixbuf, GLib, Gst, GstPbutils
 
-from preferences import PreferencesWindow
-from shortcuts import ImageviewerShortcuts
 from viewer import ImageViewerDialog
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp", ".tiff")
@@ -85,14 +83,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.flowbox.connect("child-activated", self.on_child_activated)
 
-        self.connect("close-request", self.on_close_request)
-
         # Action
-        shortcuts_action = Gio.SimpleAction.new("shortcuts", None)
-        shortcuts_action.connect("activate", self.on_shortcuts)
-        self.add_action(shortcuts_action)
-        app.set_accels_for_action("win.shortcuts", ["<primary>question"])
-
         slideshow_action = Gio.SimpleAction.new("slideshow", None)
         slideshow_action.connect("activate", self.on_slideshow)
         slideshow_action.set_enabled(False)
@@ -101,26 +92,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.slideshow_action = slideshow_action
         app.set_accels_for_action("win.slideshow", ["<Ctrl>s"])
 
-        about_action = Gio.SimpleAction.new("about", None)
-        about_action.connect("activate", self.on_about)
-        self.add_action(about_action)
-        app.set_accels_for_action("win.about", ["<primary>a"])
-
-        self.connect("close-request", self.on_close_request)
-
         controller = Gtk.EventControllerKey()
         controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
 
-        prefs_action = Gio.SimpleAction.new("preferences", None)
-        prefs_action.connect("activate", self.on_preferences)
-        self.add_action(prefs_action)
-        app.set_accels_for_action("win.preferences", ["<primary>p"])
-
-    def on_preferences(self, action, param):
-        prefs = PreferencesWindow(self)
-        prefs.present()
+        self.connect("close-request", self.on_close_request)
 
     def set_slideshow_interval(self, seconds):
         self.slideshow_interval = seconds * 1000
@@ -395,19 +372,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         if folder:
             self.load_folder(folder)
-
-    def on_about(self, action, param):
-        builder = Gtk.Builder.new_from_resource(
-            "/io/github/masatn1973/ImageViewer/about.ui"
-        )
-        builder.set_translation_domain("/io/github/masatn1973/ImageViewer")
-
-        about = builder.get_object("about")
-        about.present(self)
-
-    def on_shortcuts(self, action, param):
-        win = ImageviewerShortcuts(self)
-        win.present()
 
     def load_folder(self, folder):
         # delete old thumbnails
