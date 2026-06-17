@@ -16,11 +16,9 @@ install_data(
 )
 
 install_data([
-  '__init__.py',
   'main.py',
   'window.py',
   'viewer.py',
-  'about.py',
   'shortcuts.py',
   'preferences.py',
 ], install_dir: '/app/share/imageviewer')
