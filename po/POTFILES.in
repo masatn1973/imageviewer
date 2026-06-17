@@ -3,7 +3,6 @@
 data/io.github.masatn1973.ImageViewer.desktop.in
 data/io.github.masatn1973.ImageViewer.gschema.xml
 data/io.github.masatn1973.ImageViewer.metainfo.xml.in
-src/about.py
 src/main.py
 src/viewer.py
 src/window.py

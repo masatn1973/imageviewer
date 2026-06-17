@@ -6,7 +6,7 @@
     <child>
       <object class="GtkShortcutsSection">
         <property name="section-name">shortcuts</property>
-        <property name="title" translatable="yes">Keyboard shortcuts</property>
+        <property name="title" translatable="yes">Keyboard Shortcuts</property>
         <!-- General -->
         <child>
           <object class="GtkShortcutsGroup">
@@ -19,7 +19,7 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Open Image</property>
+                <property name="title" translatable="yes">Open Selected Image</property>
                 <property name="accelerator">space Return KP_Enter</property>
               </object>
             </child>
@@ -31,7 +31,7 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Quit Image Viewer</property>
+                <property name="title" translatable="yes">Quit</property>
                 <property name="accelerator">&lt;Ctrl&gt;q</property>
               </object>
             </child>
@@ -97,20 +97,14 @@
             <property name="title" translatable="yes">View</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Previous Image</property>
-                <property name="accelerator">Left h</property>
+                <property name="title" translatable="yes">Rotate Clockwise</property>
+                <property name="accelerator">r</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Next Image</property>
-                <property name="accelerator">Right l</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Rotate Image</property>
-                <property name="accelerator">r &lt;Shift&gt;r</property>
+                <property name="title" translatable="yes">Rotate Counterclockwise</property>
+                <property name="accelerator">&lt;Shift&gt;r</property>
               </object>
             </child>
             <child>
@@ -121,13 +115,13 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Fit to Window Size</property>
+                <property name="title" translatable="yes">Fit to Window</property>
                 <property name="accelerator">0</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">View in Original Size</property>
+                <property name="title" translatable="yes">Actual Size</property>
                 <property name="accelerator">1</property>
               </object>
             </child>
@@ -157,25 +151,25 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Open Preference</property>
+                <property name="title" translatable="yes">Preferences</property>
                 <property name="accelerator">&lt;Ctrl&gt;p</property>
               </object>
             </child>
           </object>
         </child>
-        <!-- Others -->
+        <!-- Help -->
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">Others</property>
+            <property name="title" translatable="yes">Help</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
+                <property name="title" translatable="yes">Keyboard Shortcuts</property>
                 <property name="accelerator">&lt;Ctrl&gt;question</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Show About Dialog</property>
+                <property name="title" translatable="yes">About</property>
                 <property name="accelerator">&lt;Ctrl&gt;a</property>
               </object>
             </child>
