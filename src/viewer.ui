@@ -19,7 +19,6 @@
                     <child>
                       <object class="GtkPicture" id="picture">
                         <property name="can-shrink">True</property>
-                        <property name="content-fit">contain</property>
                       </object>
                     </child>
                     <child>

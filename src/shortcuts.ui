@@ -7,6 +7,7 @@
       <object class="GtkShortcutsSection">
         <property name="section-name">shortcuts</property>
         <property name="title" translatable="yes">Keyboard shortcuts</property>
+        <!-- General -->
         <child>
           <object class="GtkShortcutsGroup">
             <property name="title" translatable="yes">General</property>
@@ -28,6 +29,18 @@
                 <property name="accelerator">Escape</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Quit Image Viewer</property>
+                <property name="accelerator">&lt;Ctrl&gt;q</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <!-- Navigation -->
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes">Navigation</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Image Above</property>
@@ -54,12 +67,6 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Rotate Image</property>
-                <property name="accelerator">r &lt;Shift&gt;r</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">First Image</property>
                 <property name="accelerator">Home</property>
               </object>
@@ -82,12 +89,66 @@
                 <property name="accelerator">Page_Down</property>
               </object>
             </child>
+          </object>
+        </child>
+        <!-- View -->
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes">View</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Previous Image</property>
+                <property name="accelerator">Left h</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Next Image</property>
+                <property name="accelerator">Right l</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Rotate Image</property>
+                <property name="accelerator">r &lt;Shift&gt;r</property>
+              </object>
+            </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Show/Hide EXIF data</property>
                 <property name="accelerator">e</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Fit to Window Size</property>
+                <property name="accelerator">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">View in Original Size</property>
+                <property name="accelerator">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Zoom In</property>
+                <property name="accelerator">plus KP_Add</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes">Zoom Out</property>
+                <property name="accelerator">minus KP_Subtract</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <!-- Tools -->
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes">Tools</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Start Slideshow</property>
@@ -100,6 +161,12 @@
                 <property name="accelerator">&lt;Ctrl&gt;p</property>
               </object>
             </child>
+          </object>
+        </child>
+        <!-- Others -->
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes">Others</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes">Show Keyboard Shortcuts</property>
@@ -111,12 +178,6 @@
                 <property name="title" translatable="yes">Show About Dialog</property>
                 <property name="accelerator">&lt;Ctrl&gt;a</property>
               </object>
-            </child>
-            <child>
-            <object class="GtkShortcutsShortcut">
-              <property name="title" translatable="yes">Quit Image Viewer</property>
-              <property name="accelerator">&lt;Ctrl&gt;q</property>
-            </object>
             </child>
           </object>
         </child>

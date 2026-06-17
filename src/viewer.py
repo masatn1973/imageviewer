@@ -37,8 +37,11 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("GExiv2", "0.16")
 
-from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio
+from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio, GLib
 from gi.repository import GExiv2
+
+DEFAULT_ZOOM_RATIO = 1.0
+ZOOM_RATIO = 1.25
 
 VIDEO_EXTS = (
     ".mp4",
@@ -78,6 +81,17 @@ class ImageViewerDialog(Adw.Window):
         self.rotation = 0
         self.file_path = None
 
+        self.zoom = DEFAULT_ZOOM_RATIO
+        self.fit_mode = True
+
+        self.connect("notify::default-width", self.on_window_resize)
+        self.connect("notify::default-height", self.on_window_resize)
+        self.connect("notify::maximized", self.on_window_resize)
+
+        scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
+        scroll.connect("scroll", self.on_scroll)
+        self.picture.add_controller(scroll)
+
         prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
 
@@ -115,7 +129,133 @@ class ImageViewerDialog(Adw.Window):
         if self.image_files:
             self.show_current_image()
 
+    def update_fit_zoom(self):
+        if self.original_pixbuf is None:
+            return False
+
+        allocation = self.get_allocation()
+
+        image_width = self.original_pixbuf.get_width()
+        image_height = self.original_pixbuf.get_height()
+
+        self.fit_zoom = min(
+            allocation.width / image_width, allocation.height / image_height
+        )
+
+        self.update_title()
+
+        return False
+
+    def get_display_zoom(self):
+        if self.fit_mode:
+            return self.fit_zoom
+
+        return self.zoom
+
+    def calculate_fit_zoom(self):
+        if self.original_pixbuf is None:
+            return DEFAULT_ZOOM_RATIO
+
+        img_w = self.original_pixbuf.get_width()
+        img_h = self.original_pixbuf.get_height()
+
+        alloc = self.get_allocation()
+
+        win_w = max(1, alloc.width)
+        win_h = max(1, alloc.height)
+
+        return min(win_w / img_w, win_h / img_h)
+
+    def on_window_resize(self, *args):
+        if self.fit_mode:
+            GLib.idle_add(self.update_title)
+
+    def get_scale_percent(self):
+        if self.original_pixbuf is None:
+            return 0
+
+        img_w = self.original_pixbuf.get_width()
+        img_h = self.original_pixbuf.get_height()
+
+        disp_w = self.picture.get_width()
+        disp_h = self.picture.get_height()
+
+        if disp_w == 0 or disp_h == 0:
+            return 0
+
+        scale = min(disp_w / img_w, disp_h / img_h)
+
+        return round(scale * 100)
+
+    def update_title(self):
+        if self.current_file is None:
+            return
+
+        filename = self.current_file.get_basename()
+
+        percent = int(self.get_display_zoom() * 100)
+
+        self.set_title(f"{filename} ({percent}%)")
+
+    def on_scroll(self, controller, dx, dy):
+        state = controller.get_current_event_state()
+
+        if state & Gdk.ModifierType.CONTROL_MASK:
+            if dy < 0:
+                self.zoom_in()
+
+            else:
+                self.zoom_out()
+
+            return True
+
+        return False
+
+    def zoom_actual_size(self):
+        self.fit_mode = False
+        self.zoom = DEFAULT_ZOOM_RATIO
+        self.update_image()
+        self.update_title()
+
+    def zoom_fit(self):
+        self.fit_mode = True
+        self.zoom = DEFAULT_ZOOM_RATIO
+        self.update_image()
+
+    def zoom_in(self):
+        if self.fit_mode:
+            self.zoom = self.fit_zoom
+            self.fit_mode = False
+
+        self.zoom *= ZOOM_RATIO
+
+        self.update_image()
+        self.update_title()
+
+    def zoom_out(self):
+        if self.fit_mode:
+            self.zoom = self.fit_zoom
+            self.fit_mode = False
+
+        self.zoom /= ZOOM_RATIO
+
+        self.update_image()
+        self.update_title()
+
+    def zoom_reset(self):
+        self.zoom = DEFAULT_ZOOM_RATIO
+        self.update_image()
+        self.update_title()
+
     def on_key_pressed(self, controller, keyval, keycode, state):
+        if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
+            self.zoom_in()
+            return True
+
+        if keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
+            self.zoom_out()
+            return True
+
         if keyval in (Gdk.KEY_Right, Gdk.KEY_l):
             self.show_next_image()
             return True
@@ -143,6 +283,16 @@ class ImageViewerDialog(Adw.Window):
             else:
                 self.info_box.set_visible(False)
                 self.is_show_exif_data = False
+
+            return True
+
+        if keyval == Gdk.KEY_0:
+            self.zoom_fit()
+
+            return True
+
+        if keyval == Gdk.KEY_1:
+            self.zoom_actual_size()
 
             return True
 
@@ -272,11 +422,18 @@ class ImageViewerDialog(Adw.Window):
         elif self.rotation == 270:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
 
-        self.picture.set_paintable(Gdk.Texture.new_for_pixbuf(pixbuf))
-
         texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-
         self.picture.set_paintable(texture)
+
+        if self.fit_mode:
+            self.picture.set_size_request(-1, -1)
+            GLib.idle_add(self.update_fit_zoom)
+
+        else:
+            width = int(pixbuf.get_width() * self.zoom)
+            height = int(pixbuf.get_height() * self.zoom)
+
+            self.picture.set_size_request(width, height)
 
     def open_video(self, gfile):
         self.set_title(gfile.get_basename())
@@ -301,6 +458,10 @@ class ImageViewerDialog(Adw.Window):
             self.open_image(gfile)
 
     def show_current_image(self):
+        self.fit_zoom = self.calculate_fit_zoom()
+        self.zoom = self.fit_zoom
+        self.fit_mode = True
+
         media = self.video.set_media_stream()
 
         if media:
@@ -343,6 +504,8 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     def open_image(self, gfile):
+        self.zoom = DEFAULT_ZOOM_RATIO
+
         media = self.video.set_media_stream()
 
         if media:
@@ -351,8 +514,6 @@ class ImageViewerDialog(Adw.Window):
         self.media_stack.set_visible_child(self.picture)
 
         path = gfile.get_path()
-
-        self.set_title(gfile.get_basename())
 
         try:
             self.rotation = 0

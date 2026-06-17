@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-16 08:24+0900\n"
+"POT-Creation-Date: 2026-06-17 11:34+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,82 +52,86 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
-msgid "Support slideshow."
+msgid "Support Zoom In/Out."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
-msgid "Fixed an issue where no sound was playing when videos were played."
+msgid "Support slideshow."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
-msgid "Add video playback support."
+msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:55
-msgid "EXIF information display is now supported."
+msgid "Add video playback support."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:62
-msgid "Image rotation is now supported."
+msgid "EXIF information display is now supported."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:69
+msgid "Image rotation is now supported."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:76
 msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:70
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:77
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:84
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:84
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:91
 msgid "Supports .bmp and .tiff file format."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:85
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:92
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:91
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:98
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:207 src/viewer.py:210
+#: src/viewer.py:357 src/viewer.py:360
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:214 src/viewer.py:216
+#: src/viewer.py:364 src/viewer.py:366
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:219 src/viewer.py:222
+#: src/viewer.py:369 src/viewer.py:372
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:227 src/viewer.py:229
+#: src/viewer.py:377 src/viewer.py:379
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:232 src/viewer.py:235 src/viewer.py:241
+#: src/viewer.py:382 src/viewer.py:385 src/viewer.py:391
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:244 src/viewer.py:248
+#: src/viewer.py:394 src/viewer.py:398
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:251 src/viewer.py:253
+#: src/viewer.py:401 src/viewer.py:403
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:256 src/viewer.py:258
+#: src/viewer.py:406 src/viewer.py:408
 msgid "Focal Length: "
 msgstr ""
 
-#: src/window.py:616
+#: src/window.py:566
 msgid "image(s) loaded."
 msgstr ""
 
@@ -139,80 +143,112 @@ msgstr ""
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/shortcuts.ui:12
+#: src/shortcuts.ui:13
 msgid "General"
 msgstr ""
 
-#: src/shortcuts.ui:15
+#: src/shortcuts.ui:16
 msgid "Open Folder"
 msgstr ""
 
-#: src/shortcuts.ui:21
+#: src/shortcuts.ui:22
 msgid "Open Image"
 msgstr ""
 
-#: src/shortcuts.ui:27
+#: src/shortcuts.ui:28
 msgid "Close Image"
 msgstr ""
 
-#: src/shortcuts.ui:33
+#: src/shortcuts.ui:34
+msgid "Quit Image Viewer"
+msgstr ""
+
+#: src/shortcuts.ui:43
+msgid "Navigation"
+msgstr ""
+
+#: src/shortcuts.ui:46
 msgid "Image Above"
 msgstr ""
 
-#: src/shortcuts.ui:39
+#: src/shortcuts.ui:52 src/shortcuts.ui:100
 msgid "Previous Image"
 msgstr ""
 
-#: src/shortcuts.ui:45
+#: src/shortcuts.ui:58 src/shortcuts.ui:106
 msgid "Next Image"
 msgstr ""
 
-#: src/shortcuts.ui:51
+#: src/shortcuts.ui:64
 msgid "Image Below"
 msgstr ""
 
-#: src/shortcuts.ui:57
-msgid "Rotate Image"
-msgstr ""
-
-#: src/shortcuts.ui:63
+#: src/shortcuts.ui:70
 msgid "First Image"
 msgstr ""
 
-#: src/shortcuts.ui:69
+#: src/shortcuts.ui:76
 msgid "Last Image"
 msgstr ""
 
-#: src/shortcuts.ui:75
+#: src/shortcuts.ui:82
 msgid "Previous Page"
 msgstr ""
 
-#: src/shortcuts.ui:81
+#: src/shortcuts.ui:88
 msgid "Next Page"
 msgstr ""
 
-#: src/shortcuts.ui:87
+#: src/shortcuts.ui:97
+msgid "View"
+msgstr ""
+
+#: src/shortcuts.ui:112
+msgid "Rotate Image"
+msgstr ""
+
+#: src/shortcuts.ui:118
 msgid "Show/Hide EXIF data"
 msgstr ""
 
-#: src/shortcuts.ui:93 src/window.ui:67
+#: src/shortcuts.ui:124
+msgid "Fit to Window Size"
+msgstr ""
+
+#: src/shortcuts.ui:130
+msgid "View in Original Size"
+msgstr ""
+
+#: src/shortcuts.ui:136
+msgid "Zoom In"
+msgstr ""
+
+#: src/shortcuts.ui:142
+msgid "Zoom Out"
+msgstr ""
+
+#: src/shortcuts.ui:151
+msgid "Tools"
+msgstr ""
+
+#: src/shortcuts.ui:154 src/window.ui:67
 msgid "Start Slideshow"
 msgstr ""
 
-#: src/shortcuts.ui:99
+#: src/shortcuts.ui:160
 msgid "Open Preference"
 msgstr ""
 
-#: src/shortcuts.ui:105
+#: src/shortcuts.ui:169
+msgid "Others"
+msgstr ""
+
+#: src/shortcuts.ui:172
 msgid "Show Keyboard Shortcuts"
 msgstr ""
 
-#: src/shortcuts.ui:111
+#: src/shortcuts.ui:178
 msgid "Show About Dialog"
-msgstr ""
-
-#: src/shortcuts.ui:117
-msgid "Quit Image Viewer"
 msgstr ""
 
 #: src/window.ui:37
