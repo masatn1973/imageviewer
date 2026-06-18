@@ -22,6 +22,7 @@ import locale
 import sys
 import gi
 
+
 APP_ID = "io.github.masatn1973.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
@@ -41,7 +42,6 @@ resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
 resource._register()
 
 from window import ImageViewerWindow
-from shortcuts import ImageviewerShortcuts
 from preferences import PreferencesWindow
 
 
@@ -93,8 +93,11 @@ class ImageviewerApplication(Adw.Application):
         prefs.present()
 
     def on_shortcuts(self, action, param):
-        win = ImageviewerShortcuts(self.get_active_window())
-        win.present()
+        builder = Gtk.Builder.new_from_resource(
+            "/io/github/masatn1973/ImageViewer/shortcuts.ui"
+        )
+        shortcuts = builder.get_object("shortcuts")
+        shortcuts.present(self.get_active_window())
 
     def on_open(self, action, param):
         win = self.props.active_window

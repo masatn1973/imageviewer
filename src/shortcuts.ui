@@ -1,181 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="io.github.masatn1973.ImageViewer">
+<interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="ImageviewerShortcuts" parent="GtkShortcutsWindow">
-    <property name="modal">True</property>
+  <requires lib="libadwaita" version="1.0"/>
+  <object class="AdwShortcutsDialog" id="shortcuts">
     <child>
-      <object class="GtkShortcutsSection">
-        <property name="section-name">shortcuts</property>
-        <property name="title" translatable="yes">Keyboard Shortcuts</property>
-        <!-- General -->
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">General</property>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">General</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Open Folder</property>
-                <property name="accelerator">&lt;Ctrl&gt;o</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Open Selected Image</property>
-                <property name="accelerator">space Return KP_Enter</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Close Image</property>
-                <property name="accelerator">Escape</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Quit</property>
-                <property name="accelerator">&lt;Ctrl&gt;q</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Open Folder</property>
+            <property name="accelerator">&lt;Ctrl&gt;o</property>
           </object>
         </child>
-        <!-- Navigation -->
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">Navigation</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Image Above</property>
-                <property name="accelerator">Up k</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Previous Image</property>
-                <property name="accelerator">Left h</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Next Image</property>
-                <property name="accelerator">Right l</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Image Below</property>
-                <property name="accelerator">Down j</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">First Image</property>
-                <property name="accelerator">Home</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Last Image</property>
-                <property name="accelerator">End</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Previous Page</property>
-                <property name="accelerator">Page_Up</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Next Page</property>
-                <property name="accelerator">Page_Down</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Open Selected Image</property>
+            <property name="accelerator">space Return KP_Enter</property>
           </object>
         </child>
-        <!-- View -->
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">View</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Rotate Clockwise</property>
-                <property name="accelerator">r</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Rotate Counterclockwise</property>
-                <property name="accelerator">&lt;Shift&gt;r</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Show/Hide EXIF data</property>
-                <property name="accelerator">e</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Fit to Window</property>
-                <property name="accelerator">0</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Actual Size</property>
-                <property name="accelerator">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Zoom In</property>
-                <property name="accelerator">plus KP_Add</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Zoom Out</property>
-                <property name="accelerator">minus KP_Subtract</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcuts window">Close Image</property>
+            <property name="accelerator">Escape</property>
           </object>
         </child>
-        <!-- Tools -->
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">Tools</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Start Slideshow</property>
-                <property name="accelerator">&lt;Ctrl&gt;s</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Preferences</property>
-                <property name="accelerator">&lt;Ctrl&gt;p</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <!-- Help -->
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes">Help</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">Keyboard Shortcuts</property>
-                <property name="accelerator">&lt;Ctrl&gt;question</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes">About</property>
-                <property name="accelerator">&lt;Ctrl&gt;a</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcuts window">Quit</property>
+            <property name="accelerator">&lt;Ctrl&gt;q</property>
           </object>
         </child>
       </object>
     </child>
-  </template>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">Navigation</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Image Above</property>
+            <property name="accelerator">Up k</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Previous Image</property>
+            <property name="accelerator">Left h</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Next Image</property>
+            <property name="accelerator">Right l</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Image Below</property>
+            <property name="accelerator">Down j</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">First Image</property>
+            <property name="accelerator">Home</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Last Image</property>
+            <property name="accelerator">End</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Previous Page</property>
+            <property name="accelerator">Page_Up</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Next Page</property>
+            <property name="accelerator">Page_Down</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">View</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Rotate Clockwise</property>
+            <property name="accelerator">r</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Rotate Counterclockwise</property>
+            <property name="accelerator">&lt;Shift&gt;r</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Show/Hide EXIF data</property>
+            <property name="accelerator">e</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Fit to Window</property>
+            <property name="accelerator">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes">Actual Size</property>
+          <property name="accelerator">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Zoom In</property>
+            <property name="accelerator">plus KP_Add</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Zoom Out</property>
+            <property name="accelerator">minus KP_Subtract</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shotcut window">Tools</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Start Slideshow</property>
+            <property name="accelerator">&lt;Ctrl&gt;s</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Preferences</property>
+            <property name="accelerator">&lt;Ctrl&gt;p</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shotcut window">Help</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Keyboard Shortcuts</property>
+            <property name="accelerator">&lt;Ctrl&gt;question</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">About</property>
+            <property name="accelerator">&lt;Ctrl&gt;a</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
