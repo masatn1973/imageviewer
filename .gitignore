@@ -5,3 +5,4 @@
 builddir/
 repo/
 *.mo
+*.log
