@@ -52,7 +52,6 @@ from gi.repository import GObject, GdkPixbuf, GLib, Gst, GstPbutils
 from viewer import ImageViewerDialog
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp", ".tiff")
-VIDEO_EXTS = (".mp4", ".mkv", ".webm", ".avi", ".mov")
 
 THUMB = 128
 
@@ -142,71 +141,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             interval * 1000,
             self.slideshow_next,
         )
-
-    def craete_video_thumbnail(self, gfile):
-        uri = gfile.get_uri()
-
-        thumb = (
-            os.path.expanduser("~/.cache/thumbnails/normal/")
-            + hashlib.md5(uri.encode("utf-8")).hexdigest()
-            + ".png"
-        )
-
-        try:
-            playbin = Gst.ElementFactory.make("playbin")
-            playbin.set_properties("uri", gfile.get_uri())
-
-            playbin.set_state(Gst.State.PAUSED)
-
-            playbin.set_state(Gst.CLOCK_TIME_NONE)
-
-            sample = playbin.emit("convert-sample", None)
-
-            if not sample:
-                return None
-
-            buffer = sample.get_buffer()
-            caps = sample.get_caps()
-
-            s = caps.get_structure(0)
-
-            width = s.get_value("width")
-            height = s.get_value("height")
-
-            success, mapinfo = buffer.map(Gst.MapFlags.READ)
-
-            if not success:
-                return None
-
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_data(
-                    mapinfo.data,
-                    GdkPixbuf.Colorspace.RGB,
-                    False,
-                    8,
-                    width,
-                    height,
-                    width * 3,
-                )
-
-            finally:
-                buffer.unmap(mapinfo)
-
-            playbin.set_state(Gst.State.NULL)
-
-            return pixbuf
-
-        except Exception as e:
-            print("thumbnail:", e)
-            return None
-
-    def open_video(self, gfile):
-        self.set_title(gfile.get_basename())
-
-        video = Gtk.Video.new_for_file(gfile)
-        video.set_autoplay(True)
-
-        self.set_content(video)
 
     def get_image_date(self, gfile):
         path = gfile.get_path()
@@ -401,7 +335,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
             name = info.get_name()
 
-            if name.lower().endswith(IMAGE_EXTS) or name.lower().endswith(VIDEO_EXTS):
+            if name.lower().endswith(IMAGE_EXTS):
                 files.append(folder.get_child(name))
 
         enumerator.close(None)
@@ -421,46 +355,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.flowbox.select_child(child)
 
         self.slideshow_action.set_enabled(len(self.image_files) > 0)
-
-    def create_video_thumbnail(self, gfile):
-        try:
-            discoverer = GstPbutils.Discoverer.new(5 * Gst.SECOND)
-            info = discoverer.discover_uri(gfile.get_uri())
-
-            orientation = 0
-
-            tags = info.get_tags()
-            if tags:
-                ok, orientation = tags.get_string("image-orientation")
-
-            playbin = Gst.ElementFactory.make("playbin")
-            sink = Gst.ElementFactory.make("gdkpixbufsink")
-
-            playbin.set_property("video-sink", sink)
-            playbin.set_property("uri", gfile.get_uri())
-
-            playbin.set_state(Gst.State.PAUSED)
-            playbin.get_state(5 * Gst.SECOND)
-
-            pixbuf = sink.get_property("last-pixbuf")
-
-            playbin.set_state(Gst.State.NULL)
-
-            if pixbuf and orientation:
-                if orientation == "rotate-90":
-                    pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-                elif orientation == "rotate-180":
-                    pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
-                elif orientation == "rotate-270":
-                    pixbuf = pixbuf.rotate_simple(
-                        GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE
-                    )
-
-            return pixbuf
-
-        except Exception as e:
-            print("thumbnail error:", e)
-            return None
 
     def load_next_thumbnail(self):
         if not self.pending_files:
@@ -493,59 +387,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 finally:
                     stream.close(None)
 
-            elif ext in VIDEO_EXTS:
-                pixbuf = self.create_video_thumbnail(gfile)
-
-                if pixbuf is None:
-                    widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
-                    widget.set_pixel_size(96)
-
-                else:
-                    w = pixbuf.get_width()
-                    h = pixbuf.get_height()
-
-                    scale = min(THUMB / w, THUMB / h)
-
-                    new_w = int(w * scale)
-                    new_h = int(h * scale)
-
-                    pixbuf = pixbuf.scale_simple(
-                        new_w, new_h, GdkPixbuf.InterpType.BILINEAR
-                    )
-
-                    texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-
-                    picture = Gtk.Picture.new_for_paintable(texture)
-                    picture.set_size_request(THUMB, THUMB)
-                    picture.set_can_shrink(True)
-                    picture.set_content_fit(Gtk.ContentFit.CONTAIN)
-
-                    overlay = Gtk.Overlay()
-                    overlay.set_child(picture)
-
-                    circle = Gtk.Box()
-                    circle.add_css_class("video-play-circle")
-
-                    play_icon = Gtk.Image.new_from_icon_name(
-                        "media-playback-start-symbolic"
-                    )
-                    play_icon.add_css_class("video-play-icon")
-                    play_icon.set_pixel_size(48)
-
-                    circle.append(play_icon)
-
-                    circle.set_halign(Gtk.Align.CENTER)
-                    circle.set_valign(Gtk.Align.CENTER)
-
-                    overlay.add_overlay(circle)
-
-                    overlay.set_size_request(THUMB, THUMB)
-                    widget = overlay
-
-                    # else:
-                    # widget = Gtk.Image.new_from_icon_name("video-x-generic-symbolic")
-                    # widget.set_pixel_size(96)
-
             else:
                 return len(self.pending_files) > 0
 
@@ -554,7 +395,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             child.set_child(widget)
 
             child.image_path = gfile
-            child.is_video = ext in VIDEO_EXTS
 
             self.flowbox.append(child)
 

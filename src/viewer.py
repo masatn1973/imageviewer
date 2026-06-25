@@ -43,14 +43,6 @@ from gi.repository import GExiv2
 DEFAULT_ZOOM_RATIO = 1.0
 ZOOM_RATIO = 1.25
 
-VIDEO_EXTS = (
-    ".mp4",
-    ".mkv",
-    ".webm",
-    ".avi",
-    ".mov",
-)
-
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
@@ -60,7 +52,6 @@ class ImageViewerDialog(Adw.Window):
     headerbar = Gtk.Template.Child()
 
     media_stack = Gtk.Template.Child()
-    video = Gtk.Template.Child()
 
     info_box = Gtk.Template.Child()
     Camera_label = Gtk.Template.Child()
@@ -168,7 +159,7 @@ class ImageViewerDialog(Adw.Window):
 
     def on_window_resize(self, *args):
         if self.fit_mode:
-            GLib.idle_add(self.update_title)
+            GLib.idle_add(self.update_fit_zoom)
 
     def get_scale_percent(self):
         if self.original_pixbuf is None:
@@ -348,9 +339,6 @@ class ImageViewerDialog(Adw.Window):
     def show_exif_data(self):
         ext = os.path.splitext(self.current_file.get_basename())[1].lower()
 
-        if ext in VIDEO_EXTS:
-            return
-
         info = self.get_exif_info()
 
         if info["Make"] == "":
@@ -435,39 +423,15 @@ class ImageViewerDialog(Adw.Window):
 
             self.picture.set_size_request(width, height)
 
-    def open_video(self, gfile):
-        self.set_title(gfile.get_basename())
-
-        media = Gtk.MediaFile.new_for_file(gfile)
-
-        self.video.set_media_stream(media)
-        self.media_stack.set_visible_child(self.video)
-
-        media.play()
-
-        self.video.set_file(gfile)
-        self.video.set_autoplay(True)
-
     def open_media(self, gfile):
         ext = os.path.splitext(gfile.get_basename())[1].lower()
 
-        if ext in VIDEO_EXTS:
-            self.open_video(gfile)
-
-        else:
-            self.open_image(gfile)
+        self.open_image(gfile)
 
     def show_current_image(self):
         self.fit_zoom = self.calculate_fit_zoom()
         self.zoom = self.fit_zoom
         self.fit_mode = True
-
-        media = self.video.set_media_stream()
-
-        if media:
-            media.pause()
-
-        self.video.set_media_stream(None)
 
         self.media_stack.set_visible_child(self.picture)
 
@@ -505,11 +469,6 @@ class ImageViewerDialog(Adw.Window):
 
     def open_image(self, gfile):
         self.zoom = DEFAULT_ZOOM_RATIO
-
-        media = self.video.set_media_stream()
-
-        if media:
-            media.pause()
 
         self.media_stack.set_visible_child(self.picture)
 
