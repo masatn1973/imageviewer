@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 19:48+0900\n"
+"POT-Creation-Date: 2026-06-25 20:26+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,43 +99,43 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:357 src/viewer.py:360
+#: src/viewer.py:345 src/viewer.py:348
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:364 src/viewer.py:366
+#: src/viewer.py:352 src/viewer.py:354
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:369 src/viewer.py:372
+#: src/viewer.py:357 src/viewer.py:360
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:377 src/viewer.py:379
+#: src/viewer.py:365 src/viewer.py:367
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:382 src/viewer.py:385 src/viewer.py:391
+#: src/viewer.py:370 src/viewer.py:373 src/viewer.py:379
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:394 src/viewer.py:398
+#: src/viewer.py:382 src/viewer.py:386
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:401 src/viewer.py:403
+#: src/viewer.py:389 src/viewer.py:391
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:406 src/viewer.py:408
+#: src/viewer.py:394 src/viewer.py:396
 msgid "Focal Length: "
 msgstr ""
 
-#: src/window.py:566
-msgid "image(s) loaded."
+#: src/window.py:406
+msgid "image(s) read."
 msgstr ""
 
-#: src/about.ui:12
+#: src/about.ui:14
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 

@@ -403,7 +403,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
             self.loaded_count += 1
 
-            self.status_label.set_text(f"{self.loaded_count} " + _("image(s) loaded."))
+            self.status_label.set_text(f"{self.loaded_count} " + _("image(s) read."))
 
         except Exception as e:
             print("FAILED:", gfile.get_basename())
