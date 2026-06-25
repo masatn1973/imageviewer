@@ -74,6 +74,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.thumbnail_idle_id = None
 
+        self.current_folder = None
+
         self.slideshow_id = None
 
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
@@ -83,6 +85,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.flowbox.connect("child-activated", self.on_child_activated)
 
         # Action
+        self.reload_action = Gio.SimpleAction.new("reload", None)
+        self.reload_action.connect("activate", lambda a, p: self.reload_folder())
+        self.reload_action.set_enabled(False)
+        self.add_action(self.reload_action)
+        app.set_accels_for_action("win.reload", ["F5"])
+
         slideshow_action = Gio.SimpleAction.new("slideshow", None)
         slideshow_action.connect("activate", self.on_slideshow)
         slideshow_action.set_enabled(False)
@@ -97,6 +105,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_controller(controller)
 
         self.connect("close-request", self.on_close_request)
+
+    def reload_folder(self):
+        self.thumbnail_idle_id = None
+        self.load_folder(self.current_folder)
 
     def set_slideshow_interval(self, seconds):
         self.slideshow_interval = seconds * 1000
@@ -184,6 +196,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             1,
             self.flowbox.get_allocated_width() // item_width,
         )
+
+        if keyval == Gdk.KEY_F5:
+            self.reload_folder()
+            return True
 
         if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
             if new_index > 0:
@@ -308,6 +324,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.load_folder(folder)
 
     def load_folder(self, folder):
+        self.current_folder = folder
+
+        if self.thumbnail_idle_id is not None:
+            self.thumbnail_idle_id = None
+
         # delete old thumbnails
         child = self.flowbox.get_first_child()
         count = 0
@@ -354,6 +375,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if child:
             self.flowbox.select_child(child)
 
+        self.reload_action.set_enabled(True)
         self.slideshow_action.set_enabled(len(self.image_files) > 0)
 
     def load_next_thumbnail(self):
@@ -442,6 +464,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     def on_close_request(self, *args):
+        if hasattr(self, "monitor") and self.monitor:
+            self.monitor.cancel()
+
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
 

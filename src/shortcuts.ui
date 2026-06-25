@@ -26,6 +26,12 @@
         </child>
         <child>
           <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcuts window">Reload Thumbnails</property>
+            <property name="accelerator">F5</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
             <property name="title" translatable="yes" context="shortcuts window">Quit</property>
             <property name="accelerator">&lt;Ctrl&gt;q</property>
           </object>

@@ -64,6 +64,12 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">Reload Thumbnails</attribute>
+        <attribute name="action">win.reload</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Start Slideshow</attribute>
         <attribute name="action">win.slideshow</attribute>
       </item>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-25 20:26+0900\n"
+"POT-Creation-Date: 2026-06-25 22:22+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Focal Length: "
 msgstr ""
 
-#: src/window.py:406
+#: src/window.py:428
 msgid "image(s) read."
 msgstr ""
 
@@ -161,108 +161,113 @@ msgstr ""
 
 #: src/shortcuts.ui:29
 msgctxt "shortcuts window"
+msgid "Reload Thumbnails"
+msgstr ""
+
+#: src/shortcuts.ui:35
+msgctxt "shortcuts window"
 msgid "Quit"
 msgstr ""
 
-#: src/shortcuts.ui:37
+#: src/shortcuts.ui:43
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr ""
 
-#: src/shortcuts.ui:40
+#: src/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Image Above"
 msgstr ""
 
-#: src/shortcuts.ui:46
+#: src/shortcuts.ui:52
 msgctxt "shortcut window"
 msgid "Previous Image"
 msgstr ""
 
-#: src/shortcuts.ui:52
+#: src/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Next Image"
 msgstr ""
 
-#: src/shortcuts.ui:58
+#: src/shortcuts.ui:64
 msgctxt "shortcut window"
 msgid "Image Below"
 msgstr ""
 
-#: src/shortcuts.ui:64
+#: src/shortcuts.ui:70
 msgctxt "shortcut window"
 msgid "First Image"
 msgstr ""
 
-#: src/shortcuts.ui:70
+#: src/shortcuts.ui:76
 msgctxt "shortcut window"
 msgid "Last Image"
 msgstr ""
 
-#: src/shortcuts.ui:76
+#: src/shortcuts.ui:82
 msgid "Previous Page"
 msgstr ""
 
-#: src/shortcuts.ui:82
+#: src/shortcuts.ui:88
 msgid "Next Page"
 msgstr ""
 
-#: src/shortcuts.ui:90
+#: src/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "View"
 msgstr ""
 
-#: src/shortcuts.ui:93
+#: src/shortcuts.ui:99
 msgid "Rotate Clockwise"
 msgstr ""
 
-#: src/shortcuts.ui:99
+#: src/shortcuts.ui:105
 msgid "Rotate Counterclockwise"
 msgstr ""
 
-#: src/shortcuts.ui:105
+#: src/shortcuts.ui:111
 msgid "Show/Hide EXIF data"
 msgstr ""
 
-#: src/shortcuts.ui:111
+#: src/shortcuts.ui:117
 msgid "Fit to Window"
 msgstr ""
 
-#: src/shortcuts.ui:117
+#: src/shortcuts.ui:123
 msgid "Actual Size"
 msgstr ""
 
-#: src/shortcuts.ui:123
+#: src/shortcuts.ui:129
 msgid "Zoom In"
 msgstr ""
 
-#: src/shortcuts.ui:129
+#: src/shortcuts.ui:135
 msgid "Zoom Out"
 msgstr ""
 
-#: src/shortcuts.ui:137
+#: src/shortcuts.ui:143
 msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:140 src/window.ui:67
+#: src/shortcuts.ui:146 src/window.ui:73
 msgid "Start Slideshow"
 msgstr ""
 
-#: src/shortcuts.ui:146 src/window.ui:73 src/preferences.ui:7
+#: src/shortcuts.ui:152 src/window.ui:79 src/preferences.ui:7
 msgid "Preferences"
 msgstr ""
 
-#: src/shortcuts.ui:154
+#: src/shortcuts.ui:160
 msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:157 src/window.ui:79
+#: src/shortcuts.ui:163 src/window.ui:85
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/shortcuts.ui:163
+#: src/shortcuts.ui:169
 msgid "About"
 msgstr ""
 
@@ -274,11 +279,15 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:83
-msgid "About ImageViewer"
+#: src/window.ui:67
+msgid "Reload Thumbnails"
 msgstr ""
 
 #: src/window.ui:89
+msgid "About ImageViewer"
+msgstr ""
+
+#: src/window.ui:95
 msgid "Quit"
 msgstr ""
 

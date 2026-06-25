@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-25 20:26+0900\n"
-"PO-Revision-Date: 2026-06-25 20:30+0900\n"
+"POT-Creation-Date: 2026-06-25 22:22+0900\n"
+"PO-Revision-Date: 2026-06-25 22:26+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:406
+#: src/window.py:428
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
@@ -166,108 +166,113 @@ msgstr "画像を閉じる"
 
 #: src/shortcuts.ui:29
 msgctxt "shortcuts window"
+msgid "Reload Thumbnails"
+msgstr "サムネイルの更新"
+
+#: src/shortcuts.ui:35
+msgctxt "shortcuts window"
 msgid "Quit"
 msgstr "画像ビューワの終了"
 
-#: src/shortcuts.ui:37
+#: src/shortcuts.ui:43
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "ナビゲーション"
 
-#: src/shortcuts.ui:40
+#: src/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Image Above"
 msgstr "上の画像"
 
-#: src/shortcuts.ui:46
+#: src/shortcuts.ui:52
 msgctxt "shortcut window"
 msgid "Previous Image"
 msgstr "前の画像"
 
-#: src/shortcuts.ui:52
+#: src/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Next Image"
 msgstr "次の画像"
 
-#: src/shortcuts.ui:58
+#: src/shortcuts.ui:64
 msgctxt "shortcut window"
 msgid "Image Below"
 msgstr "下の画像"
 
-#: src/shortcuts.ui:64
+#: src/shortcuts.ui:70
 msgctxt "shortcut window"
 msgid "First Image"
 msgstr "最初の画像"
 
-#: src/shortcuts.ui:70
+#: src/shortcuts.ui:76
 msgctxt "shortcut window"
 msgid "Last Image"
 msgstr "最後の画像"
 
-#: src/shortcuts.ui:76
+#: src/shortcuts.ui:82
 msgid "Previous Page"
 msgstr "前のページ"
 
-#: src/shortcuts.ui:82
+#: src/shortcuts.ui:88
 msgid "Next Page"
 msgstr "次のページ"
 
-#: src/shortcuts.ui:90
+#: src/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "View"
 msgstr "ビュー"
 
-#: src/shortcuts.ui:93
+#: src/shortcuts.ui:99
 msgid "Rotate Clockwise"
 msgstr "時計回りに回転"
 
-#: src/shortcuts.ui:99
+#: src/shortcuts.ui:105
 msgid "Rotate Counterclockwise"
 msgstr "反時計回りに回転"
 
-#: src/shortcuts.ui:105
+#: src/shortcuts.ui:111
 msgid "Show/Hide EXIF data"
 msgstr "EXIF データを表示する/隠す"
 
-#: src/shortcuts.ui:111
+#: src/shortcuts.ui:117
 msgid "Fit to Window"
 msgstr "ウィンドウサイズに合わせる"
 
-#: src/shortcuts.ui:117
+#: src/shortcuts.ui:123
 msgid "Actual Size"
 msgstr "実サイズにする"
 
-#: src/shortcuts.ui:123
+#: src/shortcuts.ui:129
 msgid "Zoom In"
 msgstr "ズームイン"
 
-#: src/shortcuts.ui:129
+#: src/shortcuts.ui:135
 msgid "Zoom Out"
 msgstr "ズームアウト"
 
-#: src/shortcuts.ui:137
+#: src/shortcuts.ui:143
 msgctxt "shotcut window"
 msgid "Tools"
 msgstr "ツール"
 
-#: src/shortcuts.ui:140 src/window.ui:67
+#: src/shortcuts.ui:146 src/window.ui:73
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
-#: src/shortcuts.ui:146 src/window.ui:73 src/preferences.ui:7
+#: src/shortcuts.ui:152 src/window.ui:79 src/preferences.ui:7
 msgid "Preferences"
 msgstr "設定"
 
-#: src/shortcuts.ui:154
+#: src/shortcuts.ui:160
 msgctxt "shotcut window"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/shortcuts.ui:157 src/window.ui:79
+#: src/shortcuts.ui:163 src/window.ui:85
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: src/shortcuts.ui:163
+#: src/shortcuts.ui:169
 msgid "About"
 msgstr "画像ビューワについて"
 
@@ -279,11 +284,15 @@ msgstr "準備完了"
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:83
+#: src/window.ui:67
+msgid "Reload Thumbnails"
+msgstr "サムネイルの更新"
+
+#: src/window.ui:89
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 
-#: src/window.ui:89
+#: src/window.ui:95
 msgid "Quit"
 msgstr "終了"
 
