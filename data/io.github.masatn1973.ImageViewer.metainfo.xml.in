@@ -28,6 +28,16 @@
   <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.1.10" date="2026-06-27">
+      <description>
+        <ul>
+          <li translatable="yes">Support image sorting.</li>
+          <li translatable="yes">Support reload thumbnails.</li>
+          <li translatable="yes">Made it so that the window size is remembered when you close the image view or thumbnail window.</li>
+          <li translatable="yes">Removed the video playback feature.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.9" date="2026-06-17">
       <description>
         <ul>

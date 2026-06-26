@@ -21,7 +21,6 @@ import gettext
 import locale
 from sys import modules
 import gi
-import hashlib
 
 
 APP_ID = "/io/github/masatn1973/ImageViewer"
@@ -40,15 +39,13 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 gi.require_version("GExiv2", "0.16")
-gi.require_version("Gst", "1.0")
-gi.require_version("GstPbutils", "1.0")
 
 from datetime import datetime
 from collections import deque
 
 from gi.repository import GExiv2
 from gi.repository import Gdk, Gtk, Adw, Gio
-from gi.repository import GObject, GdkPixbuf, GLib, Gst, GstPbutils
+from gi.repository import GObject, GdkPixbuf, GLib
 
 from viewer import ImageViewerDialog
 
@@ -67,8 +64,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def __init__(self, app):
         super().__init__(application=app)
-
-        Gst.init(None)
 
         self.viewer = None
         self.image_files = []

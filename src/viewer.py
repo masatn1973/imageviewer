@@ -20,7 +20,6 @@ import os
 import gettext
 import locale
 import gi
-from gi.repository.GLib import get_filename_charsets
 
 
 APP_ID = "io.github.masatn1973.ImageViewer"
