@@ -64,7 +64,9 @@ class ImageViewerDialog(Adw.Window):
     FocalLength = Gtk.Template.Child()
 
     def __init__(self, parent, image_files=None, current_index=0):
-        super().__init__(transient_for=parent)
+        super().__init__()
+
+        self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
         self.info_box.add_css_class("exif-overlay")
 
@@ -116,6 +118,16 @@ class ImageViewerDialog(Adw.Window):
 
         self.set_focusable(True)
         self.grab_focus()
+
+        self.set_default_size(
+            self.settings.get_int("viewer-width"),
+            self.settings.get_int("viewer-height"),
+        )
+
+        if self.settings.get_boolean("viewer-maximized"):
+            self.maximize()
+
+        self.connect("close-request", self.on_close_request)
 
         if self.image_files:
             self.show_current_image()
@@ -490,3 +502,10 @@ class ImageViewerDialog(Adw.Window):
         except Exception as e:
             print(f"Failed to open image: {path}")
             print(e)
+
+    def on_close_request(self, *args):
+        self.settings.set_int("viewer-width", self.get_width())
+        self.settings.set_int("viewer-height", self.get_height())
+        self.settings.set_boolean("viewer-maximized", self.is_maximized())
+
+        return False

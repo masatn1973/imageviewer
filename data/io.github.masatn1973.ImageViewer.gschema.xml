@@ -8,5 +8,23 @@
         Seconds between slides.
       </description>
     </key>
+    <key name="window-width" type="i">
+      <default>900</default>
+    </key>
+    <key name="window-height" type="i">
+      <default>700</default>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+    </key>
+    <key name="viewer-width" type="i">
+      <default>900</default>
+    </key>
+    <key name="viewer-height" type="i">
+      <default>600</default>
+    </key>
+    <key name="viewer-maximized" type="b">
+      <default>false</default>
+    </key>
 	</schema>
 </schemalist>

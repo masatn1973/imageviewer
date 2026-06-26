@@ -104,6 +104,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(controller)
 
+        self.set_default_size(
+            self.settings.get_int("viewer-width"),
+            self.settings.get_int("viewer-height"),
+        )
+
+        if self.settings.get_boolean("viewer-maximized"):
+            self.maximize()
+
         self.connect("close-request", self.on_close_request)
 
     def reload_folder(self):
@@ -464,8 +472,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     def on_close_request(self, *args):
-        if hasattr(self, "monitor") and self.monitor:
-            self.monitor.cancel()
+        self.settings.set_int("viewer-width", self.get_width())
+        self.settings.set_int("viewer-height", self.get_height())
+        self.settings.set_boolean("viewer-maximized", self.is_maximized())
 
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
