@@ -19,6 +19,7 @@
 import os
 import gettext
 import locale
+from sys import modules
 import gi
 import hashlib
 
@@ -84,7 +85,36 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.flowbox.connect("child-activated", self.on_child_activated)
 
+        self.sort_mode = "date"
+        self.sort_reverse = False
+
         # Action
+        self.sort_action = Gio.SimpleAction.new_stateful(
+            "sort", GLib.VariantType.new("s"), GLib.Variant.new_string("date")
+        )
+        self.sort_action.connect("change-state", self.on_sort_changed)
+        self.add_action(self.sort_action)
+
+        action = Gio.SimpleAction.new("sort-name", None)
+        action.connect("activate", lambda a, p: self.set_sort_mode("name"))
+        self.add_action(action)
+
+        action = Gio.SimpleAction.new("sort-name-desc", None)
+        action.connect(
+            "activate", lambda a, p: self.set_sort_mode("name", reverse=True)
+        )
+        self.add_action(action)
+
+        action = Gio.SimpleAction.new("sort-date", None)
+        action.connect("activate", lambda a, p: self.set_sort_mode("date"))
+        self.add_action(action)
+
+        action = Gio.SimpleAction.new("sort-date-desc", None)
+        action.connect(
+            "activate", lambda a, p: self.set_sort_mode("date", reverse=True)
+        )
+        self.add_action(action)
+
         self.reload_action = Gio.SimpleAction.new("reload", None)
         self.reload_action.connect("activate", lambda a, p: self.reload_folder())
         self.reload_action.set_enabled(False)
@@ -105,14 +135,45 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_controller(controller)
 
         self.set_default_size(
-            self.settings.get_int("viewer-width"),
-            self.settings.get_int("viewer-height"),
+            self.settings.get_int("window-width"),
+            self.settings.get_int("window-height"),
         )
 
-        if self.settings.get_boolean("viewer-maximized"):
+        if self.settings.get_boolean("window-maximized"):
             self.maximize()
 
         self.connect("close-request", self.on_close_request)
+
+    def on_sort_changed(self, action, value):
+        mode = value.get_string()
+
+        action.set_state(value)
+
+        if mode == "name":
+            self.sort_mode = "name"
+            self.sort_reverse = False
+
+        elif mode == "name-desc":
+            self.sort_mode = "name"
+            self.sort_reverse = True
+
+        elif mode == "date":
+            self.sort_mode = "date"
+            self.sort_reverse = False
+
+        elif mode == "date-desc":
+            self.sort_mode = "date"
+            self.sort_reverse = True
+
+        if self.current_folder:
+            self.load_folder(self.current_folder)
+
+    def set_sort_mode(self, mode, reverse=False):
+        self.sort_mode = mode
+        self.sort_reverse = reverse
+
+        if self.current_folder is not None:
+            self.load_folder(self.current_folder)
 
     def reload_folder(self):
         self.thumbnail_idle_id = None
@@ -369,7 +430,13 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         enumerator.close(None)
 
-        files.sort(key=lambda f: os.path.getmtime(f.get_path()))
+        if self.sort_mode == "name":
+            files.sort(
+                key=lambda f: f.get_basename().lower(), reverse=self.sort_reverse
+            )
+
+        else:
+            files.sort(key=self.get_image_date, reverse=self.sort_reverse)
 
         self.image_files = files
         self.pending_files = deque(files)
@@ -472,9 +539,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     def on_close_request(self, *args):
-        self.settings.set_int("viewer-width", self.get_width())
-        self.settings.set_int("viewer-height", self.get_height())
-        self.settings.set_boolean("viewer-maximized", self.is_maximized())
+        self.settings.set_int("window-width", self.get_width())
+        self.settings.set_int("window-height", self.get_height())
+        self.settings.set_boolean("window-maximized", self.is_maximized())
 
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)

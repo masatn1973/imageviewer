@@ -18,6 +18,12 @@
                 <property name="always-show-arrow">False</property>
               </object>
             </child>
+            <child type="end">
+              <object class="GtkMenuButton" id="sort_button">
+                <property name="icon-name">view-sort-ascending-symbolic</property>
+                <property name="menu-model">sort_menu</property>
+              </object>
+            </child>
           </object>
         </child>
         <!-- Content -->
@@ -55,6 +61,32 @@
     </property>
   </template>
   <!-- Menu -->
+  <menu id="sort_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Name</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">name</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Name (Descending)</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">name-desc</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Date</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">date</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Date (Descending)</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">date-desc</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="primary_menu">
     <section>
       <item>

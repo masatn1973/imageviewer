@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-25 22:22+0900\n"
-"PO-Revision-Date: 2026-06-25 22:26+0900\n"
+"POT-Creation-Date: 2026-06-27 01:20+0900\n"
+"PO-Revision-Date: 2026-06-27 01:27+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -104,39 +104,39 @@ msgstr ""
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/viewer.py:345 src/viewer.py:348
+#: src/viewer.py:357 src/viewer.py:360
 msgid "Camera: "
 msgstr "カメラ: "
 
-#: src/viewer.py:352 src/viewer.py:354
+#: src/viewer.py:364 src/viewer.py:366
 msgid "Shooting Datetime: "
 msgstr "撮影日時: "
 
-#: src/viewer.py:357 src/viewer.py:360
+#: src/viewer.py:369 src/viewer.py:372
 msgid "Pixel Size: "
 msgstr "ピクセルサイズ: "
 
-#: src/viewer.py:365 src/viewer.py:367
+#: src/viewer.py:377 src/viewer.py:379
 msgid "Orientation: "
 msgstr "向き: "
 
-#: src/viewer.py:370 src/viewer.py:373 src/viewer.py:379
+#: src/viewer.py:382 src/viewer.py:385 src/viewer.py:391
 msgid "Shutter Speed: "
 msgstr "露出時間: "
 
-#: src/viewer.py:382 src/viewer.py:386
+#: src/viewer.py:394 src/viewer.py:398
 msgid "FNumber: "
 msgstr "絞り: "
 
-#: src/viewer.py:389 src/viewer.py:391
+#: src/viewer.py:401 src/viewer.py:403
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:394 src/viewer.py:396
+#: src/viewer.py:406 src/viewer.py:408
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:428
+#: src/window.py:503
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
@@ -255,11 +255,11 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr "ツール"
 
-#: src/shortcuts.ui:146 src/window.ui:73
+#: src/shortcuts.ui:146 src/window.ui:105
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
-#: src/shortcuts.ui:152 src/window.ui:79 src/preferences.ui:7
+#: src/shortcuts.ui:152 src/window.ui:111 src/preferences.ui:7
 msgid "Preferences"
 msgstr "設定"
 
@@ -268,7 +268,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/shortcuts.ui:163 src/window.ui:85
+#: src/shortcuts.ui:163 src/window.ui:117
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
@@ -276,23 +276,39 @@ msgstr "キーボードショートカット"
 msgid "About"
 msgstr "画像ビューワについて"
 
-#: src/window.ui:37
+#: src/window.ui:43
 msgid "Ready."
 msgstr "準備完了"
 
-#: src/window.ui:61
+#: src/window.ui:67
+msgid "Name"
+msgstr "名前"
+
+#: src/window.ui:72
+msgid "Name (Descending)"
+msgstr "名前 (降順)"
+
+#: src/window.ui:79
+msgid "Date"
+msgstr "日付"
+
+#: src/window.ui:84
+msgid "Date (Descending)"
+msgstr "日付 (降順)"
+
+#: src/window.ui:93
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:67
+#: src/window.ui:99
 msgid "Reload Thumbnails"
 msgstr "サムネイルの更新"
 
-#: src/window.ui:89
+#: src/window.ui:121
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 
-#: src/window.ui:95
+#: src/window.ui:127
 msgid "Quit"
 msgstr "終了"
 
