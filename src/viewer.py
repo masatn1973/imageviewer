@@ -305,8 +305,8 @@ class ImageViewerDialog(Adw.Window):
             "Make": "",
             "Model": "",
             "Date": "",
-            "PixelXDimension": "",
-            "PixelYDimension": "",
+            "PixelXDimension": None,
+            "PixelYDimension": None,
             "Orientation": "",
             "ShutterSpeed": "",
             "FNumber": "",
@@ -348,8 +348,6 @@ class ImageViewerDialog(Adw.Window):
         return info
 
     def show_exif_data(self):
-        ext = os.path.splitext(self.current_file.get_basename())[1].lower()
-
         info = self.get_exif_info()
 
         if info["Make"] == "":
@@ -435,8 +433,6 @@ class ImageViewerDialog(Adw.Window):
             self.picture.set_size_request(width, height)
 
     def open_media(self, gfile):
-        ext = os.path.splitext(gfile.get_basename())[1].lower()
-
         self.open_image(gfile)
 
     def show_current_image(self):
@@ -495,8 +491,6 @@ class ImageViewerDialog(Adw.Window):
             self.original_pixbuf = pixbuf
 
             self.update_image()
-
-            info = gfile.query_info("*", Gio.FileQueryInfoFlags.NONE, None)
 
         except Exception as e:
             print(f"Failed to open image: {path}")

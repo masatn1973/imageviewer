@@ -19,7 +19,6 @@
 import os
 import gettext
 import locale
-from sys import modules
 import gi
 
 
