@@ -82,6 +82,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.sort_mode = "date"
         self.sort_reverse = False
 
+        drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
+        drop_target.connect("drop", self.on_drop)
+
+        self.add_controller(drop_target)
+
         # Action
         self.sort_action = Gio.SimpleAction.new_stateful(
             "sort", GLib.VariantType.new("s"), GLib.Variant.new_string("date")
@@ -137,6 +142,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.maximize()
 
         self.connect("close-request", self.on_close_request)
+
+    def on_drop(self, target, value, x, y):
+        files = value.get_files()
+
+        for file in files:
+            print(file.get_path())
+
+            if (
+                file.query_file_type(Gio.FileQueryInfoFlags.NONE, None)
+                == Gio.FileType.DIRECTORY
+            ):
+                self.load_folder(file)
+                return True
+
+        return False
 
     def on_sort_changed(self, action, value):
         mode = value.get_string()
@@ -387,6 +407,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.load_folder(folder)
 
     def load_folder(self, folder):
+        if isinstance(folder, str):
+            folder = Gio.File.new_for_path(folder)
+
+        print("LOAD", folder)
+
         self.current_folder = folder
 
         if self.thumbnail_idle_id is not None:
