@@ -143,17 +143,19 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.on_close_request)
 
+    def open_dropped_folder(self, folder):
+        self.load_folder(folder)
+        return False
+
     def on_drop(self, target, value, x, y):
         files = value.get_files()
 
         for file in files:
-            print(file.get_path())
-
             if (
                 file.query_file_type(Gio.FileQueryInfoFlags.NONE, None)
                 == Gio.FileType.DIRECTORY
             ):
-                self.load_folder(file)
+                GLib.idle_add(self.open_dropped_folder, file)
                 return True
 
         return False
@@ -239,16 +241,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def get_image_date(self, gfile):
         path = gfile.get_path()
-        try:
-            meta = GExiv2.Metadata(path)
-
-            if meta.has_tag("Exif.Photo.DateTimeOriginal"):
-                date_str = meta.get_tag_string("Exif.Photo.DateTimeOriginal")
-
-                return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
-
-        except Exception:
-            pass
 
         return datetime.fromtimestamp(os.path.getmtime(path))
 
