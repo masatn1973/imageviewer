@@ -143,6 +143,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.on_close_request)
 
+    def on_thumbnail_drag_prepare(self, source, x, y, gfile):
+        file_list = Gdk.FileList.new_from_array([gfile])
+        return Gdk.ContentProvider.new_for_value(file_list)
+
     def open_dropped_folder(self, folder):
         self.load_folder(folder)
         return False
@@ -365,7 +369,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         child = selected[0]
 
-        image_path = getattr(child, "image_path", None)
+        image_path = getattr(child, "image_file", None)
 
         if not image_path:
             return
@@ -401,8 +405,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def load_folder(self, folder):
         if isinstance(folder, str):
             folder = Gio.File.new_for_path(folder)
-
-        print("LOAD", folder)
 
         self.current_folder = folder
 
@@ -502,9 +504,15 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             child.set_size_request(THUMB, THUMB)
             child.set_child(widget)
 
-            child.image_path = gfile
+            child.image_file = gfile
 
             self.flowbox.append(child)
+
+            drag = Gtk.DragSource.new()
+            drag.set_actions(Gdk.DragAction.COPY)
+            drag.connect("prepare", self.on_thumbnail_drag_prepare, gfile)
+
+            child.add_controller(drag)
 
             if self.loaded_count == 0:
                 self.flowbox.select_child(child)
@@ -519,7 +527,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return len(self.pending_files) > 0
 
     def on_child_activated(self, flowbox, child):
-        gfile = getattr(child, "image_path", None)
+        gfile = getattr(child, "image_file", None)
 
         if not gfile:
             return
@@ -540,7 +548,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.viewer = viewer
 
         index = self.image_files.index(gfile)
-        filename = os.path.basename(gfile)
+        filename = gfile.get_basename()
 
         self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
 
