@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 02:03+0900\n"
-"PO-Revision-Date: 2026-06-27 02:05+0900\n"
+"POT-Creation-Date: 2026-07-01 03:11+0900\n"
+"PO-Revision-Date: 2026-07-01 03:14+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -56,14 +56,22 @@ msgstr ""
 "に対応しています。"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+msgid ""
+"Modified the system to monitor the “Pictures” folder and update thumbnails "
+"whenever images are added or deleted."
+msgstr ""
+"\"画像\"フォルダを監視して、画像が追加または削除された場合はサムネイルの更新"
+"を行うよう変更しました"
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
 msgid "Support image sorting."
 msgstr "画像の並び替えをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
 msgid "Support reload thumbnails."
 msgstr "サムネイルの更新をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:36
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:43
 msgid ""
 "Made it so that the window size is remembered when you close the image view "
 "or thumbnail window."
@@ -71,92 +79,92 @@ msgstr ""
 "画像ビューやサムネイルウィンドウを閉じた際、ウィンドウのサイズが記憶されるよ"
 "うにしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:37
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:44
 msgid "Removed the video playback feature."
 msgstr "動画の再生機能を削除しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:44
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:51
 msgid "Support Zoom In/Out."
 msgstr "ズームイン/アウトをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:51
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
 msgid "Support slideshow."
 msgstr "スライドショーをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:65
 msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr "動画の再生時に、音声が出ない問題を修正しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:65
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:72
 msgid "Add video playback support."
 msgstr "動画の再生機能を追加しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:72
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:79
 msgid "EXIF information display is now supported."
 msgstr "EXIF 情報の表示をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:79
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:86
 msgid "Image rotation is now supported."
 msgstr "画像の回転をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:86
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:93
 msgid "Added status bar."
 msgstr "ステータスバーを追加しました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:87
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:94
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr "Home, End, PageUp, PageDown キーをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:94
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:101
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr "vim 風のキーボード操作 (h, j, k, l) をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:101
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:108
 msgid "Supports .bmp and .tiff file format."
 msgstr ".bmp および .tiff 形式のファイルをサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:102
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:109
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 "左および右矢印キーによる、前の画像または次の画像の表示をサポートしました"
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:108
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:115
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/viewer.py:356 src/viewer.py:359
+#: src/viewer.py:373 src/viewer.py:376
 msgid "Camera: "
 msgstr "カメラ: "
 
-#: src/viewer.py:363 src/viewer.py:365
+#: src/viewer.py:380 src/viewer.py:382
 msgid "Shooting Datetime: "
 msgstr "撮影日時: "
 
-#: src/viewer.py:368 src/viewer.py:371
+#: src/viewer.py:385 src/viewer.py:388
 msgid "Pixel Size: "
 msgstr "ピクセルサイズ: "
 
-#: src/viewer.py:376 src/viewer.py:378
+#: src/viewer.py:393 src/viewer.py:395
 msgid "Orientation: "
 msgstr "向き: "
 
-#: src/viewer.py:381 src/viewer.py:384 src/viewer.py:390
+#: src/viewer.py:398 src/viewer.py:401 src/viewer.py:407
 msgid "Shutter Speed: "
 msgstr "露出時間: "
 
-#: src/viewer.py:393 src/viewer.py:397
+#: src/viewer.py:410 src/viewer.py:414
 msgid "FNumber: "
 msgstr "絞り: "
 
-#: src/viewer.py:400 src/viewer.py:402
+#: src/viewer.py:417 src/viewer.py:419
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:405 src/viewer.py:407
+#: src/viewer.py:422 src/viewer.py:424
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
-#: src/window.py:498
+#: src/window.py:552
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
