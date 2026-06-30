@@ -82,6 +82,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.sort_mode = "date"
         self.sort_reverse = False
 
+        self.folder_monitor = None
+        self.reload_timeout = 0
+
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
         drop_target.connect("drop", self.on_drop)
 
@@ -143,6 +146,20 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.on_close_request)
 
+    def on_folder_changed(self, monitor, file, other_file, event_type):
+        if self.reload_timeout:
+            GLib.source_remove(self.reload_timeout)
+
+        self.reload_timeout = GLib.timeout_add(300, self.reload_folder)
+
+    def start_folder_monitor(self, folder):
+        if self.folder_monitor:
+            self.folder_monitor.cancel()
+
+        self.folder_monitor = folder.monitor_directory(Gio.FileMonitorFlags.NONE, None)
+
+        self.folder_monitor.connect("changed", self.on_folder_changed)
+
     def on_thumbnail_drag_prepare(self, source, x, y, gfile):
         file_list = Gdk.FileList.new_from_array([gfile])
         return Gdk.ContentProvider.new_for_value(file_list)
@@ -196,8 +213,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.load_folder(self.current_folder)
 
     def reload_folder(self):
-        self.thumbnail_idle_id = None
+        self.reload_timeout = 0
+
         self.load_folder(self.current_folder)
+
+        if self.viewer:
+            self.viewer.set_image_files(self.image_files)
+
+        return False
 
     def set_slideshow_interval(self, seconds):
         self.slideshow_interval = seconds * 1000
@@ -406,24 +429,25 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if isinstance(folder, str):
             folder = Gio.File.new_for_path(folder)
 
+        if self.current_folder is None:
+            self.start_folder_monitor(folder)
+
+        elif not self.current_folder.equal(folder):
+            self.start_folder_monitor(folder)
+
         self.current_folder = folder
 
         if self.thumbnail_idle_id is not None:
+            GLib.source_remove(self.thumbnail_idle_id)
             self.thumbnail_idle_id = None
 
-        # delete old thumbnails
-        child = self.flowbox.get_first_child()
-        count = 0
+        files = self.get_image_files(folder)
 
-        while child:
-            next_child = child.get_next_sibling()
-            self.flowbox.remove(child)
-            child = next_child
-            count += 1
+        self.clear_thumbnails()
 
-        self.pending_files = []
-        self.image_files = []
+        self.create_thumbnails(files)
 
+    def get_image_files(self, folder):
         files = []
 
         enumerator = folder.enumerate_children(
@@ -451,6 +475,17 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         else:
             files.sort(key=self.get_image_date, reverse=self.sort_reverse)
 
+        return files
+
+    def clear_thumbnails(self):
+        child = self.flowbox.get_first_child()
+
+        while child:
+            next_child = child.get_next_sibling()
+            self.flowbox.remove(child)
+            child = next_child
+
+    def create_thumbnails(self, files):
         self.image_files = files
         self.pending_files = deque(files)
 
@@ -458,13 +493,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.thumbnail_idle_id = GLib.idle_add(self.load_next_thumbnail)
 
-        child = self.flowbox.get_child_at_index(0)
-
-        if child:
-            self.flowbox.select_child(child)
-
         self.reload_action.set_enabled(True)
-        self.slideshow_action.set_enabled(len(self.image_files) > 0)
+        self.slideshow_action.set_enabled(len(files) > 0)
 
     def load_next_thumbnail(self):
         if not self.pending_files:
@@ -524,6 +554,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         except Exception as e:
             print("FAILED:", gfile.get_basename())
 
+        if not self.pending_files:
+            self.thumbnail_idle_id = None
+            return False
+
         return len(self.pending_files) > 0
 
     def on_child_activated(self, flowbox, child):
@@ -564,5 +598,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         while child := self.flowbox.get_first_child():
             self.flowbox.remove(child)
+
+        if self.folder_monitor:
+            self.folder_monitor.cancel()
+            self.folder_monitor = None
 
         return False

@@ -65,6 +65,8 @@ class ImageViewerDialog(Adw.Window):
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__()
 
+        self.parent = parent
+
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
         self.info_box.add_css_class("exif-overlay")
@@ -130,6 +132,23 @@ class ImageViewerDialog(Adw.Window):
 
         if self.image_files:
             self.show_current_image()
+
+    def set_image_files(self, image_files):
+        current_file = self.current_file
+
+        self.image_files = image_files
+
+        if not self.image_files:
+            self.close()
+            return
+
+        try:
+            self.current_index = self.image_files.index(current_file)
+
+        except ValueError:
+            self.current_index = min(self.current_index, len(self.image_files) - 1)
+
+        self.show_current_image()
 
     def update_fit_zoom(self):
         if self.original_pixbuf is None:
@@ -432,6 +451,8 @@ class ImageViewerDialog(Adw.Window):
 
             self.picture.set_size_request(width, height)
 
+        self.current_file = self.image_files[self.current_index]
+
     def open_media(self, gfile):
         self.open_image(gfile)
 
@@ -500,5 +521,7 @@ class ImageViewerDialog(Adw.Window):
         self.settings.set_int("viewer-width", self.get_width())
         self.settings.set_int("viewer-height", self.get_height())
         self.settings.set_boolean("viewer-maximized", self.is_maximized())
+
+        self.parent.viewer = None
 
         return False
