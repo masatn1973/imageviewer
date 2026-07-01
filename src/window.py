@@ -21,7 +21,6 @@ import gettext
 import locale
 import gi
 
-
 APP_ID = "/io/github/masatn1973/ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
@@ -30,21 +29,16 @@ locale.textdomain(APP_ID)
 gettext.bindtextdomain(APP_ID, "/app/share/locale")
 gettext.textdomain(APP_ID)
 
-
 from gettext import gettext as _
-
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-gi.require_version("GExiv2", "0.16")
-
 from datetime import datetime
 from collections import deque
 
-from gi.repository import GExiv2
 from gi.repository import Gdk, Gtk, Adw, Gio
-from gi.repository import GObject, GdkPixbuf, GLib
+from gi.repository import GdkPixbuf, GLib
 
 from viewer import ImageViewerDialog
 
@@ -66,17 +60,13 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.viewer = None
         self.image_files = []
-
         self.thumbnail_idle_id = None
-
         self.current_folder = None
-
         self.slideshow_id = None
 
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
-
         self.flowbox.connect("child-activated", self.on_child_activated)
 
         self.sort_mode = "date"
@@ -87,10 +77,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
         drop_target.connect("drop", self.on_drop)
-
         self.add_controller(drop_target)
 
-        # Action
+        # Actions
         self.sort_action = Gio.SimpleAction.new_stateful(
             "sort", GLib.VariantType.new("s"), GLib.Variant.new_string("date")
         )
@@ -123,12 +112,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_action(self.reload_action)
         app.set_accels_for_action("win.reload", ["F5"])
 
-        slideshow_action = Gio.SimpleAction.new("slideshow", None)
-        slideshow_action.connect("activate", self.on_slideshow)
-        slideshow_action.set_enabled(False)
-        self.add_action(slideshow_action)
-
-        self.slideshow_action = slideshow_action
+        self.slideshow_action = Gio.SimpleAction.new("slideshow", None)
+        self.slideshow_action.connect("activate", self.on_slideshow)
+        self.slideshow_action.set_enabled(False)
+        self.add_action(self.slideshow_action)
         app.set_accels_for_action("win.slideshow", ["<Ctrl>s"])
 
         controller = Gtk.EventControllerKey()
@@ -146,6 +133,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.on_close_request)
 
+    # --- Folder monitoring -------------------------------------------------
+
     def on_folder_changed(self, monitor, file, other_file, event_type):
         if self.reload_timeout:
             GLib.source_remove(self.reload_timeout)
@@ -157,8 +146,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.folder_monitor.cancel()
 
         self.folder_monitor = folder.monitor_directory(Gio.FileMonitorFlags.NONE, None)
-
         self.folder_monitor.connect("changed", self.on_folder_changed)
+
+    # --- Drag and drop -------------------------------------------------------
 
     def on_thumbnail_drag_prepare(self, source, x, y, gfile):
         file_list = Gdk.FileList.new_from_array([gfile])
@@ -181,23 +171,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         return False
 
+    # --- Sorting -------------------------------------------------------------
+
     def on_sort_changed(self, action, value):
         mode = value.get_string()
-
         action.set_state(value)
 
         if mode == "name":
             self.sort_mode = "name"
             self.sort_reverse = False
-
         elif mode == "name-desc":
             self.sort_mode = "name"
             self.sort_reverse = True
-
         elif mode == "date":
             self.sort_mode = "date"
             self.sort_reverse = False
-
         elif mode == "date-desc":
             self.sort_mode = "date"
             self.sort_reverse = True
@@ -214,7 +202,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def reload_folder(self):
         self.reload_timeout = 0
-
         self.load_folder(self.current_folder)
 
         if self.viewer:
@@ -222,13 +209,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         return False
 
+    # --- Slideshow -------------------------------------------------------------
+
     def set_slideshow_interval(self, seconds):
         self.slideshow_interval = seconds * 1000
 
     def on_slideshow(self, action, param):
         if self.slideshow_id is None:
             self.start_slideshow()
-
         else:
             self.stop_slideshow()
 
@@ -247,7 +235,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return False
 
         self.viewer.show_next_image()
-
         return True
 
     def start_slideshow(self):
@@ -261,15 +248,15 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return
 
         interval = self.settings.get_uint("slideshow-interval")
-        self.slideshow_id = GLib.timeout_add(
-            interval * 1000,
-            self.slideshow_next,
-        )
+        self.slideshow_id = GLib.timeout_add(interval * 1000, self.slideshow_next)
+
+    # --- Misc helpers -------------------------------------------------------------
 
     def get_image_date(self, gfile):
         path = gfile.get_path()
-
         return datetime.fromtimestamp(os.path.getmtime(path))
+
+    # --- Keyboard navigation -------------------------------------------------------------
 
     def on_key_pressed(self, controller, keyval, keycode, state):
         selected = self.flowbox.get_selected_children()
@@ -293,11 +280,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         item_width = (
             first_child.get_allocated_width() + self.flowbox.get_column_spacing()
         )
-
-        columns = max(
-            1,
-            self.flowbox.get_allocated_width() // item_width,
-        )
+        columns = max(1, self.flowbox.get_allocated_width() // item_width)
 
         if keyval == Gdk.KEY_F5:
             self.reload_folder()
@@ -328,11 +311,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         elif keyval == Gdk.KEY_Page_Up:
             vadj = self.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-
             row_height = (
                 first_child.get_allocated_height() + self.flowbox.get_row_spacing()
             )
-
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 
@@ -348,11 +329,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         elif keyval == Gdk.KEY_Page_Down:
             vadj = self.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-
             row_height = (
                 first_child.get_allocated_height() + self.flowbox.get_row_spacing()
             )
-
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 
@@ -374,7 +353,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         )
 
         new_index = max(0, min(new_index, len(self.image_files) - 1))
-
         target = self.flowbox.get_child_at_index(new_index)
 
         if target:
@@ -384,6 +362,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         return True
 
+    # --- Viewer -------------------------------------------------------------
+
     def open_selected_image(self):
         selected = self.flowbox.get_selected_children()
 
@@ -391,7 +371,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return
 
         child = selected[0]
-
         image_path = getattr(child, "image_file", None)
 
         if not image_path:
@@ -409,15 +388,15 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.viewer = viewer
 
+    # --- Folder loading -------------------------------------------------------------
+
     def on_open(self, action, param):
         dialog = Gtk.FileDialog()
-
         dialog.select_folder(self, None, self.on_folder_selected)
 
     def on_folder_selected(self, dialog, result):
         try:
             folder = dialog.select_folder_finish(result)
-
         except Exception as e:
             print("select_folder_finish:", e)
             return
@@ -431,7 +410,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         if self.current_folder is None:
             self.start_folder_monitor(folder)
-
         elif not self.current_folder.equal(folder):
             self.start_folder_monitor(folder)
 
@@ -444,7 +422,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         files = self.get_image_files(folder)
 
         self.clear_thumbnails()
-
         self.create_thumbnails(files)
 
     def get_image_files(self, folder):
@@ -471,11 +448,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             files.sort(
                 key=lambda f: f.get_basename().lower(), reverse=self.sort_reverse
             )
-
         else:
             files.sort(key=self.get_image_date, reverse=self.sort_reverse)
 
         return files
+
+    # --- Thumbnails -------------------------------------------------------------
 
     def clear_thumbnails(self):
         child = self.flowbox.get_first_child()
@@ -488,7 +466,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def create_thumbnails(self, files):
         self.image_files = files
         self.pending_files = deque(files)
-
         self.loaded_count = 0
 
         self.thumbnail_idle_id = GLib.idle_add(self.load_next_thumbnail)
@@ -501,11 +478,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.thumbnail_idle_id = None
             return False
 
-        if not self.pending_files:
-            return False
-
         gfile = self.pending_files.popleft()
-
         ext = os.path.splitext(gfile.get_basename())[1].lower()
 
         try:
@@ -517,23 +490,19 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                         stream, THUMB, THUMB, True, None
                     )
                     pixbuf = pixbuf.apply_embedded_orientation()
-
                     texture = Gdk.Texture.new_for_pixbuf(pixbuf)
 
                     widget = Gtk.Picture.new_for_paintable(texture)
                     widget.set_can_shrink(True)
                     widget.set_content_fit(Gtk.ContentFit.CONTAIN)
-
                 finally:
                     stream.close(None)
-
             else:
                 return len(self.pending_files) > 0
 
             child = Gtk.FlowBoxChild()
             child.set_size_request(THUMB, THUMB)
             child.set_child(widget)
-
             child.image_file = gfile
 
             self.flowbox.append(child)
@@ -541,14 +510,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             drag = Gtk.DragSource.new()
             drag.set_actions(Gdk.DragAction.COPY)
             drag.connect("prepare", self.on_thumbnail_drag_prepare, gfile)
-
             child.add_controller(drag)
 
             if self.loaded_count == 0:
                 self.flowbox.select_child(child)
 
             self.loaded_count += 1
-
             self.status_label.set_text(f"{self.loaded_count} " + _("image(s) read."))
 
         except Exception as e:
@@ -575,7 +542,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.image_files,
             self.image_files.index(gfile) if gfile in self.image_files else 0,
         )
-
         viewer.connect("close-request", self.on_viewer_close)
         viewer.present()
 
@@ -583,7 +549,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         index = self.image_files.index(gfile)
         filename = gfile.get_basename()
-
         self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
 
     def on_viewer_close(self, win):

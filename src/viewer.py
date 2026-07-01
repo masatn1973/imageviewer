@@ -16,11 +16,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-import os
 import gettext
 import locale
 import gi
-
 
 APP_ID = "io.github.masatn1973.ImageViewer"
 
@@ -49,7 +47,6 @@ class ImageViewerDialog(Adw.Window):
 
     picture = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
-
     media_stack = Gtk.Template.Child()
 
     info_box = Gtk.Template.Child()
@@ -110,7 +107,6 @@ class ImageViewerDialog(Adw.Window):
             Gtk.ShortcutTrigger.parse_string("Escape"),
             Gtk.NamedAction.new("window.close"),
         )
-
         self.add_shortcut(shortcut)
 
         controller = Gtk.EventControllerKey()
@@ -133,9 +129,10 @@ class ImageViewerDialog(Adw.Window):
         if self.image_files:
             self.show_current_image()
 
+    # --- Image list management -------------------------------------------------
+
     def set_image_files(self, image_files):
         current_file = self.current_file
-
         self.image_files = image_files
 
         if not self.image_files:
@@ -144,18 +141,18 @@ class ImageViewerDialog(Adw.Window):
 
         try:
             self.current_index = self.image_files.index(current_file)
-
         except ValueError:
             self.current_index = min(self.current_index, len(self.image_files) - 1)
 
         self.show_current_image()
+
+    # --- Zoom -------------------------------------------------------------
 
     def update_fit_zoom(self):
         if self.original_pixbuf is None:
             return False
 
         allocation = self.get_allocation()
-
         image_width = self.original_pixbuf.get_width()
         image_height = self.original_pixbuf.get_height()
 
@@ -181,7 +178,6 @@ class ImageViewerDialog(Adw.Window):
         img_h = self.original_pixbuf.get_height()
 
         alloc = self.get_allocation()
-
         win_w = max(1, alloc.width)
         win_h = max(1, alloc.height)
 
@@ -213,7 +209,6 @@ class ImageViewerDialog(Adw.Window):
             return
 
         filename = self.current_file.get_basename()
-
         percent = int(self.get_display_zoom() * 100)
 
         self.set_title(f"{filename} ({percent}%)")
@@ -224,7 +219,6 @@ class ImageViewerDialog(Adw.Window):
         if state & Gdk.ModifierType.CONTROL_MASK:
             if dy < 0:
                 self.zoom_in()
-
             else:
                 self.zoom_out()
 
@@ -268,6 +262,8 @@ class ImageViewerDialog(Adw.Window):
         self.update_image()
         self.update_title()
 
+    # --- Keyboard shortcuts -------------------------------------------------------------
+
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             self.zoom_in()
@@ -300,7 +296,6 @@ class ImageViewerDialog(Adw.Window):
                 self.info_box.set_visible(True)
                 self.show_exif_data()
                 self.is_show_exif_data = True
-
             else:
                 self.info_box.set_visible(False)
                 self.is_show_exif_data = False
@@ -309,15 +304,15 @@ class ImageViewerDialog(Adw.Window):
 
         if keyval == Gdk.KEY_0:
             self.zoom_fit()
-
             return True
 
         if keyval == Gdk.KEY_1:
             self.zoom_actual_size()
-
             return True
 
         return False
+
+    # --- EXIF -------------------------------------------------------------
 
     def get_exif_info(self):
         info = {
@@ -396,14 +391,13 @@ class ImageViewerDialog(Adw.Window):
 
         if info["ShutterSpeed"] == "":
             self.ShutterSpeed.set_text(_("Shutter Speed: "))
-
         elif (info["ShutterSpeed"][0] == 0) and (info["ShutterSpeed"][1] == 0):
             self.ShutterSpeed.set_text(_("Shutter Speed: "))
         else:
             nom = info["ShutterSpeed"][0]
             den = info["ShutterSpeed"][1]
-
             shutter_speed = int(den) / int(nom)
+
             self.ShutterSpeed.set_text(_("Shutter Speed: ") + f"1/{shutter_speed:.0f}")
 
         if info["FNumber"] == "":
@@ -423,6 +417,8 @@ class ImageViewerDialog(Adw.Window):
         else:
             self.FocalLength.set_text(_("Focal Length: ") + f"{info['FocalLength']}")
 
+    # --- Image display -------------------------------------------------------------
+
     def update_image(self):
         pixbuf = self.original_pixbuf
 
@@ -431,10 +427,8 @@ class ImageViewerDialog(Adw.Window):
 
         if self.rotation == 90:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-
         elif self.rotation == 180:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
-
         elif self.rotation == 270:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
 
@@ -444,7 +438,6 @@ class ImageViewerDialog(Adw.Window):
         if self.fit_mode:
             self.picture.set_size_request(-1, -1)
             GLib.idle_add(self.update_fit_zoom)
-
         else:
             width = int(pixbuf.get_width() * self.zoom)
             height = int(pixbuf.get_height() * self.zoom)
@@ -497,7 +490,6 @@ class ImageViewerDialog(Adw.Window):
 
     def open_image(self, gfile):
         self.zoom = DEFAULT_ZOOM_RATIO
-
         self.media_stack.set_visible_child(self.picture)
 
         path = gfile.get_path()
