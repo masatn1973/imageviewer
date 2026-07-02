@@ -76,7 +76,7 @@ class ImageViewerDialog(Adw.Window):
         self.rotation = 0
         self.file_path = None
 
-        self.zoom = DEFAULT_ZOOM_RATIO
+        self.state.zoom = DEFAULT_ZOOM_RATIO
         self.fit_mode = True
 
         self.connect("notify::default-width", self.on_window_resize)
@@ -172,7 +172,7 @@ class ImageViewerDialog(Adw.Window):
         if self.fit_mode:
             return self.fit_zoom
 
-        return self.zoom
+        return self.state.zoom
 
     def calculate_fit_zoom(self):
         if self.state.pixbuf is None:
@@ -232,37 +232,37 @@ class ImageViewerDialog(Adw.Window):
 
     def zoom_actual_size(self):
         self.fit_mode = False
-        self.zoom = DEFAULT_ZOOM_RATIO
+        self.state.zoom = DEFAULT_ZOOM_RATIO
         self.update_image()
         self.update_title()
 
     def zoom_fit(self):
         self.fit_mode = True
-        self.zoom = DEFAULT_ZOOM_RATIO
+        self.state.zoom = DEFAULT_ZOOM_RATIO
         self.update_image()
 
     def zoom_in(self):
         if self.fit_mode:
-            self.zoom = self.fit_zoom
+            self.state.zoom = self.fit_zoom
             self.fit_mode = False
 
-        self.zoom *= ZOOM_RATIO
+        self.state.zoom *= ZOOM_RATIO
 
         self.update_image()
         self.update_title()
 
     def zoom_out(self):
         if self.fit_mode:
-            self.zoom = self.fit_zoom
+            self.state.zoom = self.fit_zoom
             self.fit_mode = False
 
-        self.zoom /= ZOOM_RATIO
+        self.state.zoom /= ZOOM_RATIO
 
         self.update_image()
         self.update_title()
 
     def zoom_reset(self):
-        self.zoom = DEFAULT_ZOOM_RATIO
+        self.state.zoom = DEFAULT_ZOOM_RATIO
         self.update_image()
         self.update_title()
 
@@ -443,8 +443,8 @@ class ImageViewerDialog(Adw.Window):
             self.picture.set_size_request(-1, -1)
             GLib.idle_add(self.update_fit_zoom)
         else:
-            width = int(pixbuf.get_width() * self.zoom)
-            height = int(pixbuf.get_height() * self.zoom)
+            width = int(pixbuf.get_width() * self.state.zoom)
+            height = int(pixbuf.get_height() * self.state.zoom)
 
             self.picture.set_size_request(width, height)
 
@@ -455,7 +455,7 @@ class ImageViewerDialog(Adw.Window):
 
     def show_current_image(self):
         self.fit_zoom = self.calculate_fit_zoom()
-        self.zoom = self.fit_zoom
+        self.state.zoom = self.fit_zoom
         self.fit_mode = True
 
         self.media_stack.set_visible_child(self.picture)
@@ -493,7 +493,7 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     def open_image(self, gfile):
-        self.zoom = DEFAULT_ZOOM_RATIO
+        self.state.zoom = DEFAULT_ZOOM_RATIO
         self.media_stack.set_visible_child(self.picture)
 
         path = gfile.get_path()
