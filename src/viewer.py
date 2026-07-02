@@ -208,14 +208,17 @@ class ImageViewerDialog(Adw.Window):
 
         return round(scale * 100)
 
-    def update_title(self):
+    def get_window_title(self):
         if self.current_file is None:
-            return
+            return ""
 
         filename = self.current_file.get_basename()
         percent = int(self.get_display_zoom() * 100)
 
-        self.set_title(f"{filename} ({percent}%)")
+        return f"{filename} ({percent}%)"
+
+    def update_title(self):
+        self.set_title(self.get_window_title())
 
     def on_scroll(self, controller, dx, dy):
         state = controller.get_current_event_state()
