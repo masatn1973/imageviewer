@@ -73,7 +73,7 @@ class ImageViewerDialog(Adw.Window):
         self.info_box.add_css_class("exif-overlay")
 
         self.state.pixbuf = None
-        self.rotation = 0
+        self.state.rotation = 0
         self.file_path = None
 
         self.state.zoom = DEFAULT_ZOOM_RATIO
@@ -286,12 +286,12 @@ class ImageViewerDialog(Adw.Window):
             return True
 
         if keyval == Gdk.KEY_r:
-            self.rotation = (self.rotation + 90) % 360
+            self.state.rotation = (self.state.rotation + 90) % 360
             self.update_image()
             return True
 
         elif keyval == Gdk.KEY_R:
-            self.rotation = (self.rotation - 90) % 360
+            self.state.rotation = (self.state.rotation - 90) % 360
             self.update_image()
             return True
 
@@ -429,11 +429,11 @@ class ImageViewerDialog(Adw.Window):
         if pixbuf is None:
             return
 
-        if self.rotation == 90:
+        if self.state.rotation == 90:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-        elif self.rotation == 180:
+        elif self.state.rotation == 180:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
-        elif self.rotation == 270:
+        elif self.state.rotation == 270:
             pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
 
         texture = Gdk.Texture.new_for_pixbuf(pixbuf)
@@ -499,7 +499,7 @@ class ImageViewerDialog(Adw.Window):
         path = gfile.get_path()
 
         try:
-            self.rotation = 0
+            self.state.rotation = 0
 
             stream = gfile.read(None)
 
