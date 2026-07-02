@@ -37,6 +37,8 @@ gi.require_version("GExiv2", "0.16")
 from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio, GLib
 from gi.repository import GExiv2
 
+from imagestate import ImageState
+
 DEFAULT_ZOOM_RATIO = 1.0
 ZOOM_RATIO = 1.25
 
@@ -61,6 +63,8 @@ class ImageViewerDialog(Adw.Window):
 
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__()
+
+        self.state = ImageState()
 
         self.parent = parent
 
