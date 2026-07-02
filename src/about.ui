@@ -7,7 +7,7 @@
     <property name="application-name" translatable="yes">Image Viewer</property>
     <property name="application-icon">io.github.masatn1973.ImageViewer</property>
     <property name="developer-name">masatn</property>
-    <property name="version">0.1.11</property>
+    <property name="version">0.2.0</property>
     <property name="website">https://github.com/masatn1973/imageviewer</property>
     <property name="issue-url">https://github.com/masatn1973/imageviewer/issues</property>
     <property name="license-type">gpl-3-0</property>
