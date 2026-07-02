@@ -490,26 +490,17 @@ class ImageViewerDialog(Adw.Window):
             self.show_exif_data()
 
     def show_next_image(self):
+        self.change_image(1)
+
+    def change_image(self, offset):
         if not self.image_files:
             return
 
-        self.current_index += 1
-
-        if self.current_index >= len(self.image_files):
-            self.current_index = 0
-
+        self.current_index = (self.current_index + offset) % len(self.image_files)
         self.show_current_image()
 
     def show_previous_image(self):
-        if not self.image_files:
-            return
-
-        self.current_index -= 1
-
-        if self.current_index < 0:
-            self.current_index = len(self.image_files) - 1
-
-        self.show_current_image()
+        self.change_image(-1)
 
     def open_image(self, gfile):
         self.state.zoom = DEFAULT_ZOOM_RATIO
