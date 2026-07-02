@@ -72,7 +72,7 @@ class ImageViewerDialog(Adw.Window):
 
         self.info_box.add_css_class("exif-overlay")
 
-        self.original_pixbuf = None
+        self.state.pixbuf = None
         self.rotation = 0
         self.file_path = None
 
@@ -153,12 +153,12 @@ class ImageViewerDialog(Adw.Window):
     # --- Zoom -------------------------------------------------------------
 
     def update_fit_zoom(self):
-        if self.original_pixbuf is None:
+        if self.state.pixbuf is None:
             return False
 
         allocation = self.get_allocation()
-        image_width = self.original_pixbuf.get_width()
-        image_height = self.original_pixbuf.get_height()
+        image_width = self.state.pixbuf.get_width()
+        image_height = self.state.pixbuf.get_height()
 
         self.fit_zoom = min(
             allocation.width / image_width, allocation.height / image_height
@@ -175,11 +175,11 @@ class ImageViewerDialog(Adw.Window):
         return self.zoom
 
     def calculate_fit_zoom(self):
-        if self.original_pixbuf is None:
+        if self.state.pixbuf is None:
             return DEFAULT_ZOOM_RATIO
 
-        img_w = self.original_pixbuf.get_width()
-        img_h = self.original_pixbuf.get_height()
+        img_w = self.state.pixbuf.get_width()
+        img_h = self.state.pixbuf.get_height()
 
         alloc = self.get_allocation()
         win_w = max(1, alloc.width)
@@ -192,11 +192,11 @@ class ImageViewerDialog(Adw.Window):
             GLib.idle_add(self.update_fit_zoom)
 
     def get_scale_percent(self):
-        if self.original_pixbuf is None:
+        if self.state.pixbuf is None:
             return 0
 
-        img_w = self.original_pixbuf.get_width()
-        img_h = self.original_pixbuf.get_height()
+        img_w = self.state.pixbuf.get_width()
+        img_h = self.state.pixbuf.get_height()
 
         disp_w = self.picture.get_width()
         disp_h = self.picture.get_height()
@@ -424,7 +424,7 @@ class ImageViewerDialog(Adw.Window):
     # --- Image display -------------------------------------------------------------
 
     def update_image(self):
-        pixbuf = self.original_pixbuf
+        pixbuf = self.state.pixbuf
 
         if pixbuf is None:
             return
@@ -505,7 +505,7 @@ class ImageViewerDialog(Adw.Window):
 
             pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
             pixbuf = pixbuf.apply_embedded_orientation()
-            self.original_pixbuf = pixbuf
+            self.state.pixbuf = pixbuf
 
             self.update_image()
 
