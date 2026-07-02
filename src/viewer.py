@@ -440,23 +440,29 @@ class ImageViewerDialog(Adw.Window):
 
         return pixbuf
 
+    def update_picture(self, pixbuf):
+        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+        self.picture.set_paintable(texture)
+
+    def update_picture_size(self, pixbuf):
+        if self.state.fit_mode:
+            self.picture.set_size_request(-1, -1)
+            GLib.idle_add(self.update_fit_zoom)
+
+        else:
+            width = int(pixbuf.get_width() * self.state.zoom)
+            height = int(pixbuf.get_height() * self.state.zoom)
+
+            self.picture.set_size_request(width, height)
+
     def update_image(self):
         pixbuf = self.get_transformed_pixbuf()
 
         if pixbuf is None:
             return
 
-        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-        self.picture.set_paintable(texture)
-
-        if self.state.fit_mode:
-            self.picture.set_size_request(-1, -1)
-            GLib.idle_add(self.update_fit_zoom)
-        else:
-            width = int(pixbuf.get_width() * self.state.zoom)
-            height = int(pixbuf.get_height() * self.state.zoom)
-
-            self.picture.set_size_request(width, height)
+        self.update_picture(pixbuf)
+        self.update_picture_size(pixbuf)
 
         self.current_file = self.image_files[self.current_index]
 
