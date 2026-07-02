@@ -423,18 +423,28 @@ class ImageViewerDialog(Adw.Window):
 
     # --- Image display -------------------------------------------------------------
 
-    def update_image(self):
+    def get_transformed_pixbuf(self):
         pixbuf = self.state.pixbuf
 
         if pixbuf is None:
-            return
+            return None
 
         if self.state.rotation == 90:
-            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-        elif self.state.rotation == 180:
-            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
-        elif self.state.rotation == 270:
-            pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
+            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
+
+        if self.state.rotation == 180:
+            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
+
+        if self.state.rotation == 270:
+            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
+
+        return pixbuf
+
+    def update_image(self):
+        pixbuf = self.get_transformed_pixbuf()
+
+        if pixbuf is None:
+            return
 
         texture = Gdk.Texture.new_for_pixbuf(pixbuf)
         self.picture.set_paintable(texture)
