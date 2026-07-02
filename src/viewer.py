@@ -472,10 +472,13 @@ class ImageViewerDialog(Adw.Window):
     def open_media(self, gfile):
         self.open_image(gfile)
 
-    def show_current_image(self):
-        self.state.fit_zoom = self.calculate_fit_zoom()
-        self.state.zoom = self.state.fit_zoom
+    def reset_view_state(self):
+        self.state.zoon = DEFAULT_ZOOM_RATIO
         self.state.fit_mode = True
+        self.state.fit_zoom = self.calculate_fit_zoom()
+
+    def show_current_image(self):
+        self.reset_view_state()
 
         self.media_stack.set_visible_child(self.picture)
 
