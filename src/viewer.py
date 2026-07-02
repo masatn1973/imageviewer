@@ -38,6 +38,7 @@ from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio, GLib
 from gi.repository import GExiv2
 
 from imagestate import ImageState
+from imageops import ImageOps
 
 DEFAULT_ZOOM_RATIO = 1.0
 ZOOM_RATIO = 1.25
@@ -425,24 +426,6 @@ class ImageViewerDialog(Adw.Window):
             self.FocalLength.set_text(_("Focal Length: ") + f"{info['FocalLength']}")
 
     # --- Image display -------------------------------------------------------------
-
-    def get_transformed_pixbuf(self):
-        pixbuf = self.state.pixbuf
-
-        if pixbuf is None:
-            return None
-
-        if self.state.rotation == 90:
-            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-
-        if self.state.rotation == 180:
-            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.UPSIDEDOWN)
-
-        if self.state.rotation == 270:
-            return pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE)
-
-        return pixbuf
-
     def update_picture(self, pixbuf):
         texture = Gdk.Texture.new_for_pixbuf(pixbuf)
         self.picture.set_paintable(texture)
@@ -459,7 +442,7 @@ class ImageViewerDialog(Adw.Window):
             self.picture.set_size_request(width, height)
 
     def update_image(self):
-        pixbuf = self.get_transformed_pixbuf()
+        pixbuf = ImageOps.rotate(self.state.pixbuf, self.state.rotation)
 
         if pixbuf is None:
             return

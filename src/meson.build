@@ -17,6 +17,9 @@ install_data(
 
 install_data([
   'main.py',
+  'imagestate.py',
+  'imageops.py',
+  'renderer.py',
   'window.py',
   'viewer.py',
   'shortcuts.py',
