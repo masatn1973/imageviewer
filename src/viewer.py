@@ -436,25 +436,22 @@ class ImageViewerDialog(Adw.Window):
 
     def update_picture_size(self, pixbuf):
         if self.imagestate.fit_mode:
-            self.picture.set_size_request(-1, -1)
+            self.imagecanvas.update_canvas_size()
+            self.imagecanvas.queue_draw()
             GLib.idle_add(self.update_fit_zoom)
 
         else:
             width = int(pixbuf.get_width() * self.imagestate.zoom)
             height = int(pixbuf.get_height() * self.imagestate.zoom)
 
-            self.picture.set_size_request(width, height)
+            self.imagecanvas.update_canvas_size()
+            self.imagecanvas.queue_draw()
 
     def update_image(self):
-        pixbuf = ImageOps.rotate(self.imagestate.pixbuf, self.imagestate.rotation)
+        self.imagecanvas.update_canvas_size()
+        self.imagecanvas.queue_draw()
 
-        if pixbuf is None:
-            return
-
-        self.update_picture(pixbuf)
-        self.update_picture_size(pixbuf)
-
-        self.current_file = self.image_files[self.current_index]
+        self.update_title()
 
     def open_media(self, gfile):
         self.open_image(gfile)

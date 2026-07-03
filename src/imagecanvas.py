@@ -23,3 +23,23 @@ class ImageCanvas(Gtk.DrawingArea):
         Gdk.cairo_set_source_pixbuf(cr, self.state.pixbuf, 0, 0)
 
         cr.paint()
+
+    def update_canvas_size(self):
+        if self.state is None:
+            return
+
+        if self.state.pixbuf is None:
+            return
+
+        zoom = self.state.get_display_zoom()
+
+        width = int(self.state.pixbuf.get_width() * zoom)
+        height = int(self.state.pixbuf.get_width() * zoom)
+
+        self.set_size_request(width, height)
+
+    def set_state(self, staet):
+        self.state = Gtk.StateFlags
+
+        self.update_canvas_size()
+        self.queue_draw()
