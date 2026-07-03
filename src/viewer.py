@@ -42,14 +42,14 @@ from imageops import ImageOps
 from imagecanvas import ImageCanvas
 
 DEFAULT_ZOOM_RATIO = 1.0
-ZOOM_RATIO = 1.25
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
     __gtype_name__ = "ImageViewerDialog"
 
-    picture = Gtk.Template.Child()
+    image_container = Gtk.Template.Child()
+
     headerbar = Gtk.Template.Child()
     media_stack = Gtk.Template.Child()
 
@@ -67,9 +67,11 @@ class ImageViewerDialog(Adw.Window):
         super().__init__()
 
         self.imagestate = ImageState()
-        self.imagecanvas = ImageCanvas()
 
+        self.imagecanvas = ImageCanvas()
         self.imagecanvas.set_state(self.imagestate)
+
+        self.image_container.append(self.imagecanvas)
 
         self.parent = parent
 
@@ -90,7 +92,7 @@ class ImageViewerDialog(Adw.Window):
 
         scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
         scroll.connect("scroll", self.on_scroll)
-        self.picture.add_controller(scroll)
+        self.imagecanvas.add_controller(scroll)
 
         prev_button = Gtk.Button(icon_name="go-previous-symbolic")
         prev_button.connect("clicked", lambda *_: self.show_previous_image())
@@ -156,28 +158,18 @@ class ImageViewerDialog(Adw.Window):
         self.show_current_image()
 
     # --- Zoom -------------------------------------------------------------
-
     def update_fit_zoom(self):
-        if self.imagestate.pixbuf is None:
-            return False
+        fit_zoom = self.calculate_fit_zoom()
 
-        allocation = self.get_allocation()
-        image_width = self.imagestate.pixbuf.get_width()
-        image_height = self.imagestate.pixbuf.get_height()
+        self.imagestate.fit_zoom = fit_zoom
 
-        self.imagestate.fit_zoom = min(
-            allocation.width / image_width, allocation.height / image_height
-        )
+        if self.imagestate.fit_mode:
+            self.imagestate.zoom = fit_zoom
+
+        self.imagecanvas.update_canvas_size()
+        self.imagecanvas.queue_draw()
 
         self.update_title()
-
-        return False
-
-    def get_display_zoom(self):
-        if self.imagestate.fit_mode:
-            return self.imagestate.fit_zoom
-
-        return self.imagestate.zoom
 
     def calculate_fit_zoom(self):
         if self.imagestate.pixbuf is None:
@@ -197,28 +189,14 @@ class ImageViewerDialog(Adw.Window):
             GLib.idle_add(self.update_fit_zoom)
 
     def get_scale_percent(self):
-        if self.imagestate.pixbuf is None:
-            return 0
-
-        img_w = self.imagestate.pixbuf.get_width()
-        img_h = self.imagestate.pixbuf.get_height()
-
-        disp_w = self.picture.get_width()
-        disp_h = self.picture.get_height()
-
-        if disp_w == 0 or disp_h == 0:
-            return 0
-
-        scale = min(disp_w / img_w, disp_h / img_h)
-
-        return round(scale * 100)
+        return round(self.imagestate.zoom * 100)
 
     def get_window_title(self):
         if self.current_file is None:
             return ""
 
         filename = self.current_file.get_basename()
-        percent = int(self.get_display_zoom() * 100)
+        percent = int(self.imagestate.get_display_zoom() * 100)
 
         return f"{filename} ({percent}%)"
 
@@ -238,6 +216,23 @@ class ImageViewerDialog(Adw.Window):
 
         return False
 
+    def refresh_image(self):
+        self.imagecanvas.update_canvas_size()
+        self.imagecanvas.queue_draw()
+        self.update_title()
+
+    def zoom_in(self):
+        self.imagestate.zoom_in()
+        self.refresh_image()
+
+    def zoom_out(self):
+        self.imagestate.zoom_out()
+        self.refresh_image()
+
+    def zoom_reset(self):
+        self.imagestate.zoom_reset()
+        self.refresh_image()
+
     def zoom_actual_size(self):
         self.imagestate.fit_mode = False
         self.imagestate.zoom = DEFAULT_ZOOM_RATIO
@@ -248,31 +243,6 @@ class ImageViewerDialog(Adw.Window):
         self.imagestate.fit_mode = True
         self.imagestate.zoom = DEFAULT_ZOOM_RATIO
         self.update_image()
-
-    def zoom_in(self):
-        if self.imagestate.fit_mode:
-            self.imagestate.zoom = self.imagestate.fit_zoom
-            self.imagestate.fit_mode = False
-
-        self.imagestate.zoom *= ZOOM_RATIO
-
-        self.update_image()
-        self.update_title()
-
-    def zoom_out(self):
-        if self.imagestate.fit_mode:
-            self.imagestate.zoom = self.imagestate.fit_zoom
-            self.imagestate.fit_mode = False
-
-        self.imagestate.zoom /= ZOOM_RATIO
-
-        self.update_image()
-        self.update_title()
-
-    def zoom_reset(self):
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.update_image()
-        self.update_title()
 
     # --- Keyboard shortcuts -------------------------------------------------------------
 
@@ -315,7 +285,7 @@ class ImageViewerDialog(Adw.Window):
             return True
 
         if keyval == Gdk.KEY_0:
-            self.zoom_fit()
+            self.zoom_reset()
             return True
 
         if keyval == Gdk.KEY_1:
@@ -430,23 +400,6 @@ class ImageViewerDialog(Adw.Window):
             self.FocalLength.set_text(_("Focal Length: ") + f"{info['FocalLength']}")
 
     # --- Image display -------------------------------------------------------------
-    def update_picture(self, pixbuf):
-        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-        self.picture.set_paintable(texture)
-
-    def update_picture_size(self, pixbuf):
-        if self.imagestate.fit_mode:
-            self.imagecanvas.update_canvas_size()
-            self.imagecanvas.queue_draw()
-            GLib.idle_add(self.update_fit_zoom)
-
-        else:
-            width = int(pixbuf.get_width() * self.imagestate.zoom)
-            height = int(pixbuf.get_height() * self.imagestate.zoom)
-
-            self.imagecanvas.update_canvas_size()
-            self.imagecanvas.queue_draw()
-
     def update_image(self):
         self.imagecanvas.update_canvas_size()
         self.imagecanvas.queue_draw()
@@ -464,7 +417,7 @@ class ImageViewerDialog(Adw.Window):
     def show_current_image(self):
         self.reset_view_state()
 
-        self.media_stack.set_visible_child(self.picture)
+        self.media_stack.set_visible_child(self.image_container)
 
         if not self.image_files:
             return
@@ -493,7 +446,7 @@ class ImageViewerDialog(Adw.Window):
 
     def open_image(self, gfile):
         self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.media_stack.set_visible_child(self.picture)
+        self.media_stack.set_visible_child(self.imagecanvas)
 
         path = gfile.get_path()
 

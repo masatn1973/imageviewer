@@ -20,6 +20,7 @@ install_data([
   'imagestate.py',
   'imageops.py',
   'imagecanvas.py',
+  'imagestate.py',
   'renderer.py',
   'window.py',
   'viewer.py',

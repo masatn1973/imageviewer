@@ -19,9 +19,7 @@
                 <property name="child">
                   <object class="GtkStack" id="media_stack">
                     <child>
-                      <object class="GtkPicture" id="picture">
-                        <property name="can-shrink">True</property>
-                      </object>
+                      <object class="GtkBox" id="image_container"/>
                     </child>
                     <child>
                       <object class="GtkVideo" id="video"/>

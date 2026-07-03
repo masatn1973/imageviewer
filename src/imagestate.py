@@ -1,3 +1,10 @@
+MAX_ZOOM = 16.0
+MIN_ZOOM = 0.1
+
+DEFAULT_ZOOM_RATIO = 1.0
+ZOOM_RATIO = 1.25
+
+
 class ImageState:
     def __init__(self):
         self.pixbuf = None
@@ -5,3 +12,26 @@ class ImageState:
         self.fit_zoom = 1.0
         self.fit_mode = True
         self.rotation = 0
+
+    def get_display_zoom(self):
+        return self.zoom
+
+    def zoom_in(self):
+        if self.fit_mode:
+            self.zoom = self.fit_zoom
+            self.fit_mode = False
+
+        self.zoom = min(self.zoom * ZOOM_RATIO, MAX_ZOOM)
+
+        print(f"zoom={self.zoom:.3f}, fit_zoom={self.fit_zoom:.3f}")
+
+    def zoom_out(self):
+        if self.fit_mode:
+            self.zoom = self.fit_zoom
+            self.fit_mode = False
+
+        self.zoom = max(self.zoom / ZOOM_RATIO, MIN_ZOOM)
+
+    def zoom_reset(self):
+        self.zoom = self.fit_zoom
+        self.fit_mode = True
