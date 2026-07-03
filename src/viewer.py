@@ -479,6 +479,8 @@ class ImageViewerDialog(Adw.Window):
         if self.is_show_exif_data:
             self.show_exif_data()
 
+        self.imagecanvas.queue_draw()
+
     def show_next_image(self):
         self.change_image(1)
 

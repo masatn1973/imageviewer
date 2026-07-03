@@ -7,6 +7,19 @@ class ImageCanvas(Gtk.DrawingArea):
 
         self.state = None
 
-    def set_state(self, state):
-        self.state = state
+        self.set_draw_func(self.draw)
+
+    def set_state(self, imagestate):
+        self.state = imagestate
         self.queue_draw()
+
+    def draw(self, area, cr, width, height):
+        if self.state is None:
+            return
+
+        if self.state.pixbuf is None:
+            return
+
+        Gdk.cairo_set_source_pixbuf(cr, self.state.pixbuf, 0, 0)
+
+        cr.paint()
