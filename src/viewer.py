@@ -446,7 +446,7 @@ class ImageViewerDialog(Adw.Window):
 
     def open_image(self, gfile):
         self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.media_stack.set_visible_child(self.imagecanvas)
+        self.media_stack.set_visible_child(self.image_container)
 
         path = gfile.get_path()
 
