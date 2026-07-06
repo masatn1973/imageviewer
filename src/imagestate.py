@@ -14,6 +14,9 @@ class ImageState:
         self.rotation = 0
 
     def get_display_zoom(self):
+        if self.fit_mode:
+            return self.fit_zoom
+
         return self.zoom
 
     def zoom_in(self):

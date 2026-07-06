@@ -3,6 +3,7 @@ from gi.repository import GdkPixbuf
 
 class ImageOps:
     @staticmethod
+    # TODO: GtkDrawingArea + Cairo への移行後に削除予定
     def rotate(pixbuf, rotation):
         if pixbuf is None:
             return None

@@ -159,17 +159,9 @@ class ImageViewerDialog(Adw.Window):
 
     # --- Zoom -------------------------------------------------------------
     def update_fit_zoom(self):
-        fit_zoom = self.calculate_fit_zoom()
+        self.imagestate.fit_zoom = self.calculate_fit_zoom()
 
-        self.imagestate.fit_zoom = fit_zoom
-
-        if self.imagestate.fit_mode:
-            self.imagestate.zoom = fit_zoom
-
-        self.imagecanvas.update_canvas_size()
-        self.imagecanvas.queue_draw()
-
-        self.update_title()
+        self.update_image()
 
     def calculate_fit_zoom(self):
         if self.imagestate.pixbuf is None:
@@ -178,7 +170,7 @@ class ImageViewerDialog(Adw.Window):
         img_w = self.imagestate.pixbuf.get_width()
         img_h = self.imagestate.pixbuf.get_height()
 
-        alloc = self.get_allocation()
+        alloc = self.imagecanvas.get_allocation()
         win_w = max(1, alloc.width)
         win_h = max(1, alloc.height)
 
@@ -410,7 +402,7 @@ class ImageViewerDialog(Adw.Window):
         self.open_image(gfile)
 
     def reset_view_state(self):
-        self.imagestate.zoon = DEFAULT_ZOOM_RATIO
+        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
         self.imagestate.fit_mode = True
         self.imagestate.fit_zoom = self.calculate_fit_zoom()
 
