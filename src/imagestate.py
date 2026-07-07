@@ -26,8 +26,6 @@ class ImageState:
 
         self.zoom = min(self.zoom * ZOOM_RATIO, MAX_ZOOM)
 
-        print(f"zoom={self.zoom:.3f}, fit_zoom={self.fit_zoom:.3f}")
-
     def zoom_out(self):
         if self.fit_mode:
             self.zoom = self.fit_zoom

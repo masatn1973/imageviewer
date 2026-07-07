@@ -13,7 +13,7 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="scrolled_window">
             <property name="child">
               <object class="GtkOverlay">
                 <property name="child">
