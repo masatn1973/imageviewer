@@ -19,7 +19,10 @@
                 <property name="child">
                   <object class="GtkStack" id="media_stack">
                     <child>
-                      <object class="GtkBox" id="image_container"/>
+                      <object class="GtkBox" id="image_container">
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                      </object>
                     </child>
                     <child>
                       <object class="GtkVideo" id="video"/>

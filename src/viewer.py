@@ -162,6 +162,8 @@ class ImageViewerDialog(Adw.Window):
             pixbuf = pixbuf.apply_embedded_orientation()
             self.imagestate.pixbuf = pixbuf
 
+            self.update_fit_zoom()
+
             self.update_image()
 
         except Exception as e:
@@ -460,7 +462,6 @@ class ImageViewerDialog(Adw.Window):
     def reset_view_state(self):
         self.imagestate.zoom = DEFAULT_ZOOM_RATIO
         self.imagestate.fit_mode = True
-        self.imagestate.fit_zoom = self.calculate_fit_zoom()
 
     def show_next_image(self):
         self.change_image(1)
