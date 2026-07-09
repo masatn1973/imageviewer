@@ -32,6 +32,10 @@ class ImageCanvas(Gtk.DrawingArea):
 
         self.set_draw_func(self.draw_image)
 
+    def redraw(self):
+        self.update_canvas_size()
+        self.queue_draw()
+
     def draw_image(self, area, cr, width, height):
         if self.state is None or self.state.pixbuf is None:
             return

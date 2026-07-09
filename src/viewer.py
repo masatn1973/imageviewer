@@ -155,7 +155,7 @@ class ImageViewerDialog(Adw.Window):
 
             self.update_fit_zoom()
 
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
 
         except Exception as e:
@@ -180,21 +180,17 @@ class ImageViewerDialog(Adw.Window):
 
         self.imagecanvas.queue_draw()
 
-    def redraw_image(self):
-        self.imagecanvas.update_canvas_size()
-        self.imagecanvas.queue_draw()
-
     # --- Event handler --------------------------------------------------------
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             self.imagestate.zoom_in()
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
         if keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
             self.imagestate.zoom_out()
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
@@ -208,13 +204,13 @@ class ImageViewerDialog(Adw.Window):
 
         if keyval == Gdk.KEY_r:
             self.imagestate.rotate_right()
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
         elif keyval == Gdk.KEY_R:
             self.imagestate.rotate_left()
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
@@ -236,7 +232,7 @@ class ImageViewerDialog(Adw.Window):
 
         if keyval == Gdk.KEY_1:
             self.imagestate.zoom_actual_size()
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
@@ -251,7 +247,7 @@ class ImageViewerDialog(Adw.Window):
             else:
                 self.imagestate.zoom_out()
 
-            self.redraw_image()
+            self.imagecanvas.redraw()
             self.update_title()
             return True
 
@@ -273,7 +269,7 @@ class ImageViewerDialog(Adw.Window):
     # --- Zoom -----------------------------------------------------------------
     def update_fit_zoom(self):
         self.imagestate.set_fit_zoom(self.calculate_fit_zoom())
-        self.redraw_image()
+        self.imagecanvas.redraw()
         self.update_title()
 
     def calculate_fit_zoom(self):
