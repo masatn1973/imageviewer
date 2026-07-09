@@ -142,16 +142,13 @@ class ImageViewerDialog(Adw.Window):
         return self.image_files[self.current_index]
 
     def open_image(self, gfile):
-        self.imagestate.initialize_view()
         self.media_stack.set_visible_child(self.image_container)
 
         path = gfile.get_path()
 
+        stream = gfile.read(None)
+
         try:
-            self.imagestate.rotation = 0
-
-            stream = gfile.read(None)
-
             pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
             pixbuf = pixbuf.apply_embedded_orientation()
             self.imagestate.pixbuf = pixbuf
@@ -164,6 +161,9 @@ class ImageViewerDialog(Adw.Window):
         except Exception as e:
             print(f"Failed to open image: {path}")
             print(e)
+
+        finally:
+            stream.close(None)
 
     def show_current_image(self):
         if not self.image_files:
