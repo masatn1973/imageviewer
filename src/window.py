@@ -68,6 +68,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.flowbox.connect("child-activated", self.on_child_activated)
+        self.flowbox.connect("selected-children-changed", self.on_selection_changed)
 
         self.sort_mode = "date"
         self.sort_reverse = False
@@ -251,6 +252,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.slideshow_id = GLib.timeout_add(interval * 1000, self.slideshow_next)
 
     # --- Misc helpers -------------------------------------------------------------
+    def set_status(self, text):
+        self.status_label.set_text(text)
 
     def get_image_date(self, gfile):
         path = gfile.get_path()
@@ -347,11 +350,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         else:
             return False
 
-        filename = os.path.basename(self.image_files[new_index])
-        self.status_label.set_text(
-            f"{new_index + 1}/{len(self.image_files)} : {filename}"
-        )
-
         new_index = max(0, min(new_index, len(self.image_files) - 1))
         target = self.flowbox.get_child_at_index(new_index)
 
@@ -363,6 +361,16 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return True
 
     # --- Viewer -------------------------------------------------------------
+    def open_viewer(self, gfile):
+        viewer = ImageViewerDialog(
+            self,
+            self.image_files,
+            self.image_files.index(gfile) if gfile in self.image_files else 0,
+        )
+        viewer.connect("close-request", self.on_viewer_close)
+        viewer.present()
+
+        self.viewer = viewer
 
     def open_selected_image(self):
         selected = self.flowbox.get_selected_children()
@@ -380,16 +388,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.viewer.close()
             self.viewer = None
 
-        viewer = ImageViewerDialog(
-            self, self.image_files, self.image_files.index(image_path)
-        )
-        viewer.connect("close-request", self.on_viewer_close)
-        viewer.present()
-
-        self.viewer = viewer
+        self.open_viewer(image_path)
 
     # --- Folder loading -------------------------------------------------------------
-
     def on_open(self, action, param):
         dialog = Gtk.FileDialog()
         dialog.select_folder(self, None, self.on_folder_selected)
@@ -454,7 +455,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return files
 
     # --- Thumbnails -------------------------------------------------------------
-
     def clear_thumbnails(self):
         child = self.flowbox.get_first_child()
 
@@ -516,7 +516,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
                 self.flowbox.select_child(child)
 
             self.loaded_count += 1
-            self.status_label.set_text(f"{self.loaded_count} " + _("image(s) read."))
+            self.set_status(f"{self.loaded_count} " + _("image(s) read."))
 
         except Exception as e:
             print("FAILED:", gfile.get_basename())
@@ -537,19 +537,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.viewer.close()
             self.viewer = None
 
-        viewer = ImageViewerDialog(
-            self,
-            self.image_files,
-            self.image_files.index(gfile) if gfile in self.image_files else 0,
-        )
-        viewer.connect("close-request", self.on_viewer_close)
-        viewer.present()
-
-        self.viewer = viewer
-
-        index = self.image_files.index(gfile)
-        filename = gfile.get_basename()
-        self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
+        self.open_viewer(gfile)
 
     def on_viewer_close(self, win):
         self.stop_slideshow()
@@ -569,3 +557,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.folder_monitor = None
 
         return False
+
+    # --- Status bar -----------------------------------------------------------
+    def on_selection_changed(self, flowbox):
+        self.update_status(flowbox)
+
+    def update_status(self, flowbox):
+        selected = flowbox.get_selected_children()
+
+        if not selected:
+            self.status_label.set_text("")
+            return
+
+        child = selected[0]
+        index = child.get_index()
+
+        filename = self.image_files[index].get_basename()
+
+        self.status_label.set_text(f"{index + 1}/{len(self.image_files)} : {filename}")
