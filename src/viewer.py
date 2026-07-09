@@ -16,6 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 import gettext
 import locale
 import gi
@@ -32,21 +33,12 @@ from gettext import gettext as _
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-gi.require_version("GExiv2", "0.16")
 
 from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio, GLib
-from gi.repository import GExiv2
 
+from exifinfo import ExifData, get_exif_info
 from imagestate import ImageState
-from imageops import ImageOps
 from imagecanvas import ImageCanvas
-
-DEFAULT_ZOOM_RATIO = 1.0
-
-ZOOM_RATIO = 1.25
-
-MIN_ZOOM = 0.1
-MAX_ZOOM = 16.0
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
@@ -78,6 +70,8 @@ class ImageViewerDialog(Adw.Window):
         self.imagecanvas = ImageCanvas()
         self.imagecanvas.set_state(self.imagestate)
 
+        self.current_file = None
+
         self.image_container.append(self.imagecanvas)
 
         self.parent = parent
@@ -86,12 +80,7 @@ class ImageViewerDialog(Adw.Window):
 
         self.info_box.add_css_class("exif-overlay")
 
-        self.imagestate.pixbuf = None
-        self.imagestate.rotation = 0
         self.file_path = None
-
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.imagestate.fit_mode = True
 
         self.connect("notify::default-width", self.on_window_resize)
         self.connect("notify::default-height", self.on_window_resize)
@@ -148,7 +137,7 @@ class ImageViewerDialog(Adw.Window):
             self.show_current_image()
 
     def open_image(self, gfile):
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
+        self.imagestate.initialize_view()
         self.media_stack.set_visible_child(self.image_container)
 
         path = gfile.get_path()
@@ -164,14 +153,15 @@ class ImageViewerDialog(Adw.Window):
 
             self.update_fit_zoom()
 
-            self.update_image()
+            self.redraw_image()
+            self.update_title()
 
         except Exception as e:
             print(f"Failed to open image: {path}")
             print(e)
 
     def show_current_image(self):
-        self.reset_view_state()
+        self.imagestate.initialize_view()
 
         self.media_stack.set_visible_child(self.image_container)
 
@@ -187,59 +177,22 @@ class ImageViewerDialog(Adw.Window):
 
         self.imagecanvas.queue_draw()
 
-    def update_image(self):
+    def redraw_image(self):
         self.imagecanvas.update_canvas_size()
         self.imagecanvas.queue_draw()
 
-        self.update_title()
-
-    def update_fit_zoom(self):
-        self.imagestate.fit_zoom = self.calculate_fit_zoom()
-
-        self.update_image()
-
-    def zoom_in(self):
-        if self.imagestate.fit_mode:
-            self.imagestate.zoom = self.imagestate.fit_zoom
-            self.imagestate.fit_mode = False
-
-        self.imagestate.zoom = min(self.imagestate.zoom * ZOOM_RATIO, MAX_ZOOM)
-
-        self.update_image()
-
-    def zoom_out(self):
-        if self.imagestate.fit_mode:
-            self.imagestate.zoom = self.imagestate.fit_zoom
-            self.imagestate.fit_mode = False
-
-        self.imagestate.zoom = max(self.imagestate.zoom / ZOOM_RATIO, MIN_ZOOM)
-
-        self.update_image()
-
-    def zoom_reset(self):
-        self.imagestate.fit_mode = True
-        self.update_fit_zoom()
-
-    def on_scroll(self, controller, dx, dy):
-        state = controller.get_current_event_state()
-
-        if state & Gdk.ModifierType.CONTROL_MASK:
-            if dy < 0:
-                self.zoom_in()
-            else:
-                self.zoom_out()
-
-            return True
-
-        return False
-
+    # --- Event handler --------------------------------------------------------
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
-            self.zoom_in()
+            self.imagestate.zoom_in()
+            self.redraw_image()
+            self.update_title()
             return True
 
         if keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
-            self.zoom_out()
+            self.imagestate.zoom_out()
+            self.redraw_image()
+            self.update_title()
             return True
 
         if keyval in (Gdk.KEY_Right, Gdk.KEY_l):
@@ -251,13 +204,15 @@ class ImageViewerDialog(Adw.Window):
             return True
 
         if keyval == Gdk.KEY_r:
-            self.imagestate.rotation = (self.imagestate.rotation + 90) % 360
-            self.update_image()
+            self.imagestate.rotate_right()
+            self.redraw_image()
+            self.update_title()
             return True
 
         elif keyval == Gdk.KEY_R:
-            self.imagestate.rotation = (self.imagestate.rotation - 90) % 360
-            self.update_image()
+            self.imagestate.rotate_left()
+            self.redraw_image()
+            self.update_title()
             return True
 
         if keyval == Gdk.KEY_e:
@@ -272,11 +227,29 @@ class ImageViewerDialog(Adw.Window):
             return True
 
         if keyval == Gdk.KEY_0:
-            self.zoom_reset()
+            self.imagestate.zoom_reset()
+            self.update_fit_zoom()
             return True
 
         if keyval == Gdk.KEY_1:
-            self.zoom_actual_size()
+            self.imagestate.zoom_actual_size()
+            self.redraw_image()
+            self.update_title()
+            return True
+
+        return False
+
+    def on_scroll(self, controller, dx, dy):
+        state = controller.get_current_event_state()
+
+        if state & Gdk.ModifierType.CONTROL_MASK:
+            if dy < 0:
+                self.imagestate.zoom_in()
+            else:
+                self.imagestate.zoom_out()
+
+            self.redraw_image()
+            self.update_title()
             return True
 
         return False
@@ -285,27 +258,24 @@ class ImageViewerDialog(Adw.Window):
         if self.imagestate.fit_mode:
             GLib.idle_add(self.update_fit_zoom)
 
-    # --- Image list management -------------------------------------------------
+    def on_close_request(self, *args):
+        self.settings.set_int("viewer-width", self.get_width())
+        self.settings.set_int("viewer-height", self.get_height())
+        self.settings.set_boolean("viewer-maximized", self.is_maximized())
 
-    def set_image_files(self, image_files):
-        current_file = self.current_file
-        self.image_files = image_files
+        self.parent.viewer = None
 
-        if not self.image_files:
-            self.close()
-            return
+        return False
 
-        try:
-            self.current_index = self.image_files.index(current_file)
-        except ValueError:
-            self.current_index = min(self.current_index, len(self.image_files) - 1)
+    # --- Zoom -----------------------------------------------------------------
+    def update_fit_zoom(self):
+        self.imagestate.set_fit_zoom(self.calculate_fit_zoom())
+        self.redraw_image()
+        self.update_title()
 
-        self.show_current_image()
-
-    # --- Zoom -------------------------------------------------------------
     def calculate_fit_zoom(self):
         if self.imagestate.pixbuf is None:
-            return DEFAULT_ZOOM_RATIO
+            return self.imagestate.zoom_actual_size()
 
         img_w = self.imagestate.pixbuf.get_width()
         img_h = self.imagestate.pixbuf.get_height()
@@ -316,9 +286,6 @@ class ImageViewerDialog(Adw.Window):
         win_h = max(1, alloc.height)
 
         return min(win_w / img_w, win_h / img_h)
-
-    def get_scale_percent(self):
-        return round(self.imagestate.zoom * 100)
 
     def get_window_title(self):
         if self.current_file is None:
@@ -332,136 +299,40 @@ class ImageViewerDialog(Adw.Window):
     def update_title(self):
         self.set_title(self.get_window_title())
 
-    def refresh_image(self):
-        self.imagecanvas.update_canvas_size()
-        self.imagecanvas.queue_draw()
-        self.update_title()
-
-    def zoom_actual_size(self):
-        self.imagestate.fit_mode = False
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.update_image()
-        self.update_title()
-
-    def zoom_fit(self):
-        self.imagestate.fit_mode = True
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.update_image()
-
-    # --- Keyboard shortcuts -------------------------------------------------------------
-
     # --- EXIF -------------------------------------------------------------
+    def set_label(self, label, title, value):
+        if value:
+            label.set_text(title + value)
 
-    def get_exif_info(self):
-        info = {
-            "Make": "",
-            "Model": "",
-            "Date": "",
-            "PixelXDimension": None,
-            "PixelYDimension": None,
-            "Orientation": "",
-            "ShutterSpeed": "",
-            "FNumber": "",
-            "ISO": "",
-            "FocalLength": "",
-        }
-
-        try:
-            meta = GExiv2.Metadata()
-            path = self.current_file.get_path()
-            meta.open_path(path)
-
-            info["Make"] = meta.try_get_tag_string("Exif.Image.Make") or ""
-            info["Model"] = meta.try_get_tag_string("Exif.Image.Model") or ""
-            info["Date"] = (
-                meta.try_get_tag_string("Exif.Photo.DateTimeOriginal")
-                or meta.try_get_tag_string("Exif.Image.DateTime")
-                or ""
-            )
-            info["PixelXDimension"] = (
-                meta.try_get_tag_string("Exif.Photo.PixelXDimension")
-                or meta.get_pixel_width()
-            )
-            info["PixelYDimension"] = (
-                meta.try_get_tag_string("Exif.Photo.PixelYDimension")
-                or meta.get_pixel_height()
-            )
-            info["Orientation"] = (
-                meta.try_get_tag_string("Exif.Image.Orientation") or ""
-            )
-            info["ShutterSpeed"] = meta.try_get_exposure_time() or ""
-            info["FNumber"] = meta.try_get_tag_string("Exif.Photo.FNumber") or ""
-            info["ISO"] = meta.try_get_tag_string("Exif.Photo.ISOSpeedRatings") or ""
-            info["FocalLength"] = meta.try_get_focal_length() or ""
-
-        except Exception as e:
-            print("EXIF:", e)
-
-        return info
+        else:
+            label.set_text(title)
 
     def show_exif_data(self):
-        info = self.get_exif_info()
+        info = get_exif_info(self.current_file)
 
-        if info["Make"] == "":
-            self.Camera_label.set_text(_("Camera: "))
-        else:
-            self.Camera_label.set_text(
-                _("Camera: ") + f"{info['Make']} {info['Model']}".strip()
-            )
+        self.set_label(self.Camera_label, _("Camera: "), info.camera)
 
-        if info["Date"] == "":
-            self.Date_label.set_text(_("Shooting Datetime: "))
-        else:
-            self.Date_label.set_text(_("Shooting Datetime: ") + info["Date"])
+        self.set_label(self.Date_label, _("Shooting Datetime: "), info.date)
 
-        if info["PixelXDimension"] == "" or info["PixelYDimension"] == "":
-            self.Pixel_size.set_text(_("Pixel Size: "))
-        else:
-            self.Pixel_size.set_text(
-                _("Pixel Size: ")
-                + f"{info['PixelXDimension']} x {info['PixelYDimension']}"
-            )
+        self.set_label(self.Pixel_size, _("Pixel Size: "), info.pixel_size)
 
-        if info["Orientation"] == "":
-            self.Orientation.set_text(_("Orientation: "))
-        else:
-            self.Orientation.set_text(_("Orientation: ") + f"{info['Orientation']}")
+        self.set_label(self.Orientation, _("Orientation: "), f"{info.orientation}")
 
-        if info["ShutterSpeed"] == "":
-            self.ShutterSpeed.set_text(_("Shutter Speed: "))
-        elif (info["ShutterSpeed"][0] == 0) and (info["ShutterSpeed"][1] == 0):
-            self.ShutterSpeed.set_text(_("Shutter Speed: "))
-        else:
-            nom = info["ShutterSpeed"][0]
-            den = info["ShutterSpeed"][1]
-            shutter_speed = int(den) / int(nom)
+        self.set_label(
+            self.ShutterSpeed, _("Shutter Speed: "), f"{info.shutter_speed_text}"
+        )
 
-            self.ShutterSpeed.set_text(_("Shutter Speed: ") + f"1/{shutter_speed:.0f}")
+        self.FNumber.set_text(_("FNumber: ") + f"{info.fnumber_text}")
 
-        if info["FNumber"] == "":
-            self.FNumber.set_text(_("FNumber: "))
-        else:
-            a, b = info["FNumber"].split("/")
-            fnumber = f"f/{int(a) / int(b)}"
-            self.FNumber.set_text(_("FNumber: ") + f"{fnumber}")
+        self.set_label(self.ISO, _("ISO: "), f"{info.iso}")
 
-        if info["ISO"] == "":
-            self.ISO.set_text(_("ISO: "))
-        else:
-            self.ISO.set_text(_("ISO: ") + f"{info['ISO']}")
-
-        if info["FocalLength"] == "":
-            self.FocalLength.set_text(_("Focal Length: "))
-        else:
-            self.FocalLength.set_text(_("Focal Length: ") + f"{info['FocalLength']}")
+        self.set_label(
+            self.FocalLength, _("Focal Length: "), f"{info.focal_length_text}"
+        )
 
     # --- Image display -------------------------------------------------------------
     def open_media(self, gfile):
         self.open_image(gfile)
-
-    def reset_view_state(self):
-        self.imagestate.zoom = DEFAULT_ZOOM_RATIO
-        self.imagestate.fit_mode = True
 
     def show_next_image(self):
         self.change_image(1)
@@ -475,12 +346,3 @@ class ImageViewerDialog(Adw.Window):
 
     def show_previous_image(self):
         self.change_image(-1)
-
-    def on_close_request(self, *args):
-        self.settings.set_int("viewer-width", self.get_width())
-        self.settings.set_int("viewer-height", self.get_height())
-        self.settings.set_boolean("viewer-maximized", self.is_maximized())
-
-        self.parent.viewer = None
-
-        return False
