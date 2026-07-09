@@ -70,8 +70,6 @@ class ImageViewerDialog(Adw.Window):
         self.imagecanvas = ImageCanvas()
         self.imagecanvas.set_state(self.imagestate)
 
-        self.current_file = None
-
         self.image_container.append(self.imagecanvas)
 
         self.parent = parent
@@ -136,6 +134,13 @@ class ImageViewerDialog(Adw.Window):
         if self.image_files:
             self.show_current_image()
 
+    @property
+    def current_file(self):
+        if not self.image_files:
+            return None
+
+        return self.image_files[self.current_index]
+
     def open_image(self, gfile):
         self.imagestate.initialize_view()
         self.media_stack.set_visible_child(self.image_container)
@@ -161,16 +166,14 @@ class ImageViewerDialog(Adw.Window):
             print(e)
 
     def show_current_image(self):
+        if not self.image_files:
+            return
+
         self.imagestate.initialize_view()
 
         self.media_stack.set_visible_child(self.image_container)
 
-        if not self.image_files:
-            return
-
-        gfile = self.image_files[self.current_index]
-        self.current_file = gfile
-        self.open_media(gfile)
+        self.open_media(self.current_file)
 
         if self.is_show_exif_data:
             self.show_exif_data()
