@@ -310,25 +310,19 @@ class ImageViewerDialog(Adw.Window):
     def show_exif_data(self):
         info = get_exif_info(self.current_file)
 
-        self.set_label(self.Camera_label, _("Camera: "), info.camera)
-
-        self.set_label(self.Date_label, _("Shooting Datetime: "), info.date)
-
-        self.set_label(self.Pixel_size, _("Pixel Size: "), info.pixel_size)
-
-        self.set_label(self.Orientation, _("Orientation: "), f"{info.orientation}")
-
-        self.set_label(
-            self.ShutterSpeed, _("Shutter Speed: "), f"{info.shutter_speed_text}"
+        EXIF_FILEDS = (
+            (self.Camera_label, _("Camera: "), info.camera),
+            (self.Date_label, _("Shooting Datetime: "), info.date_str),
+            (self.Pixel_size, _("Pixel Size: "), info.pixel_size),
+            (self.Orientation, _("Orientation: "), f"{info.orientation}"),
+            (self.ShutterSpeed, _("Shutter Speed: "), f"{info.shutter_speed_text}"),
+            (self.FNumber, _("FNumber: "), f"{info.fnumber_text}"),
+            (self.ISO, _("ISO: "), f"{info.iso}"),
+            (self.FocalLength, _("Focal Length: "), f"{info.focal_length_text}"),
         )
 
-        self.FNumber.set_text(_("FNumber: ") + f"{info.fnumber_text}")
-
-        self.set_label(self.ISO, _("ISO: "), f"{info.iso}")
-
-        self.set_label(
-            self.FocalLength, _("Focal Length: "), f"{info.focal_length_text}"
-        )
+        for label, title, value in EXIF_FILEDS:
+            self.set_label(label, title, value)
 
     # --- Image display -------------------------------------------------------------
     def open_media(self, gfile):

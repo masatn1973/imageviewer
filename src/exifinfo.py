@@ -54,6 +54,10 @@ class ExifData:
         return f"{self.make} {self.model}".strip()
 
     @property
+    def date_str(self) -> str:
+        return f"{self.date}"
+
+    @property
     def pixel_size(self) -> str:
         if self.pixel_x is None or self.pixel_y is None:
             return ""
@@ -77,13 +81,15 @@ class ExifData:
 
     @property
     def fnumber_text(self) -> str:
-        if self.fnumber == "":
+        if not self.fnumber:
             return ""
 
-        else:
+        try:
             a, b = self.fnumber.split("/")
-            fnumber = f"f/{int(a) / int(b)}"
-            return fnumber
+            return f"f/{int(a) / int(b):g}"
+
+        except (ValueError, ZeroDivisionError):
+            return self.fnumber
 
     @property
     def focal_length_text(self) -> str:
@@ -139,7 +145,7 @@ def get_exif_info(current_file) -> ExifData:
             info.shutter_nom = result[0]
             info.shutter_den = result[1]
 
-        info.fnumber = meta.try_get_tag_string("Exif.Photo.FNumber")
+        info.fnumber = meta.try_get_tag_string("Exif.Photo.FNumber") or ""
 
         info.iso = meta.try_get_tag_string("Exif.Photo.ISOSpeedRatings") or ""
         info.focal_length = meta.try_get_focal_length()
