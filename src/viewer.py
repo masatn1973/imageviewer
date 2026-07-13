@@ -67,7 +67,8 @@ class ImageViewerDialog(Adw.Window):
 
         self.imagestate = ImageState()
 
-        self.imagecanvas = ImageCanvas()
+        self.imagecanvas = ImageCanvas(self.update_title)
+
         self.imagecanvas.set_state(self.imagestate)
 
         self.image_container.append(self.imagecanvas)
@@ -291,7 +292,7 @@ class ImageViewerDialog(Adw.Window):
             return ""
 
         filename = self.current_file.get_basename()
-        percent = int(self.imagestate.get_display_zoom() * 100)
+        percent = int(self.imagecanvas.current_zoom * 100)
 
         return f"{filename} ({percent}%)"
 

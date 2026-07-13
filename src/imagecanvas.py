@@ -19,33 +19,32 @@
 
 import math
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 
 class ImageCanvas(Gtk.DrawingArea):
     __gtype_name__ = "ImageCanvas"
 
-    def __init__(self):
+    def __init__(self, on_zoom_changed=None):
         super().__init__()
 
         self.state = None
+        self.current_zoom = 1.0
+        self.on_zoom_changed = on_zoom_changed
 
         self.set_draw_func(self.draw_image)
 
+        self.set_hexpand(True)
+        self.set_vexpand(True)
+
     def redraw(self):
-        self.update_canvas_size()
         self.queue_draw()
 
     def draw_image(self, area, cr, width, height):
+        print("DRAW SIZE", width, height)
+
         if self.state is None or self.state.pixbuf is None:
             return
-
-        cr.save()
-
-        zoom = self.state.get_display_zoom()
-
-        cr.scale(zoom, zoom)
-        cr.translate(0, 0)
 
         pixbuf = self.state.pixbuf
 
@@ -53,19 +52,50 @@ class ImageCanvas(Gtk.DrawingArea):
         image_h = pixbuf.get_height()
 
         rotation = self.state.rotation
+
+        if rotation in (90, 270):
+            image_w, image_h = image_h, image_w
+
+        if self.state.fit_mode:
+            zoom = min(width / image_w, height / image_h)
+
+        else:
+            zoom = self.state.zoom
+
+        old_zoom = self.current_zoom
+        self.current_zoom = zoom
+
+        if abs(old_zoom - zoom) > 0.001:
+            if self.on_zoom_changed:
+                GLib.idle_add(self.on_zoom_changed)
+
+        if zoom <= 0:
+            return
+
+        draw_w = image_w * zoom
+        draw_h = image_h * zoom
+
+        offset_x = (width - draw_w) / 2
+        offset_y = (height - draw_h) / 2
+
+        cr.save()
+
+        cr.translate(offset_x, offset_y)
+        cr.scale(zoom, zoom)
+
         if rotation == 90:
-            cr.translate(image_h, 0)
+            cr.translate(pixbuf.get_height(), 0)
             cr.rotate(math.radians(90))
 
         elif rotation == 180:
-            cr.translate(image_w, image_h)
+            cr.translate(pixbuf.get_width(), pixbuf.get_height())
             cr.rotate(math.radians(180))
 
         elif rotation == 270:
-            cr.translate(0, image_w)
+            cr.translate(0, pixbuf.get_width())
             cr.rotate(math.radians(270))
 
-        Gdk.cairo_set_source_pixbuf(cr, self.state.pixbuf, 0, 0)
+        Gdk.cairo_set_source_pixbuf(cr, pixbuf, 0, 0)
         cr.paint()
 
         cr.restore()
@@ -92,6 +122,4 @@ class ImageCanvas(Gtk.DrawingArea):
 
     def set_state(self, state):
         self.state = state
-
-        self.update_canvas_size()
         self.queue_draw()
