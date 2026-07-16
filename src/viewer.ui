@@ -13,9 +13,9 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkScrolledWindow" id="scrolled_window">
+          <object class="GtkOverlay" id="overlay">
             <property name="child">
-              <object class="GtkOverlay" id="overlay">
+              <object class="GtkScrolledWindow" id="scrolled_window">
                 <property name="child">
                   <object class="GtkStack" id="media_stack">
                     <child>
@@ -29,8 +29,10 @@
                     </child>
                   </object>
                 </property>
-                <child type="overlay">
-                  <object class="GtkBox" id="info_box">
+              </object>
+            </property>
+            <child type="overlay">
+              <object class="GtkBox" id="info_box">
                     <property name="orientation">vertical</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
@@ -90,8 +92,6 @@
               </object>
             </property>
           </object>
-        </property>
-      </object>
     </child>
   </template>
 </interface>
