@@ -67,7 +67,7 @@ class ImageViewerDialog(Adw.Window):
 
         self.imagestate = ImageState()
 
-        self.imagecanvas = ImageCanvas(self.update_title)
+        self.imagecanvas = ImageCanvas(self.scrolled_window, self.update_title)
 
         self.imagecanvas.set_state(self.imagestate)
 
@@ -184,14 +184,12 @@ class ImageViewerDialog(Adw.Window):
     # --- Event handler --------------------------------------------------------
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
-            self.imagestate.zoom_in()
-            self.imagecanvas.redraw()
+            self.imagecanvas.zoom_at_viewport_center(zoom_in=True)
             self.update_title()
             return True
 
         if keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
-            self.imagestate.zoom_out()
-            self.imagecanvas.redraw()
+            self.imagecanvas.zoom_at_viewport_center(zoom_in=False)
             self.update_title()
             return True
 
@@ -242,17 +240,16 @@ class ImageViewerDialog(Adw.Window):
     def on_scroll(self, controller, dx, dy):
         state = controller.get_current_event_state()
 
-        if state & Gdk.ModifierType.CONTROL_MASK:
-            if dy < 0:
-                self.imagestate.zoom_in()
-            else:
-                self.imagestate.zoom_out()
+        if not (state & Gdk.ModifierType.CONTROL_MASK):
+            return False
 
-            self.imagecanvas.redraw()
-            self.update_title()
-            return True
+        if dy < 0:
+            self.imagecanvas.zoom_at_cursor(zoom_in=True)
+        else:
+            self.imagecanvas.zoom_at_cursor(zoom_in=False)
 
-        return False
+        self.update_title()
+        return True
 
     def on_window_resize(self, *args):
         if self.imagestate.fit_mode:

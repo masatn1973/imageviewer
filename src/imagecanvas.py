@@ -25,23 +25,172 @@ from gi.repository import Gtk, Gdk, GLib
 class ImageCanvas(Gtk.DrawingArea):
     __gtype_name__ = "ImageCanvas"
 
-    def __init__(self, on_zoom_changed=None):
+    def __init__(self, scrolled_window, on_zoom_changed=None):
         super().__init__()
 
         self.state = None
-        self.current_zoom = 1.0
+        self.scrolled_window = scrolled_window
         self.on_zoom_changed = on_zoom_changed
+
+        self.current_zoom = 1.0
+
+        self.draw_width = 0
+        self.draw_height = 0
+
+        self.mouse_x = 0
+        self.mouse_y = 0
 
         self.set_draw_func(self.draw_image)
 
-        self.set_hexpand(True)
-        self.set_vexpand(True)
+        motion = Gtk.EventControllerMotion()
+        motion.connect("motion", self.on_motion)
+        self.add_controller(motion)
+
+    def _get_view_size(self):
+        alloc = self.scrolled_window.get_allocation()
+        return max(1, alloc.width), max(1, alloc.height)
+
+    def _get_image_size(self):
+        pixbuf = self.state.pixbuf
+        w = pixbuf.get_width()
+        h = pixbuf.get_height()
+
+        if self.state.rotation in (90, 270):
+            w, h = h, w
+
+        return w, h
+
+    def _compute_geometry(self, zoom):
+        image_w, image_h = self._get_image_size()
+        view_w, view_h = self._get_view_size()
+
+        draw_w = image_w * zoom
+        draw_h = image_h * zoom
+
+        content_w = max(int(draw_w), view_w)
+        content_h = max(int(draw_h), view_h)
+
+        offset_x = max((content_w - draw_w) / 2, 0)
+        offset_y = max((content_h - draw_h) / 2, 0)
+
+        return content_w, content_h, offset_x, offset_y
+
+    def zoom_at_viewport_center(self, zoom_in):
+        hadj = self.scrolled_window.get_hadjustment()
+        vadj = self.scrolled_window.get_vadjustment()
+
+        center_x = hadj.get_value() + hadj.get_page_size() / 2
+        center_y = vadj.get_value() + vadj.get_page_size() / 2
+
+        self.zoom_at_point(center_x, center_y, zoom_in)
+
+    def zoom_at_cursor(self, zoom_in):
+        self.zoom_at_point(self.mouse_x, self.mouse_y, zoom_in)
+
+    def zoom_at_point(self, x, y, zoom_in):
+        if self.state is None or self.state.pixbuf is None:
+            return
+
+        if self.state.fit_mode:
+            old_zoom = self.current_zoom
+
+        else:
+            old_zoom = self.state.zoom
+
+        if zoom_in:
+            new_zoom = min(old_zoom * self.state.ZOOM_RATIO, self.state.MAX_ZOOM)
+
+        else:
+            new_zoom = max(old_zoom / self.state.ZOOM_RATIO, self.state.MIN_ZOOM)
+
+        if new_zoom == old_zoom:
+            return
+
+        hadj = self.scrolled_window.get_hadjustment()
+        vadj = self.scrolled_window.get_vadjustment()
+
+        old_hadj_value = hadj.get_value()
+        old_vadj_value = vadj.get_value()
+
+        _, _, offset_x_old, offset_y_old = self._compute_geometry(old_zoom)
+
+        anchor_x = (x - offset_x_old) / old_zoom
+        anchor_y = (y - offset_y_old) / old_zoom
+
+        content_w_new, content_h_new, offset_x_new, offset_y_new = (
+            self._compute_geometry(new_zoom)
+        )
+
+        canvas_x_new = offset_x_new + anchor_x * new_zoom
+        canvas_y_new = offset_y_new + anchor_y * new_zoom
+
+        new_hadj_value = old_hadj_value + (canvas_x_new - x)
+        new_vadj_value = old_vadj_value + (canvas_y_new - y)
+
+        view_w, view_h = self._get_view_size()
+
+        hadj.configure(
+            new_hadj_value,
+            0,
+            content_w_new,
+            hadj.get_step_increment(),
+            hadj.get_page_increment(),
+            view_w,
+        )
+
+        vadj.configure(
+            new_vadj_value,
+            0,
+            content_h_new,
+            vadj.get_step_increment(),
+            vadj.get_page_increment(),
+            view_h,
+        )
+
+        self.state.zoom = new_zoom
+        self.state.fit_mode = False
+
+        self.redraw()
+
+        self.mouse_x = canvas_x_new
+        self.mouse_y = canvas_y_new
 
     def redraw(self):
+        if self.state is None or self.state.pixbuf is None:
+            return
+
+        width = self.state.pixbuf.get_width()
+        height = self.state.pixbuf.get_height()
+
+        if self.state.rotation in (90, 270):
+            width, height = height, width
+
+        if self.state.fit_mode:
+            self.set_content_width(0)
+            self.set_content_height(0)
+            self.set_hexpand(True)
+            self.set_vexpand(True)
+
+        else:
+            zoom = self.state.zoom
+
+            display_width = int(width * zoom)
+            display_height = int(height * zoom)
+
+            alloc = self.scrolled_window.get_allocation()
+
+            view_width = max(1, alloc.width)
+            view_height = max(1, alloc.height)
+
+            self.set_content_width(max(display_width, view_width))
+            self.set_content_height(max(display_height, view_height))
+
+        self.queue_resize()
         self.queue_draw()
 
     def draw_image(self, area, cr, width, height):
-        print("DRAW SIZE", width, height)
+        self.draw_width = width
+        self.draw_height = height
 
         if self.state is None or self.state.pixbuf is None:
             return
@@ -75,8 +224,8 @@ class ImageCanvas(Gtk.DrawingArea):
         draw_w = image_w * zoom
         draw_h = image_h * zoom
 
-        offset_x = (width - draw_w) / 2
-        offset_y = (height - draw_h) / 2
+        offset_x = max((width - draw_w) / 2, 0)
+        offset_y = max((height - draw_h) / 2, 0)
 
         cr.save()
 
@@ -100,26 +249,10 @@ class ImageCanvas(Gtk.DrawingArea):
 
         cr.restore()
 
-    def update_canvas_size(self):
-        if self.state is None:
-            return
-
-        if self.state.pixbuf is None:
-            return
-
-        zoom = self.state.get_display_zoom()
-
-        image_width = self.state.pixbuf.get_width()
-        image_height = self.state.pixbuf.get_height()
-
-        if self.state.rotation in (90, 270):
-            image_width, image_height = image_height, image_width
-
-        width = max(1, int(image_width * zoom))
-        height = max(1, int(image_height * zoom))
-
-        self.set_size_request(width, height)
-
     def set_state(self, state):
         self.state = state
         self.queue_draw()
+
+    def on_motion(self, controller, x, y):
+        self.mouse_x = x
+        self.mouse_y = y

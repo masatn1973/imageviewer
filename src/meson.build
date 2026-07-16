@@ -19,7 +19,6 @@ install_data([
   'main.py',
   'exifinfo.py',
   'imagestate.py',
-  'imageops.py',
   'imagecanvas.py',
   'imagestate.py',
   'renderer.py',
