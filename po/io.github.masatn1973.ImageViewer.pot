@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-02 23:00+0900\n"
+"POT-Creation-Date: 2026-07-17 15:21+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,115 +52,116 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
 msgid "Performed a refactoring. No features were added or removed."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:41
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+msgid "Fixed it so that when you zoom in, it zooms to the correct position."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
 msgid ""
 "Modified the system to monitor the “Pictures” folder and update thumbnails "
 "whenever images are added or deleted."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:48
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
 msgid "Support image sorting."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:57
 msgid "Support reload thumbnails."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:50
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
 msgid ""
 "Made it so that the window size is remembered when you close the image view "
 "or thumbnail window."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:51
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:59
 msgid "Removed the video playback feature."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:66
 msgid "Support Zoom In/Out."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:65
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:73
 msgid "Support slideshow."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:72
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:80
 msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:79
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:87
 msgid "Add video playback support."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:86
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:94
 msgid "EXIF information display is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:93
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:101
 msgid "Image rotation is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:100
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:108
 msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:101
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:109
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:108
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:116
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:115
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:123
 msgid "Supports .bmp and .tiff file format."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:116
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:124
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:122
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:130
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:376 src/viewer.py:379
+#: src/viewer.py:138
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:383 src/viewer.py:385
+#: src/viewer.py:139
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:388 src/viewer.py:391
+#: src/viewer.py:140
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:396 src/viewer.py:398
+#: src/viewer.py:141
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:401 src/viewer.py:403 src/viewer.py:409
+#: src/viewer.py:142
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:412 src/viewer.py:416
+#: src/viewer.py:143
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:419 src/viewer.py:421
+#: src/viewer.py:144
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:424 src/viewer.py:426
+#: src/viewer.py:145
 msgid "Focal Length: "
-msgstr ""
-
-#: src/window.py:519
-msgid "image(s) read."
 msgstr ""
 
 #: src/about.ui:14

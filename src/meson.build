@@ -17,13 +17,23 @@ install_data(
 
 install_data([
   'main.py',
-  'exifinfo.py',
-  'imagestate.py',
-  'imagecanvas.py',
-  'imagestate.py',
-  'renderer.py',
   'window.py',
   'viewer.py',
+  'imagecanvas.py',
   'shortcuts.py',
   'preferences.py',
 ], install_dir: '/app/share/imageviewer')
+
+install_data([
+  'models/__init__.py',
+  'models/gallerymodel.py',
+  'models/imagestate.py',
+  'models/exifinfo.py',
+  'models/geometry.py',
+], install_dir: '/app/share/imageviewer/models')
+
+install_data([
+  'controllers/__init__.py',
+  'controllers/gallerycontroller.py',
+  'controllers/viewercontroller.py',
+], install_dir: '/app/share/imageviewer/controllers')

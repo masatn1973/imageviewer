@@ -34,15 +34,21 @@ from gettext import gettext as _
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Adw, GdkPixbuf, Gio, GLib
+from gi.repository import Gtk, Adw, Gio
 
-from exifinfo import ExifData, get_exif_info
-from imagestate import ImageState
+from models.imagestate import ImageState
 from imagecanvas import ImageCanvas
+from controllers.viewercontroller import ViewerController
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
+    """画像1枚表示ダイアログ (View)。
+
+    見た目の構築と更新だけを担当する。ズーム・回転・EXIF表示・
+    キー操作などのロジックは ViewerController が持つ。
+    """
+
     __gtype_name__ = "ImageViewerDialog"
 
     scrolled_window = Gtk.Template.Child()
@@ -65,42 +71,28 @@ class ImageViewerDialog(Adw.Window):
     def __init__(self, parent, image_files=None, current_index=0):
         super().__init__()
 
-        self.imagestate = ImageState()
-
-        self.imagecanvas = ImageCanvas(self.scrolled_window, self.update_title)
-
-        self.imagecanvas.set_state(self.imagestate)
-
-        self.image_container.append(self.imagecanvas)
-
         self.parent = parent
-
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+
+        self.state = ImageState()
+        self.state.set_files(image_files or [], current_index)
+
+        self.imagecanvas = ImageCanvas(
+            self.scrolled_window, self._on_canvas_zoom_changed
+        )
+        self.imagecanvas.set_state(self.state)
+        self.image_container.append(self.imagecanvas)
 
         self.info_box.add_css_class("exif-overlay")
 
-        self.file_path = None
+        self.prev_button = Gtk.Button(icon_name="go-previous-symbolic")
+        self.next_button = Gtk.Button(icon_name="go-next-symbolic")
 
-        self.connect("notify::default-width", self.on_window_resize)
-        self.connect("notify::default-height", self.on_window_resize)
-        self.connect("notify::maximized", self.on_window_resize)
+        self.headerbar.pack_start(self.prev_button)
+        self.headerbar.pack_start(self.next_button)
 
-        scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
-        scroll.connect("scroll", self.on_scroll)
-        self.imagecanvas.add_controller(scroll)
-
-        prev_button = Gtk.Button(icon_name="go-previous-symbolic")
-        prev_button.connect("clicked", lambda *_: self.show_previous_image())
-
-        next_button = Gtk.Button(icon_name="go-next-symbolic")
-        next_button.connect("clicked", lambda *_: self.show_next_image())
-
-        self.headerbar.pack_start(prev_button)
-        self.headerbar.pack_start(next_button)
-
-        self.image_files = image_files or []
-        self.current_index = current_index
-        self.is_show_exif_data = False
+        self.key_controller = Gtk.EventControllerKey()
+        self.add_controller(self.key_controller)
 
         self.add_shortcut(
             Gtk.Shortcut.new(
@@ -109,15 +101,12 @@ class ImageViewerDialog(Adw.Window):
             )
         )
 
-        shortcut = Gtk.Shortcut.new(
-            Gtk.ShortcutTrigger.parse_string("Escape"),
-            Gtk.NamedAction.new("window.close"),
+        self.add_shortcut(
+            Gtk.Shortcut.new(
+                Gtk.ShortcutTrigger.parse_string("Escape"),
+                Gtk.NamedAction.new("window.close"),
+            )
         )
-        self.add_shortcut(shortcut)
-
-        controller = Gtk.EventControllerKey()
-        controller.connect("key-pressed", self.on_key_pressed)
-        self.add_controller(controller)
 
         self.set_focusable(True)
         self.grab_focus()
@@ -130,184 +119,22 @@ class ImageViewerDialog(Adw.Window):
         if self.settings.get_boolean("viewer-maximized"):
             self.maximize()
 
-        self.connect("close-request", self.on_close_request)
+        # View / Model の初期化が終わった最後に Controller を組み立てる
+        self.controller = ViewerController(self.state, self)
 
-        if self.image_files:
-            self.show_current_image()
+    def _on_canvas_zoom_changed(self):
+        self.controller.on_canvas_zoom_changed()
 
-    @property
-    def current_file(self):
-        if not self.image_files:
-            return None
-
-        return self.image_files[self.current_index]
-
-    def open_image(self, gfile):
+    # --- View: 見た目の更新だけ ------------------------------------------------
+    def show_image_container(self):
         self.media_stack.set_visible_child(self.image_container)
 
-        path = gfile.get_path()
-
-        stream = gfile.read(None)
-
-        try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
-            pixbuf = pixbuf.apply_embedded_orientation()
-            self.imagestate.pixbuf = pixbuf
-
-            self.update_fit_zoom()
-
-            self.imagecanvas.redraw()
-            self.update_title()
-
-        except Exception as e:
-            print(f"Failed to open image: {path}")
-            print(e)
-
-        finally:
-            stream.close(None)
-
-    def show_current_image(self):
-        if not self.image_files:
-            return
-
-        self.imagestate.initialize_view()
-
-        self.media_stack.set_visible_child(self.image_container)
-
-        self.open_media(self.current_file)
-
-        if self.is_show_exif_data:
-            self.show_exif_data()
-
-        self.imagecanvas.queue_draw()
-
-    # --- Event handler --------------------------------------------------------
-    def on_key_pressed(self, controller, keyval, keycode, state):
-        if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
-            self.imagecanvas.zoom_at_viewport_center(zoom_in=True)
-            self.update_title()
-            return True
-
-        if keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
-            self.imagecanvas.zoom_at_viewport_center(zoom_in=False)
-            self.update_title()
-            return True
-
-        if keyval in (Gdk.KEY_Right, Gdk.KEY_l):
-            self.show_next_image()
-            return True
-
-        if keyval in (Gdk.KEY_Left, Gdk.KEY_h):
-            self.show_previous_image()
-            return True
-
-        if keyval == Gdk.KEY_r:
-            self.imagestate.rotate_right()
-            self.imagecanvas.redraw()
-            self.update_title()
-            return True
-
-        elif keyval == Gdk.KEY_R:
-            self.imagestate.rotate_left()
-            self.imagecanvas.redraw()
-            self.update_title()
-            return True
-
-        if keyval == Gdk.KEY_e:
-            if not self.is_show_exif_data:
-                self.info_box.set_visible(True)
-                self.show_exif_data()
-                self.is_show_exif_data = True
-            else:
-                self.info_box.set_visible(False)
-                self.is_show_exif_data = False
-
-            return True
-
-        if keyval == Gdk.KEY_0:
-            self.imagestate.zoom_reset()
-            self.update_fit_zoom()
-            return True
-
-        if keyval == Gdk.KEY_1:
-            self.imagestate.zoom_actual_size()
-            self.imagecanvas.redraw()
-            self.update_title()
-            return True
-
-        return False
-
-    def on_scroll(self, controller, dx, dy):
-        state = controller.get_current_event_state()
-
-        if not (state & Gdk.ModifierType.CONTROL_MASK):
-            return False
-
-        if dy < 0:
-            self.imagecanvas.zoom_at_cursor(zoom_in=True)
-        else:
-            self.imagecanvas.zoom_at_cursor(zoom_in=False)
-
-        self.update_title()
-        return True
-
-    def on_window_resize(self, *args):
-        if self.imagestate.fit_mode:
-            GLib.idle_add(self.update_fit_zoom)
-
-    def on_close_request(self, *args):
-        self.settings.set_int("viewer-width", self.get_width())
-        self.settings.set_int("viewer-height", self.get_height())
-        self.settings.set_boolean("viewer-maximized", self.is_maximized())
-
-        self.parent.viewer = None
-
-        return False
-
-    # --- Zoom -----------------------------------------------------------------
-    def update_fit_zoom(self):
-        self.imagestate.set_fit_zoom(self.calculate_fit_zoom())
-        self.imagecanvas.redraw()
-        self.update_title()
-
-    def calculate_fit_zoom(self):
-        if self.imagestate.pixbuf is None:
-            return self.imagestate.zoom_actual_size()
-
-        img_w = self.imagestate.pixbuf.get_width()
-        img_h = self.imagestate.pixbuf.get_height()
-
+    def get_canvas_view_size(self):
         alloc = self.scrolled_window.get_allocation()
+        return max(1, alloc.width), max(1, alloc.height)
 
-        win_w = max(1, alloc.width)
-        win_h = max(1, alloc.height)
-
-        return min(win_w / img_w, win_h / img_h)
-
-    def get_window_title(self):
-        if self.current_file is None:
-            return ""
-
-        filename = self.current_file.get_basename()
-        percent = int(self.imagecanvas.current_zoom * 100)
-
-        return f"{filename} ({percent}%)"
-
-    def update_title(self):
-        self.set_title(self.get_window_title())
-
-    # --- EXIF -------------------------------------------------------------
-    def set_label(self, label, title, value):
-        if value:
-            label.set_text(title + value)
-
-        else:
-            label.set_text(title)
-
-    def show_exif_data(self):
-        info = get_exif_info(self.current_file)
-
-        EXIF_FILEDS = (
+    def update_exif_labels(self, info):
+        fields = (
             (self.Camera_label, _("Camera: "), info.camera),
             (self.Date_label, _("Shooting Datetime: "), info.date_str),
             (self.Pixel_size, _("Pixel Size: "), info.pixel_size),
@@ -318,22 +145,20 @@ class ImageViewerDialog(Adw.Window):
             (self.FocalLength, _("Focal Length: "), f"{info.focal_length_text}"),
         )
 
-        for label, title, value in EXIF_FILEDS:
-            self.set_label(label, title, value)
+        for label, title, value in fields:
+            label.set_text(title + value if value else title)
 
-    # --- Image display -------------------------------------------------------------
-    def open_media(self, gfile):
-        self.open_image(gfile)
+    def save_window_geometry(self):
+        self.settings.set_int("viewer-width", self.get_width())
+        self.settings.set_int("viewer-height", self.get_height())
+        self.settings.set_boolean("viewer-maximized", self.is_maximized())
+
+    # --- window.py から呼ばれる公開API ------------------------------------------
+    def set_image_files(self, files):
+        self.controller.set_image_files(files)
 
     def show_next_image(self):
-        self.change_image(1)
-
-    def change_image(self, offset):
-        if not self.image_files:
-            return
-
-        self.current_index = (self.current_index + offset) % len(self.image_files)
-        self.show_current_image()
+        self.controller.show_next_image()
 
     def show_previous_image(self):
-        self.change_image(-1)
+        self.controller.show_previous_image()

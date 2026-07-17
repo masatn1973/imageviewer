@@ -28,6 +28,14 @@
   <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.2.1" date="2026-07-17">
+      <description>
+        <ul>
+          <li translatable="yes">Performed a refactoring. No features were added or removed.</li>
+          <li translatable="yes">Fixed it so that when you zoom in, it zooms to the correct position.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.0" date="2026-07-02">
       <description>
         <ul>

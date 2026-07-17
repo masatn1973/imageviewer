@@ -21,6 +21,8 @@ import math
 
 from gi.repository import Gtk, Gdk, GLib
 
+from models.geometry import compute_geometry, compute_zoom_anchor
+
 
 class ImageCanvas(Gtk.DrawingArea):
     __gtype_name__ = "ImageCanvas"
@@ -64,16 +66,7 @@ class ImageCanvas(Gtk.DrawingArea):
         image_w, image_h = self._get_image_size()
         view_w, view_h = self._get_view_size()
 
-        draw_w = image_w * zoom
-        draw_h = image_h * zoom
-
-        content_w = max(int(draw_w), view_w)
-        content_h = max(int(draw_h), view_h)
-
-        offset_x = max((content_w - draw_w) / 2, 0)
-        offset_y = max((content_h - draw_h) / 2, 0)
-
-        return content_w, content_h, offset_x, offset_y
+        return compute_geometry(image_w, image_h, view_w, view_h, zoom)
 
     def zoom_at_viewport_center(self, zoom_in):
         hadj = self.scrolled_window.get_hadjustment()
@@ -114,15 +107,20 @@ class ImageCanvas(Gtk.DrawingArea):
 
         _, _, offset_x_old, offset_y_old = self._compute_geometry(old_zoom)
 
-        anchor_x = (x - offset_x_old) / old_zoom
-        anchor_y = (y - offset_y_old) / old_zoom
-
         content_w_new, content_h_new, offset_x_new, offset_y_new = (
             self._compute_geometry(new_zoom)
         )
 
-        canvas_x_new = offset_x_new + anchor_x * new_zoom
-        canvas_y_new = offset_y_new + anchor_y * new_zoom
+        canvas_x_new, canvas_y_new = compute_zoom_anchor(
+            x,
+            y,
+            old_zoom,
+            new_zoom,
+            offset_x_old,
+            offset_y_old,
+            offset_x_new,
+            offset_y_new,
+        )
 
         new_hadj_value = old_hadj_value + (canvas_x_new - x)
         new_vadj_value = old_vadj_value + (canvas_y_new - y)
