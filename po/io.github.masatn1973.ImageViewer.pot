@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 15:21+0900\n"
+"POT-Creation-Date: 2026-07-17 22:28+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,40 +132,24 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-#: src/viewer.py:138
-msgid "Camera: "
-msgstr ""
-
-#: src/viewer.py:139
-msgid "Shooting Datetime: "
-msgstr ""
-
-#: src/viewer.py:140
-msgid "Pixel Size: "
-msgstr ""
-
-#: src/viewer.py:141
-msgid "Orientation: "
-msgstr ""
-
-#: src/viewer.py:142
-msgid "Shutter Speed: "
-msgstr ""
-
-#: src/viewer.py:143
-msgid "FNumber: "
-msgstr ""
-
-#: src/viewer.py:144
-msgid "ISO: "
-msgstr ""
-
-#: src/viewer.py:145
-msgid "Focal Length: "
-msgstr ""
-
 #: src/about.ui:14
 msgid "Folder-orientad thumbnail image browser"
+msgstr ""
+
+#: src/controllers/gallerycontroller.py:99
+msgid "image(s) read."
+msgstr ""
+
+#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:115
+msgid "Preferences"
+msgstr ""
+
+#: src/preferences.ui:12
+msgid "Slideshow"
+msgstr ""
+
+#: src/preferences.ui:15
+msgid "Interval"
 msgstr ""
 
 #: src/shortcuts.ui:8
@@ -283,10 +267,6 @@ msgstr ""
 msgid "Start Slideshow"
 msgstr ""
 
-#: src/shortcuts.ui:152 src/window.ui:115 src/preferences.ui:7
-msgid "Preferences"
-msgstr ""
-
 #: src/shortcuts.ui:160
 msgctxt "shotcut window"
 msgid "Help"
@@ -298,6 +278,38 @@ msgstr ""
 
 #: src/shortcuts.ui:169
 msgid "About"
+msgstr ""
+
+#: src/viewer.py:138
+msgid "Camera: "
+msgstr ""
+
+#: src/viewer.py:139
+msgid "Shooting Datetime: "
+msgstr ""
+
+#: src/viewer.py:140
+msgid "Pixel Size: "
+msgstr ""
+
+#: src/viewer.py:141
+msgid "Orientation: "
+msgstr ""
+
+#: src/viewer.py:142
+msgid "Shutter Speed: "
+msgstr ""
+
+#: src/viewer.py:143
+msgid "FNumber: "
+msgstr ""
+
+#: src/viewer.py:144
+msgid "ISO: "
+msgstr ""
+
+#: src/viewer.py:145
+msgid "Focal Length: "
 msgstr ""
 
 #: src/window.ui:19
@@ -342,12 +354,4 @@ msgstr ""
 
 #: src/window.ui:131
 msgid "Quit"
-msgstr ""
-
-#: src/preferences.ui:12
-msgid "Slideshow"
-msgstr ""
-
-#: src/preferences.ui:15
-msgid "Interval"
 msgstr ""

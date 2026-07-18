@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 15:21+0900\n"
+"POT-Creation-Date: 2026-07-17 22:28+0900\n"
 "PO-Revision-Date: 2026-07-17 15:40+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
@@ -141,41 +141,25 @@ msgstr ""
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: src/viewer.py:138
-msgid "Camera: "
-msgstr "カメラ: "
-
-#: src/viewer.py:139
-msgid "Shooting Datetime: "
-msgstr "撮影日時: "
-
-#: src/viewer.py:140
-msgid "Pixel Size: "
-msgstr "ピクセルサイズ: "
-
-#: src/viewer.py:141
-msgid "Orientation: "
-msgstr "向き: "
-
-#: src/viewer.py:142
-msgid "Shutter Speed: "
-msgstr "露出時間: "
-
-#: src/viewer.py:143
-msgid "FNumber: "
-msgstr "絞り: "
-
-#: src/viewer.py:144
-msgid "ISO: "
-msgstr ""
-
-#: src/viewer.py:145
-msgid "Focal Length: "
-msgstr "焦点距離: "
-
 #: src/about.ui:14
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
+
+#: src/controllers/gallerycontroller.py:99
+msgid "image(s) read."
+msgstr "枚の画像を読み込みました"
+
+#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:115
+msgid "Preferences"
+msgstr "設定"
+
+#: src/preferences.ui:12
+msgid "Slideshow"
+msgstr "スライドショー"
+
+#: src/preferences.ui:15
+msgid "Interval"
+msgstr "間隔"
 
 #: src/shortcuts.ui:8
 msgctxt "shortcut window"
@@ -292,10 +276,6 @@ msgstr "ツール"
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
-#: src/shortcuts.ui:152 src/window.ui:115 src/preferences.ui:7
-msgid "Preferences"
-msgstr "設定"
-
 #: src/shortcuts.ui:160
 msgctxt "shotcut window"
 msgid "Help"
@@ -308,6 +288,38 @@ msgstr "キーボードショートカット"
 #: src/shortcuts.ui:169
 msgid "About"
 msgstr "画像ビューワについて"
+
+#: src/viewer.py:138
+msgid "Camera: "
+msgstr "カメラ: "
+
+#: src/viewer.py:139
+msgid "Shooting Datetime: "
+msgstr "撮影日時: "
+
+#: src/viewer.py:140
+msgid "Pixel Size: "
+msgstr "ピクセルサイズ: "
+
+#: src/viewer.py:141
+msgid "Orientation: "
+msgstr "向き: "
+
+#: src/viewer.py:142
+msgid "Shutter Speed: "
+msgstr "露出時間: "
+
+#: src/viewer.py:143
+msgid "FNumber: "
+msgstr "絞り: "
+
+#: src/viewer.py:144
+msgid "ISO: "
+msgstr ""
+
+#: src/viewer.py:145
+msgid "Focal Length: "
+msgstr "焦点距離: "
 
 #: src/window.ui:19
 msgid "Main Menu"
@@ -352,17 +364,6 @@ msgstr "画像ビューワについて"
 #: src/window.ui:131
 msgid "Quit"
 msgstr "終了"
-
-#: src/preferences.ui:12
-msgid "Slideshow"
-msgstr "スライドショー"
-
-#: src/preferences.ui:15
-msgid "Interval"
-msgstr "間隔"
-
-#~ msgid "image(s) read."
-#~ msgstr "枚の画像を読み込みました"
 
 #~ msgid "Keyboard shortcuts"
 #~ msgstr "キーボードショートカット"
