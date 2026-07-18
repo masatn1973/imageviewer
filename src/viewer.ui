@@ -16,10 +16,16 @@
           <object class="GtkOverlay" id="overlay">
             <property name="child">
               <object class="GtkScrolledWindow" id="scrolled_window">
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
                 <property name="child">
                   <object class="GtkStack" id="media_stack">
+                    <property name="hexpand">true</property>
+                    <property name="vexpand">true</property>
                     <child>
                       <object class="GtkBox" id="image_container">
+                        <property name="hexpand">true</property>
+                        <property name="vexpand">true</property>
                         <property name="halign">fill</property>
                         <property name="valign">fill</property>
                       </object>

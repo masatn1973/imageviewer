@@ -22,7 +22,6 @@ import locale
 import sys
 import gi
 
-
 APP_ID = "io.github.masatn1973.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
@@ -38,7 +37,31 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Gdk, Gio, Adw
 
+
+import os
+
+
+def _find_gresource_path():
+    flatpak_path = "/app/share/imageviewer/imageviewer.gresource"
+    if os.path.exists(flatpak_path):
+        return flatpak_path
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    local_path = os.path.join(here, "..", "build", "src", "imageviewer.gresource")
+    local_path = os.path.normpath(local_path)
+    if os.path.exists(local_path):
+        return local_path
+
+    raise FileNotFoundError(
+        f"Not found imageviewer.gresource"
+        f"build using 'meson compile -C build' when run on local"
+    )
+
+
+resource = Gio.Resource.load(_find_gresource_path())
+"""
 resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
+"""
 resource._register()
 
 from window import ImageViewerWindow

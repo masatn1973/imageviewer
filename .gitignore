@@ -6,3 +6,4 @@ builddir/
 repo/
 *.mo
 *.log
+__pycache__
