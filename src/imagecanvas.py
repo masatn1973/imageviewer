@@ -42,11 +42,31 @@ class ImageCanvas(Gtk.DrawingArea):
         self.mouse_x = 0
         self.mouse_y = 0
 
+        # ドラッグ開始時点の hadjustment/vadjustment の値を保持しておく
+        self.drag_start_hadj = 0.0
+        self.drag_start_vadj = 0.0
+
         self.set_draw_func(self.draw_image)
 
         motion = Gtk.EventControllerMotion()
         motion.connect("motion", self.on_motion)
         self.add_controller(motion)
+
+        # 注意: このジェスチャーは self(ImageCanvas) ではなく scrolled_window に
+        # 付ける。パン中に ImageCanvas 自身の画面上の位置が(Viewportの
+        # スクロールによって)動いてしまうと、動く側にジェスチャーを付けた場合
+        # マウス移動量の計算基準がフレームごとにズレてガクガクする
+        # (フィードバックループになる)ため。
+        drag = Gtk.GestureDrag.new()
+        drag.set_button(Gdk.BUTTON_PRIMARY)
+        drag.connect("drag-begin", self.on_drag_begin)
+        drag.connect("drag-update", self.on_drag_update)
+        drag.connect("drag-end", self.on_drag_end)
+        self.scrolled_window.add_controller(drag)
+
+        # パン可能(=画像がビューより大きい)かどうかでカーソルを切り替える
+        self.is_pannable = False
+        self.set_cursor(None)
 
     def _get_view_size(self):
         alloc = self.scrolled_window.get_allocation()
@@ -186,6 +206,45 @@ class ImageCanvas(Gtk.DrawingArea):
         self.queue_resize()
         self.queue_draw()
 
+        # queue_resize() 直後はまだ GTK 側のレイアウト(adjustmentの
+        # upper/page_size)が確定していないため、次のフレームまで待って
+        # から判定する
+        GLib.idle_add(self.update_cursor)
+
+    def update_cursor(self):
+        """画像がビューより大きく、パン可能な場合だけ移動カーソルにする。
+
+        フィットしている間(はみ出していない間)は矢印のまま。
+
+        パン可能かどうかは、自前で画像サイズとビューサイズを計算するの
+        ではなく、実際にスクロールバーの表示/非表示を決めている
+        hadjustment / vadjustment の値(upper と page_size)をそのまま
+        見て判定する。こうすることで、コンテンツサイズの計算式が別の
+        場所(redrawやcompute_geometryなど)とズレていても、実際の見た目
+        と必ず一致する。
+        """
+        if self.state is None or self.state.pixbuf is None:
+            self.is_pannable = False
+            self.set_cursor(None)
+            return False
+
+        if self.state.fit_mode:
+            pannable = False
+        else:
+            hadj = self.scrolled_window.get_hadjustment()
+            vadj = self.scrolled_window.get_vadjustment()
+
+            pannable = (
+                hadj.get_upper() > hadj.get_page_size()
+                or vadj.get_upper() > vadj.get_page_size()
+            )
+
+        self.is_pannable = pannable
+
+        self.set_cursor_from_name("all-scroll" if pannable else "default")
+
+        return False  # GLib.idle_add: 一度実行したら解除する
+
     def draw_image(self, area, cr, width, height):
         self.draw_width = width
         self.draw_height = height
@@ -254,3 +313,34 @@ class ImageCanvas(Gtk.DrawingArea):
     def on_motion(self, controller, x, y):
         self.mouse_x = x
         self.mouse_y = y
+
+    # --- パン (ドラッグでスクロール) ---------------------------------------------
+    def on_drag_begin(self, gesture, start_x, start_y):
+        if self.state is None or self.state.pixbuf is None:
+            return
+
+        if not self.is_pannable:
+            return
+
+        hadj = self.scrolled_window.get_hadjustment()
+        vadj = self.scrolled_window.get_vadjustment()
+
+        self.drag_start_hadj = hadj.get_value()
+        self.drag_start_vadj = vadj.get_value()
+
+    def on_drag_update(self, gesture, offset_x, offset_y):
+        if self.state is None or self.state.pixbuf is None:
+            return
+
+        if not self.is_pannable:
+            return
+
+        hadj = self.scrolled_window.get_hadjustment()
+        vadj = self.scrolled_window.get_vadjustment()
+
+        # マウスを右/下に動かした分だけ、表示位置は左/上にずれる
+        hadj.set_value(self.drag_start_hadj - offset_x)
+        vadj.set_value(self.drag_start_vadj - offset_y)
+
+    def on_drag_end(self, gesture, offset_x, offset_y):
+        self.update_cursor()
