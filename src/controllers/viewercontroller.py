@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-from gi.repository import Gdk, Gtk, GLib, GdkPixbuf
+from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
 from models.exifinfo import get_exif_info
 
@@ -31,10 +31,9 @@ class ViewerController:
         self.state = state
         self.view = view
         self.is_show_exif_data = False
+        self._load_cancellable = None
 
-        scroll = Gtk.EventControllerScroll.new(
-            Gtk.EventControllerScrollFlags.VERTICAL
-        )
+        scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
         scroll.connect("scroll", self.on_scroll)
         view.imagecanvas.add_controller(scroll)
 
@@ -83,21 +82,57 @@ class ViewerController:
     def _open_media(self, gfile):
         self.view.show_image_container()
 
-        path = gfile.get_path()
-        stream = gfile.read(None)
+        if self._load_cancellable is not None:
+            self._load_cancellable.cancel()
+
+        self._load_cancellable = Gio.Cancellable()
+        print(f"[LOAD START] {gfile.get_basename()}")
+
+        gfile.read_async(
+            GLib.PRIORITY_DEFAULT, self._load_cancellable, self._on_file_read, gfile
+        )
+
+    def _on_file_read(self, gfile, result, _gfile):
+        try:
+            stream = gfile.read_finish(result)
+
+        except GLib.Error as e:
+            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                print(f"[CANCELLED at read] {gfile.get_basename()}")
+
+            else:
+                print(f"Failed to open image: {gfile.get_path()}")
+                print(e)
+
+            return
+
+        print(f"[STREAM OK] {gfile.get_basename()}")
+
+        GdkPixbuf.Pixbuf.new_from_stream_async(
+            stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
+        )
+
+    def _on_pixbuf_ready(self, stream, result, data):
+        gfile, stream = data
 
         try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_stream(stream, None)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_stream_finish(result)
             pixbuf = pixbuf.apply_embedded_orientation()
-            self.state.pixbuf = pixbuf
 
+            self.state.pixbuf = pixbuf
             self.update_fit_zoom()
             self.view.imagecanvas.redraw()
             self.update_title()
 
-        except Exception as e:
-            print(f"Failed to open image: {path}")
-            print(e)
+            print(f"[LOAD DONE] {gfile.get_basename()}")
+
+        except GLib.Error as e:
+            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                print(f"[CANCELLED at pixbuf] {gfile.get_basename()}")
+
+            else:
+                print(f"Failed to open image: {gfile.get_path()}")
+                print(e)
 
         finally:
             stream.close(None)
