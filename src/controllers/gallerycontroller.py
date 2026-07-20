@@ -1,4 +1,4 @@
-# gallery_controller.py
+# gallerycontroller.py
 #
 # Copyright 2026 masatn
 #
@@ -38,6 +38,7 @@ class GalleryController:
         self.pending_files = []
         self.loaded_count = 0
         self.thumbnail_idle_id = None
+        self.select_target = None
 
         # Model -> Controller
         self.model.connect("files-loaded", self.on_files_loaded)
@@ -70,6 +71,16 @@ class GalleryController:
         self.view.reload_action.set_enabled(True)
         self.view.slideshow_action.set_enabled(len(model.image_files) > 0)
 
+    def open_path(self, gfile):
+        folder = gfile.get_parent()
+
+        if folder is None:
+            print("open_path: Failed to get parent folder:", gfile.get_path())
+            return
+
+        self.select_target = gfile
+        self.model.load_folder(folder)
+
     def _load_next_thumbnail(self):
         if not self.pending_files:
             self.thumbnail_idle_id = None
@@ -88,6 +99,12 @@ class GalleryController:
             finally:
                 stream.close(None)
 
+            if self.select_target is not None:
+                select = gfile.equal(self.select_target)
+
+            else:
+                select = self.loaded_count == 0
+
             self.view.add_thumbnail(
                 gfile,
                 pixbuf,
@@ -103,6 +120,7 @@ class GalleryController:
 
         if not self.pending_files:
             self.thumbnail_idle_id = None
+            self.select_target = None
             return False
 
         return True
@@ -241,9 +259,7 @@ class GalleryController:
         if first_child is None:
             return False
 
-        item_width = (
-            first_child.get_allocated_width() + flowbox.get_column_spacing()
-        )
+        item_width = first_child.get_allocated_width() + flowbox.get_column_spacing()
         columns = max(1, flowbox.get_allocated_width() // item_width)
 
         if keyval == Gdk.KEY_F5:
@@ -275,9 +291,7 @@ class GalleryController:
         elif keyval == Gdk.KEY_Page_Up:
             vadj = self.view.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-            row_height = (
-                first_child.get_allocated_height() + flowbox.get_row_spacing()
-            )
+            row_height = first_child.get_allocated_height() + flowbox.get_row_spacing()
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 
@@ -293,9 +307,7 @@ class GalleryController:
         elif keyval == Gdk.KEY_Page_Down:
             vadj = self.view.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-            row_height = (
-                first_child.get_allocated_height() + flowbox.get_row_spacing()
-            )
+            row_height = first_child.get_allocated_height() + flowbox.get_row_spacing()
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 

@@ -222,3 +222,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.model.stop_monitor()
 
         return False
+
+    def open_path(self, gfile):
+        self.controller.open_path(gfile)

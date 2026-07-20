@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Image Viewer
 Comment=Folder-oriented thumbnail image browser
-Exec=imageviewer
+Exec=imageviewer %f
 Icon=io.github.masatn1973.ImageViewer
 Terminal=false
 Type=Application
@@ -9,3 +9,4 @@ Categories=Graphics;
 Keywords=GTK;
 StartupNotify=true
 DBusActivatable=true
+MimeType=image/jpeg;image/jpg;image/png;image/gif;image/webp;image/bmp;image/tiff;image/svg

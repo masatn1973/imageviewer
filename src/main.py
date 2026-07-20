@@ -74,7 +74,7 @@ class ImageviewerApplication(Adw.Application):
     def __init__(self):
         super().__init__(
             application_id=APP_ID,
-            flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
+            flags=Gio.ApplicationFlags.HANDLES_OPEN,
             resource_base_path="/io/github/masatn1973/ImageViewer",
         )
 
@@ -102,6 +102,17 @@ class ImageviewerApplication(Adw.Application):
         quit_action.connect("activate", lambda *_: self.quit())
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Ctrl>Q"])
+
+    def _ensure_css_loaded(self):
+        if getattr(self, "_css_loaded", False):
+            return
+
+        css = Gtk.CssProvider()
+        css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+        self._css_loaded = True
 
     def on_about(self, action, param):
         builder = Gtk.Builder.new_from_resource(
@@ -135,6 +146,14 @@ class ImageviewerApplication(Adw.Application):
             win.on_slideshow(action, param)
 
     def do_activate(self):
+        self._ensure_css_loaded()
+        self.win = self.get_active_window()
+        if not self.win:
+            self.win = ImageViewerWindow(self)
+
+        self.win.present()
+
+        """
         css = Gtk.CssProvider()
         css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
 
@@ -144,6 +163,17 @@ class ImageviewerApplication(Adw.Application):
         self.win = self.get_active_window()
         if not self.win:
             self.win = ImageViewerWindow(self)
+        self.win.present()
+        """
+
+    def do_open(self, files, n_files, hint):
+        self._ensure_css_loaded()
+        self.win = self.get_active_window()
+        if not self.win:
+            self.win = ImageViewerWindow(self)
+
+        gfile = files[0]
+        self.win.open_path(gfile)
         self.win.present()
 
     def create_action(self, name, callback, shortcuts=None):
