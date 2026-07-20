@@ -108,7 +108,7 @@ class GalleryController:
             self.view.add_thumbnail(
                 gfile,
                 pixbuf,
-                select=(self.loaded_count == 0),
+                select=select,
                 on_drag_prepare=self._on_thumbnail_drag_prepare,
             )
 
