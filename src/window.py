@@ -16,17 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-import gettext
-import locale
 import gi
-
-APP_ID = "/io/github/masatn1973/ImageViewer"
-
-locale.bindtextdomain(APP_ID, "/app/share/locale")
-locale.textdomain(APP_ID)
-
-gettext.bindtextdomain(APP_ID, "/app/share/locale")
-gettext.textdomain(APP_ID)
 
 from gettext import gettext as _
 
