@@ -9,4 +9,4 @@ Categories=Graphics;
 Keywords=GTK;
 StartupNotify=true
 DBusActivatable=true
-MimeType=image/jpeg;image/jpg;image/png;image/gif;image/webp;image/bmp;image/tiff;image/svg
+MimeType=image/jpeg;image/jpg;image/png;image/gif;image/webp;image/bmp;image/tiff;image/svg+xml;
