@@ -86,7 +86,6 @@ class ViewerController:
             self._load_cancellable.cancel()
 
         self._load_cancellable = Gio.Cancellable()
-        print(f"[LOAD START] {gfile.get_basename()}")
 
         gfile.read_async(
             GLib.PRIORITY_DEFAULT, self._load_cancellable, self._on_file_read, gfile
@@ -97,16 +96,11 @@ class ViewerController:
             stream = gfile.read_finish(result)
 
         except GLib.Error as e:
-            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                print(f"[CANCELLED at read] {gfile.get_basename()}")
-
-            else:
+            if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
                 print(f"Failed to open image: {gfile.get_path()}")
                 print(e)
 
             return
-
-        print(f"[STREAM OK] {gfile.get_basename()}")
 
         GdkPixbuf.Pixbuf.new_from_stream_async(
             stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
@@ -124,13 +118,8 @@ class ViewerController:
             self.view.imagecanvas.redraw()
             self.update_title()
 
-            print(f"[LOAD DONE] {gfile.get_basename()}")
-
         except GLib.Error as e:
-            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                print(f"[CANCELLED at pixbuf] {gfile.get_basename()}")
-
-            else:
+            if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
                 print(f"Failed to open image: {gfile.get_path()}")
                 print(e)
 
