@@ -10,7 +10,8 @@
         "--device=dri",
         "--socket=fallback-x11",
         "--socket=wayland",
-        "--filesystem=xdg-pictures"
+        "--filesystem=xdg-pictures",
+        "--filesystem=xdg-download"
     ],
     "cleanup": [
         "/include",
