@@ -36,6 +36,8 @@ class ViewerController:
         self.is_show_exif_data = False
         self._load_cancellable = None
         self._pre_fullscreen_size = None
+        self.slideshow_mode = False
+        self._loading_slideshow_mode = False
 
         scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
         scroll.connect("scroll", self.on_scroll)
@@ -52,6 +54,11 @@ class ViewerController:
 
         if state.image_files:
             self.show_current_image()
+
+    def set_slideshow_mode(self, enabled):
+        self.slideshow_mode = enabled
+        self.state.slideshow_mode = enabled
+        self.update_title()
 
     # --- 画像切り替え -----------------------------------------------------------
     def show_current_image(self):
@@ -91,9 +98,13 @@ class ViewerController:
 
         self._load_cancellable = Gio.Cancellable()
 
-        self.state.pixbuf = None
-        self.view.imagecanvas.redraw()
+        # 読み込み開始時点のモードを記憶しておく
+        # （非同期処理の完了時には self.slideshow_mode が
+        # 途中で変わっている可能性があるため）
+        self._loading_slideshow_mode = self.slideshow_mode
 
+        # # 新しい画像の準備ができるまでは、今の画像を表示したままにする
+        # (state.pixbuf を先に None にすると、その間 画面が空白になりチラつく)
         gfile.read_async(
             GLib.PRIORITY_DEFAULT, self._load_cancellable, self._on_file_read, gfile
         )
@@ -108,9 +119,68 @@ class ViewerController:
 
             return
 
-        GdkPixbuf.Pixbuf.new_from_stream_async(
-            stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
-        )
+        if self._loading_slideshow_mode:
+            # スライドショー中は表示サイズ相当まで縮小してデコード（高速）
+            win_w, win_h = self.view.get_canvas_view_size()
+            target_w = max(win_w, 1) * 2
+            target_h = max(win_h, 1) * 2
+
+            # フォーマットによっては at_scale_async が「元画像より小さければ
+            # 拡大しない」という仕様を守らず、意図せず引き伸ばしてしまうこと
+            # がある(WebP/BMP等)。そのため、先にヘッダーだけ読んで本来の
+            # サイズを確認し、すでに表示領域より小さい画像は拡大せず
+            # そのままのサイズでデコードする。
+            native_size = self._get_native_image_size(gfile)
+
+            if (
+                native_size is not None
+                and native_size[0] <= target_w
+                and native_size[1] <= target_h
+            ):
+                GdkPixbuf.Pixbuf.new_from_stream_async(
+                    stream,
+                    self._load_cancellable,
+                    self._on_pixbuf_ready,
+                    (gfile, stream),
+                )
+            else:
+                GdkPixbuf.Pixbuf.new_from_stream_at_scale_async(
+                    stream,
+                    target_w,
+                    target_h,
+                    True,  # preserve_aspect_ratio
+                    self._load_cancellable,
+                    self._on_pixbuf_ready,
+                    (gfile, stream),
+                )
+
+        else:
+            # 通常時はフルサイズでデコード（実寸表示のため）
+            GdkPixbuf.Pixbuf.new_from_stream_async(
+                stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
+            )
+
+    def _get_native_image_size(self, gfile):
+        path = gfile.get_path()
+
+        if path is None:
+            return None
+
+        try:
+            info = GdkPixbuf.Pixbuf.get_file_info(path)
+
+        except GLib.Error:
+            return None
+
+        if info is None:
+            return None
+
+        _format, width, height = info
+
+        if not width or not height:
+            return None
+
+        return (width, height)
 
     def _on_pixbuf_ready(self, stream, result, data):
         gfile, stream = data
@@ -132,6 +202,9 @@ class ViewerController:
             stream.close(None)
 
     def _show_load_error(self, gfile):
+        self.state.pixbuf = None
+        self.view.imagecanvas.redraw()
+
         self.view.show_error(
             _("Failed to open {filename}").format(filename=gfile.get_basename())
         )
@@ -162,6 +235,10 @@ class ViewerController:
             return ""
 
         filename = self.state.current_file.get_basename()
+
+        if self.slideshow_mode:
+            return filename
+
         percent = int(self.view.imagecanvas.current_zoom * 100)
 
         return f"{filename} ({percent}%)"

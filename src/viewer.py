@@ -113,6 +113,9 @@ class ImageViewerDialog(Adw.Window):
     def _on_canvas_zoom_changed(self):
         self.controller.on_canvas_zoom_changed()
 
+    def set_slideshow_mode(self, enabled):
+        self.controller.set_slideshow_mode(enabled)
+
     # --- View: 見た目の更新だけ ------------------------------------------------
     def show_image_container(self):
         self.media_stack.set_visible_child(self.image_container)

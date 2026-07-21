@@ -32,6 +32,7 @@ class ImageState:
         self.fit_zoom = self.DEFAULT_ZOOM_RATIO
         self.fit_mode = True
         self.rotation = 0
+        self.slideshow_mode = False
 
         # --- 画像一覧・現在位置 (旧: viewer.py / window.py に分散していたもの) ---
         self.image_files = []

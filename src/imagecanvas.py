@@ -265,6 +265,9 @@ class ImageCanvas(Gtk.DrawingArea):
         if self.state.fit_mode:
             zoom = min(width / image_w, height / image_h)
 
+            if getattr(self.state, "slideshow_mode", False):
+                zoom = min(zoom, 1.0)
+
         else:
             zoom = self.state.zoom
 

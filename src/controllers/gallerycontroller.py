@@ -282,6 +282,11 @@ class GalleryController:
             GLib.source_remove(self.slideshow_id)
             self.slideshow_id = None
 
+        if self.view.viewer is not None:
+            self.view.viewer.controller.exit_fullscreen()
+            self.view.viewer.set_slideshow_mode(False)
+            self.view.viewer.controller.show_current_image()
+
     # --- キーボードナビゲーション -------------------------------------------------
     # NOTE: 元の window.py の on_key_pressed のロジックをそのまま移設したもの。
     #       参照先を self.flowbox -> flowbox / self.image_files -> image_files
