@@ -5,6 +5,7 @@ data/io.github.masatn1973.ImageViewer.gschema.xml
 data/io.github.masatn1973.ImageViewer.metainfo.xml.in
 src/about.ui
 src/controllers/gallerycontroller.py
+src/controllers/viewercontroller.py
 src/main.py
 src/preferences.py
 src/preferences.ui

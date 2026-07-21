@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 11:02+0900\n"
+"POT-Creation-Date: 2026-07-21 14:02+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: data/io.github.masatn1973.ImageViewer.desktop.in:2
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:4 src/about.ui:7
@@ -52,83 +53,95 @@ msgid ""
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:42
-msgid "Performed a refactoring. No features were added or removed."
+msgid "Added support for the \"Pan\" feature in image."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+msgid "Can open files in \"Download\" directory."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:36
+msgid "Added tooltip in image view window."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:43
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:51
+msgid "Performed a refactoring. No features were added or removed."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:44
 msgid "Fixed it so that when you zoom in, it zooms to the correct position."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:49
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
 msgid ""
 "Modified the system to monitor the “Pictures” folder and update thumbnails "
 "whenever images are added or deleted."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:56
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:65
 msgid "Support image sorting."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:57
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:66
 msgid "Support reload thumbnails."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:67
 msgid ""
 "Made it so that the window size is remembered when you close the image view "
 "or thumbnail window."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:59
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:68
 msgid "Removed the video playback feature."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:66
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:75
 msgid "Support Zoom In/Out."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:73
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:82
 msgid "Support slideshow."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:80
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:89
 msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:87
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:96
 msgid "Add video playback support."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:94
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:103
 msgid "EXIF information display is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:101
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:110
 msgid "Image rotation is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:108
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:117
 msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:109
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:118
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:116
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:125
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:123
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:132
 msgid "Supports .bmp and .tiff file format."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:124
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:133
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:130
+#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:139
 msgid "Initial release"
 msgstr ""
 
@@ -136,11 +149,27 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:116
+#: src/controllers/gallerycontroller.py:131
 msgid "image(s) read."
 msgstr ""
 
-#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:115
+#: src/controllers/gallerycontroller.py:154
+#, python-brace-format
+msgid "Failed to load {count} image."
+msgid_plural "Failed to load {count} images."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/controllers/gallerycontroller.py:183
+msgid "Failed to open folder."
+msgstr ""
+
+#: src/controllers/viewercontroller.py:134
+#, python-brace-format
+msgid "Failed to open {filename}"
+msgstr ""
+
+#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:119
 msgid "Preferences"
 msgstr ""
 
@@ -263,7 +292,7 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:146 src/window.ui:109
+#: src/shortcuts.ui:146 src/window.ui:113
 msgid "Start Slideshow"
 msgstr ""
 
@@ -272,7 +301,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:163 src/window.ui:121
+#: src/shortcuts.ui:163 src/window.ui:125
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -332,34 +361,34 @@ msgstr ""
 msgid "Ready."
 msgstr ""
 
-#: src/window.ui:71
+#: src/window.ui:75
 msgid "Name"
 msgstr ""
 
-#: src/window.ui:76
+#: src/window.ui:80
 msgid "Name (Descending)"
 msgstr ""
 
-#: src/window.ui:83
+#: src/window.ui:87
 msgid "Date"
 msgstr ""
 
-#: src/window.ui:88
+#: src/window.ui:92
 msgid "Date (Descending)"
 msgstr ""
 
-#: src/window.ui:97
+#: src/window.ui:101
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:103
+#: src/window.ui:107
 msgid "Reload Thumbnails"
 msgstr ""
 
-#: src/window.ui:125
+#: src/window.ui:129
 msgid "About ImageViewer"
 msgstr ""
 
-#: src/window.ui:131
+#: src/window.ui:135
 msgid "Quit"
 msgstr ""

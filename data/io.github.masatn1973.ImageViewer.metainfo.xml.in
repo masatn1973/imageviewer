@@ -28,6 +28,15 @@
   <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.2.2" date="2026-07-21">
+      <description>
+        <ul>
+          <li translatable="yes">Added support for the "Pan" feature in image.</li>
+          <li translatable="yes">Can open files in "Download" directory.</li>
+          <li translatable="yes">Added tooltip in image view window.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.1" date="2026-07-17">
       <description>
         <ul>

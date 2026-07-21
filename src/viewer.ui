@@ -27,88 +27,92 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkOverlay" id="overlay">
+          <object class="AdwToastOverlay" id="toast_overlay">
             <property name="child">
-              <object class="GtkScrolledWindow" id="scrolled_window">
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
+              <object class="GtkOverlay" id="overlay">
                 <property name="child">
-                  <object class="GtkStack" id="media_stack">
+                  <object class="GtkScrolledWindow" id="scrolled_window">
                     <property name="hexpand">true</property>
                     <property name="vexpand">true</property>
-                    <child>
-                      <object class="GtkBox" id="image_container">
+                    <property name="child">
+                      <object class="GtkStack" id="media_stack">
                         <property name="hexpand">true</property>
                         <property name="vexpand">true</property>
-                        <property name="halign">fill</property>
-                        <property name="valign">fill</property>
+                        <child>
+                          <object class="GtkBox" id="image_container">
+                            <property name="hexpand">true</property>
+                            <property name="vexpand">true</property>
+                            <property name="halign">fill</property>
+                            <property name="valign">fill</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkVideo" id="video"/>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+                <child type="overlay">
+                  <object class="GtkBox" id="info_box">
+                    <property name="orientation">vertical</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="margin-top">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="visible">False</property>
+                    <child>
+                      <object class="GtkLabel" id="Camera_label">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkVideo" id="video"/>
+                      <object class="GtkLabel" id="Date_label">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="Pixel_size">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="Orientation">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="ShutterSpeed">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="FNumber">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="ISO">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="FocalLength">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"></property>
+                      </object>
                     </child>
                   </object>
-                </property>
+                </child>
               </object>
             </property>
-            <child type="overlay">
-              <object class="GtkBox" id="info_box">
-                <property name="orientation">vertical</property>
-                <property name="halign">end</property>
-                <property name="valign">start</property>
-                <property name="margin-top">12</property>
-                <property name="margin-end">12</property>
-                <property name="visible">False</property>
-                <child>
-                  <object class="GtkLabel" id="Camera_label">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="Date_label">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="Pixel_size">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="Orientation">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="ShutterSpeed">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FNumber">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="ISO">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FocalLength">
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes"></property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </property>
       </object>

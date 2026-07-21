@@ -50,15 +50,19 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkScrolledWindow" id="scrolled_window">
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <child>
-              <object class="GtkFlowBox" id="flowbox">
-                <property name="selection-mode">single</property>
-                <property name="max-children-per-line">5</property>
+          <object class="AdwToastOverlay" id="toast_overlay">
+            <property name="child">
+              <object class="GtkScrolledWindow" id="scrolled_window">
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child>
+                  <object class="GtkFlowBox" id="flowbox">
+                    <property name="selection-mode">single</property>
+                    <property name="max-children-per-line">5</property>
+                  </object>
+                </child>
               </object>
-            </child>
+            </property>
           </object>
         </property>
       </object>

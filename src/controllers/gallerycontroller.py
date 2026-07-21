@@ -16,7 +16,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-from gettext import gettext as _
+
+from gettext import gettext as _, ngettext
 
 from gi.repository import Gdk, Gtk, Gio, GLib, GdkPixbuf
 
@@ -39,6 +40,9 @@ class GalleryController:
         self.loaded_count = 0
         self.thumbnail_idle_id = None
         self.select_target = None
+
+        self.failed_files = []
+        self._broken_paintable = None
 
         # Model -> Controller
         self.model.connect("files-loaded", self.on_files_loaded)
@@ -84,9 +88,11 @@ class GalleryController:
     def _load_next_thumbnail(self):
         if not self.pending_files:
             self.thumbnail_idle_id = None
+            self._report_failures()
             return False
 
         gfile = self.pending_files.pop(0)
+        broken = False
 
         try:
             stream = gfile.read(None)
@@ -96,38 +102,72 @@ class GalleryController:
                     stream, THUMB, THUMB, True, None
                 )
                 pixbuf = pixbuf.apply_embedded_orientation()
+
             finally:
                 stream.close(None)
 
-            if self.select_target is not None:
-                select = gfile.equal(self.select_target)
-
-            else:
-                select = self.loaded_count == 0
-
-            self.view.add_thumbnail(
-                gfile,
-                pixbuf,
-                select=select,
-                on_drag_prepare=self._on_thumbnail_drag_prepare,
-            )
-
-            self.loaded_count += 1
-            self.view.set_status(f"{self.loaded_count} " + _("image(s) read."))
+            paintable = Gdk.Texture.new_for_pixbuf(pixbuf)
 
         except Exception:
-            print("FAILED:", gfile.get_basename())
+            self.failed_files.append(gfile.get_basename())
+            paintable = self._broken_image_pixbuf()
+            broken = True
+
+        if self.select_target is not None:
+            select = gfile.equal(self.select_target)
+
+        else:
+            select = self.loaded_count == 0
+
+        self.view.add_thumbnail(
+            gfile,
+            paintable,
+            select=select,
+            on_drag_prepare=self._on_thumbnail_drag_prepare,
+            broken=broken,
+        )
+
+        self.loaded_count += 1
+        self.view.set_status(f"{self.loaded_count} " + _("image(s) read."))
 
         if not self.pending_files:
             self.thumbnail_idle_id = None
             self.select_target = None
+            self._report_failures()
+
             return False
 
         return True
 
     def _on_thumbnail_drag_prepare(self, source, x, y, gfile):
         file_list = Gdk.FileList.new_from_array([gfile])
+
         return Gdk.ContentProvider.new_for_value(file_list)
+
+    def _report_failures(self):
+        if not self.failed_files:
+            return
+
+        count = len(self.failed_files)
+        self.view.show_error(
+            ngettext(
+                "Failed to load {count} image.",
+                "Failed to load {count} images.",
+                count,
+            ).format(count=count)
+        )
+        self.failed_files = []
+
+    def _broken_image_pixbuf(self):
+        if self._broken_paintable is not None:
+            return self._broken_paintable
+
+        icon_theme = Gtk.IconTheme.get_for_display(self.view.get_display())
+        self._broken_paintable = icon_theme.lookup_icon(
+            "image-missing", None, THUMB, 1, Gtk.TextDirection.NONE, 0
+        )
+
+        return self._broken_paintable
 
     # --- View -> Model: フォルダ操作 ----------------------------------------
     def on_open(self, action, param):
@@ -137,8 +177,11 @@ class GalleryController:
     def _on_folder_selected(self, dialog, result):
         try:
             folder = dialog.select_folder_finish(result)
-        except Exception as e:
-            print("select_folder_finish:", e)
+
+        except GLib.Error as e:
+            if not e.matches(Gtk.DialogError.quark(), Gtk.DialogError.DISMISSED):
+                self.view.show_error(_("Failed to open folder."))
+
             return
 
         if folder:

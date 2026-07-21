@@ -17,7 +17,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import gettext
 import gi
 
 from gettext import gettext as _
@@ -51,6 +50,7 @@ class ImageViewerDialog(Adw.Window):
 
     headerbar = Gtk.Template.Child()
     media_stack = Gtk.Template.Child()
+    toast_overlay = Gtk.Template.Child()
 
     info_box = Gtk.Template.Child()
     Camera_label = Gtk.Template.Child()
@@ -150,3 +150,8 @@ class ImageViewerDialog(Adw.Window):
 
     def show_previous_image(self):
         self.controller.show_previous_image()
+
+    def show_error(self, message):
+        toast = Adw.Toast.new(message)
+        toast.set_timeout(4)
+        self.toast_overlay.add_toast(toast)

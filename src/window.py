@@ -47,6 +47,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     flowbox = Gtk.Template.Child()
     status_label = Gtk.Template.Child()
     scrolled_window = Gtk.Template.Child()
+    toast_overlay = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__(application=app)
@@ -130,10 +131,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.flowbox.remove(child)
             child = next_child
 
-    def add_thumbnail(self, gfile, pixbuf, select=False, on_drag_prepare=None):
-        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-
-        widget = Gtk.Picture.new_for_paintable(texture)
+    def add_thumbnail(
+        self, gfile, paintable, select=False, on_drag_prepare=None, broken=False
+    ):
+        widget = Gtk.Picture.new_for_paintable(paintable)
         widget.set_can_shrink(True)
         widget.set_content_fit(Gtk.ContentFit.CONTAIN)
 
@@ -141,6 +142,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         child.set_size_request(THUMB, THUMB)
         child.set_child(widget)
         child.image_file = gfile
+
+        if broken:
+            child.add_css_class("thumbnail-broken")
 
         self.flowbox.append(child)
 
@@ -164,11 +168,20 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return
 
         child = selected[0]
-        index = child.get_index()
+        gfile = getattr(child, "image_file", None)
 
-        filename = image_files[index].get_basename()
+        if gfile is None:
+            self.status_label.set_text("")
+            return
 
-        self.status_label.set_text(f"{index + 1}/{len(image_files)} : {filename}")
+        filename = gfile.get_basename()
+
+        if gfile in image_files:
+            index = image_files.index(gfile)
+            self.status_label.set_text(f"{index + 1}/{len(image_files)} : {filename}")
+
+        else:
+            self.status_label.set_text(filename)
 
     # --- View: ビューアーダイアログの開閉 -----------------------------------------
     def open_viewer(self, gfile, image_files):
@@ -215,3 +228,8 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def open_path(self, gfile):
         self.controller.open_path(gfile)
+
+    def show_error(self, message):
+        toast = Adw.Toast.new(message)
+        toast.set_timeout(4)
+        self.toast_overlay.add_toast(toast)

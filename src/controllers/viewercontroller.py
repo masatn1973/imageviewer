@@ -16,6 +16,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+
+from gettext import gettext as _
 from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
 from models.exifinfo import get_exif_info
@@ -87,6 +89,9 @@ class ViewerController:
 
         self._load_cancellable = Gio.Cancellable()
 
+        self.state.pixbuf = None
+        self.view.imagecanvas.redraw()
+
         gfile.read_async(
             GLib.PRIORITY_DEFAULT, self._load_cancellable, self._on_file_read, gfile
         )
@@ -97,8 +102,7 @@ class ViewerController:
 
         except GLib.Error as e:
             if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                print(f"Failed to open image: {gfile.get_path()}")
-                print(e)
+                self._show_load_error(gfile)
 
             return
 
@@ -120,11 +124,16 @@ class ViewerController:
 
         except GLib.Error as e:
             if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                print(f"Failed to open image: {gfile.get_path()}")
-                print(e)
+                self._show_load_error(gfile)
 
         finally:
             stream.close(None)
+
+    def _show_load_error(self, gfile):
+        self.view.show_error(
+            _("Failed to open {filename}").format(filename=gfile.get_basename())
+        )
+        self.view.set_title(gfile.get_basename())
 
     # --- ズーム ----------------------------------------------------------------
     def update_fit_zoom(self):
