@@ -253,6 +253,9 @@ class GalleryController:
         if self.view.viewer is None:
             return
 
+        self.view.viewer.set_slideshow_mode(True)
+        self.view.viewer.controller.enter_fullscreen()
+
         interval = self.view.settings.get_uint("slideshow-interval")
         self.slideshow_id = GLib.timeout_add(interval * 1000, self._slideshow_next)
 
@@ -267,6 +270,9 @@ class GalleryController:
 
         self.view.viewer.show_next_image()
         return True
+
+    def is_slideshow_active(self):
+        return self.slideshow_id is not None
 
     def stop_slideshow(self):
         self._stop_slideshow()

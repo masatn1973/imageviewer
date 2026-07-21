@@ -136,9 +136,13 @@ class ImageViewerDialog(Adw.Window):
         for label, title, value in fields:
             label.set_text(title + value if value else title)
 
-    def save_window_geometry(self):
-        self.settings.set_int("viewer-width", self.get_width())
-        self.settings.set_int("viewer-height", self.get_height())
+    def save_window_geometry(self, width=None, height=None):
+        self.settings.set_int(
+            "viewer-width", width if width is not None else self.get_width()
+        )
+        self.settings.set_int(
+            "viewer-height", height if height is not None else self.get_height()
+        )
         self.settings.set_boolean("viewer-maximized", self.is_maximized())
 
     # --- window.py から呼ばれる公開API ------------------------------------------

@@ -1,4 +1,4 @@
-# viewer_controller.py
+# viewercontroller.py
 #
 # Copyright 2026 masatn
 #
@@ -20,6 +20,7 @@
 from gettext import gettext as _
 from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
+from controllers import gallerycontroller
 from models.exifinfo import get_exif_info
 
 
@@ -34,6 +35,7 @@ class ViewerController:
         self.view = view
         self.is_show_exif_data = False
         self._load_cancellable = None
+        self._pre_fullscreen_size = None
 
         scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
         scroll.connect("scroll", self.on_scroll)
@@ -167,6 +169,50 @@ class ViewerController:
     def on_canvas_zoom_changed(self):
         self.update_title()
 
+    def toggle_fullscreen(self):
+        if self.view.is_fullscreen():
+            self.exit_fullscreen()
+
+        else:
+            self.enter_fullscreen()
+
+    def enter_fullscreen(self):
+        if self.view.is_fullscreen():
+            return
+
+        self._pre_fullscreen_size = self._get_current_window_size()
+        self.view.fullscreen()
+
+    def _get_current_window_size(self):
+        width = self.view.get_width()
+        height = self.view.get_height()
+
+        # ウィンドウがまだ実現(realize)されておらず、
+        # 実サイズが確定していない場合は、GSettings に保存されている
+        # 値にフォールバックする
+        if width <= 1 or height <= 1:
+            width = self.view.settings.get_int("viewer-width")
+            height = self.view.settings.get_int("viewer-height")
+
+        return (width, height)
+
+    def exit_fullscreen(self):
+        if not self.view.is_fullscreen():
+            return
+
+        self.view.unfullscreen()
+
+        # unfullscreen() は非同期（ウィンドウマネージャー任せ）のため、
+        # 直後に set_default_size しても効かないことがある。
+        # 1 フレーム後に確実に反映させる。
+        if self._pre_fullscreen_size is not None:
+            w, h = self._pre_fullscreen_size
+            GLib.idle_add(self._restore_pre_fullscreen_size, w, h)
+
+    def _restore_pre_fullscreen_size(self, w, h):
+        self.view.set_default_size(w, h)
+        return False  # GLib.idle_add: 一度実行したら解除する
+
     # --- EXIF ------------------------------------------------------------------
     def show_exif_data(self):
         info = get_exif_info(self.state.current_file)
@@ -185,6 +231,17 @@ class ViewerController:
     # NOTE: 元の viewer.py の on_key_pressed のロジックをそのまま移設したもの。
     def on_key_pressed(self, controller, keyval, keycode, state):
         canvas = self.view.imagecanvas
+
+        if keyval == Gdk.KEY_Escape and self.view.is_fullscreen():
+            gallerycontroller = self.view.parent.controller
+
+            if gallerycontroller.is_slideshow_active():
+                gallerycontroller.stop_slideshow()
+
+            else:
+                self.exit_fullscreen()
+
+            return True
 
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             canvas.zoom_at_viewport_center(zoom_in=True)
@@ -220,6 +277,10 @@ class ViewerController:
             self.toggle_exif_data()
             return True
 
+        if keyval in (Gdk.KEY_f, Gdk.KEY_F11):
+            self.toggle_fullscreen()
+            return True
+
         if keyval == Gdk.KEY_0:
             self.state.zoom_reset()
             self.update_fit_zoom()
@@ -252,6 +313,12 @@ class ViewerController:
             GLib.idle_add(self.update_fit_zoom)
 
     def on_close_request(self, *args):
-        self.view.save_window_geometry()
+        if self.view.is_fullscreen() and self._pre_fullscreen_size is not None:
+            w, h = self._pre_fullscreen_size
+            self.view.save_window_geometry(w, h)
+
+        else:
+            self.view.save_window_geometry()
+
         self.view.parent.viewer = None
         return False
