@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 22:28+0900\n"
+"POT-Creation-Date: 2026-07-21 11:02+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:99
+#: src/controllers/gallerycontroller.py:116
 msgid "image(s) read."
 msgstr ""
 
@@ -280,36 +280,44 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: src/viewer.py:138
+#: src/viewer.py:126
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:139
+#: src/viewer.py:127
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:140
+#: src/viewer.py:128
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:141
+#: src/viewer.py:129
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:142
+#: src/viewer.py:130
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:143
+#: src/viewer.py:131
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:144
+#: src/viewer.py:132
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:145
+#: src/viewer.py:133
 msgid "Focal Length: "
+msgstr ""
+
+#: src/viewer.ui:17
+msgid "Previous Image"
+msgstr ""
+
+#: src/viewer.ui:24
+msgid "Next Image"
 msgstr ""
 
 #: src/window.ui:19

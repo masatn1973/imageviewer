@@ -46,6 +46,9 @@ class ImageViewerDialog(Adw.Window):
 
     image_container = Gtk.Template.Child()
 
+    prev_button = Gtk.Template.Child()
+    next_button = Gtk.Template.Child()
+
     headerbar = Gtk.Template.Child()
     media_stack = Gtk.Template.Child()
 
@@ -75,12 +78,6 @@ class ImageViewerDialog(Adw.Window):
         self.image_container.append(self.imagecanvas)
 
         self.info_box.add_css_class("exif-overlay")
-
-        self.prev_button = Gtk.Button(icon_name="go-previous-symbolic")
-        self.next_button = Gtk.Button(icon_name="go-next-symbolic")
-
-        self.headerbar.pack_start(self.prev_button)
-        self.headerbar.pack_start(self.next_button)
 
         self.key_controller = Gtk.EventControllerKey()
         self.add_controller(self.key_controller)

@@ -10,6 +10,20 @@
         <child type="top">
           <object class="AdwHeaderBar" id="headerbar">
             <property name="show-end-title-buttons">true</property>
+            <child type="start">
+              <object class="GtkButton" id="prev_button">
+                <property name="icon-name">go-previous-symbolic</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-text" translatable="yes">Previous Image</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="next_button">
+                <property name="icon-name">go-next-symbolic</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-text" translatable="yes">Next Image</property>
+              </object>
+            </child>
           </object>
         </child>
         <property name="content">
