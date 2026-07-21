@@ -153,19 +153,6 @@ class ImageviewerApplication(Adw.Application):
 
         self.win.present()
 
-        """
-        css = Gtk.CssProvider()
-        css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
-
-        Gtk.StyleContext.add_provider_for_display(
-            Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
-        self.win = self.get_active_window()
-        if not self.win:
-            self.win = ImageViewerWindow(self)
-        self.win.present()
-        """
-
     def do_open(self, files, n_files, hint):
         self._ensure_css_loaded()
         self.win = self.get_active_window()
