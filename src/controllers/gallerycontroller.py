@@ -44,12 +44,18 @@ class GalleryController:
         self.failed_files = []
         self._broken_paintable = None
 
+        self.search_text = ""
+
         # Model -> Controller
         self.model.connect("files-loaded", self.on_files_loaded)
 
         # View -> Controller
         view.flowbox.connect("child-activated", self.on_child_activated)
         view.flowbox.connect("selected-children-changed", self.on_selection_changed)
+
+        # ファイル名によるフィルタリング (ギャラリー内の絞り込み検索)
+        view.flowbox.set_filter_func(self.filter_thumbnail)
+        view.search_entry.connect("search-changed", self.on_search_changed)
 
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
         drop_target.connect("drop", self.on_drop)
@@ -74,6 +80,28 @@ class GalleryController:
 
         self.view.reload_action.set_enabled(True)
         self.view.slideshow_action.set_enabled(len(model.image_files) > 0)
+
+    # --- 絞り込み検索 (ファイル名) ----------------------------------------------
+    def on_search_changed(self, entry):
+        self.search_text = entry.get_text().strip().lower()
+        self.view.flowbox.invalidate_filter()
+
+    def filter_thumbnail(self, child):
+        """GtkFlowBox.set_filter_func に渡すコールバック。
+
+        True を返したサムネイルだけが表示される。
+        """
+        if not self.search_text:
+            return True
+
+        gfile = getattr(child, "image_file", None)
+
+        if gfile is None:
+            return True
+
+        filename = gfile.get_basename().lower()
+
+        return self.search_text in filename
 
     def open_path(self, gfile):
         folder = gfile.get_parent()

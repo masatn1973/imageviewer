@@ -48,6 +48,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     status_label = Gtk.Template.Child()
     scrolled_window = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
+    search_button = Gtk.Template.Child()
+    search_bar = Gtk.Template.Child()
+    search_entry = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__(application=app)
@@ -56,6 +59,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+
+        # ウィンドウ内のどこにフォーカスがあっても、文字を入力すると
+        # 自動的に検索バーが開いて入力が反映されるようにする
+        self.search_bar.set_key_capture_widget(self)
 
         self.model = GalleryModel()
         self.controller = GalleryController(self.model, self)

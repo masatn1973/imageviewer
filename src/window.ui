@@ -28,6 +28,28 @@
                 <property name="tooltip-text" translatable="yes">Sort</property>
               </object>
             </child>
+            <child type="end">
+              <object class="GtkToggleButton" id="search_button">
+                <property name="icon-name">system-search-symbolic</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-text" translatable="yes">Search</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <!-- Search Bar -->
+        <child type="top">
+          <object class="GtkSearchBar" id="search_bar">
+            <property name="search-mode-enabled"
+                      bind-source="search_button"
+                      bind-property="active"
+                      bind-flags="sync-create|bidirectional"/>
+            <property name="child">
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="placeholder-text" translatable="yes">Search by filename…</property>
+                <property name="hexpand">True</property>
+              </object>
+            </property>
           </object>
         </child>
         <!-- Content -->
