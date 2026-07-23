@@ -21,6 +21,8 @@ from gettext import gettext as _, ngettext
 
 from gi.repository import Gdk, Gtk, Gio, GLib, GdkPixbuf
 
+from models.searchfilter import matches_filename
+
 THUMB = 128
 
 
@@ -83,25 +85,22 @@ class GalleryController:
 
     # --- 絞り込み検索 (ファイル名) ----------------------------------------------
     def on_search_changed(self, entry):
-        self.search_text = entry.get_text().strip().lower()
+        self.search_text = entry.get_text()
         self.view.flowbox.invalidate_filter()
 
     def filter_thumbnail(self, child):
         """GtkFlowBox.set_filter_func に渡すコールバック。
 
         True を返したサムネイルだけが表示される。
+        マッチ判定そのものは models.searchfilter.matches_filename
+        (GTK非依存の純粋関数) に委譲している。
         """
-        if not self.search_text:
-            return True
-
         gfile = getattr(child, "image_file", None)
 
         if gfile is None:
             return True
 
-        filename = gfile.get_basename().lower()
-
-        return self.search_text in filename
+        return matches_filename(gfile.get_basename(), self.search_text)
 
     def open_path(self, gfile):
         folder = gfile.get_parent()
