@@ -86,7 +86,26 @@ class GalleryController:
     # --- 絞り込み検索 (ファイル名) ----------------------------------------------
     def on_search_changed(self, entry):
         self.search_text = entry.get_text()
-        self.view.flowbox.invalidate_filter()
+        flowbox = self.view.flowbox
+        flowbox.invalidate_filter()
+
+        # invalidate_filter() は表示/非表示を切り替えるだけで、選択状態は
+        # 変わらない。検索前に選択していたサムネイルが絞り込みで非表示に
+        # なった場合、選択が「見えていないアイテム」を指したままになり、
+        # 続けて Space/Enter を押すと検索結果に含まれない画像が開いて
+        # しまう。フィルタ変更のたびに、選択中の子が表示中かどうかを
+        # 確認し、非表示になっていれば表示中の先頭アイテムへ選択を
+        # 移し替える。
+        selected = flowbox.get_selected_children()
+        visible_children = self._visible_children(flowbox)
+
+        if not visible_children:
+            return
+
+        if not selected or selected[0] not in visible_children:
+            target = visible_children[0]
+            flowbox.unselect_all()
+            flowbox.select_child(target)
 
     def filter_thumbnail(self, child):
         """GtkFlowBox.set_filter_func に渡すコールバック。
@@ -315,13 +334,65 @@ class GalleryController:
             self.view.viewer.controller.show_current_image()
 
     # --- キーボードナビゲーション -------------------------------------------------
+    def _visible_children(self, flowbox):
+        """検索フィルタを通過して現在表示されている FlowBoxChild だけを、
+        表示順のリストとして返す。
+
+        GtkFlowBox の filter_func は非該当の子を「非表示(visible=False)」
+        にするだけで、flowbox から取り除くわけではない。そのため
+        get_child_at_index() や get_index() は非表示の子も含めた
+        インデックスを返してしまう。キーボード移動は必ずこのメソッドが
+        返す「見えているものだけのリスト」を基準に行うこと。
+        """
+        children = []
+        child = flowbox.get_first_child()
+
+        while child is not None:
+            # GtkFlowBox はフィルタで除外した子を「visible」プロパティ
+            # ではなく「child-visible」プロパティで隠す。そのため
+            # get_visible() は常に True を返してしまい、フィルタ状態の
+            # 判定には使えない。get_child_visible() を使うこと。
+            if child.get_child_visible():
+                children.append(child)
+
+            child = child.get_next_sibling()
+
+        return children
+
     # NOTE: 元の window.py の on_key_pressed のロジックをそのまま移設したもの。
     #       参照先を self.flowbox -> flowbox / self.image_files -> image_files
     #       に置き換えただけで、判定ロジック自体は変更していない。
     def on_key_pressed(self, controller, keyval, keycode, state):
-        flowbox = self.view.flowbox
-        image_files = self.model.image_files
+        # 検索欄 (search_entry) にフォーカスがある間は、h/j/k/l 等を
+        # サムネイル移動として横取りせず、そのまま入力させる。
+        # このハンドラは CAPTURE フェーズで動いているため、ここで False
+        # を返すと通常通りイベントが検索欄まで届く。
+        #
+        # isinstance(focus_widget, Gtk.Editable) のような型ベースの判定は
+        # 「gi.repository をまるごとモックに差し替える」テスト環境
+        # (Gtk.Editable が本物の型ではなくなる)と相性が悪いため使わず、
+        # 「フォーカスが検索欄そのものかどうか」を同一性 (is) で判定する。
+        focus_widget = self.view.get_focus()
 
+        if focus_widget is self.view.search_entry:
+            return False
+
+        # GtkSearchEntry (GtkEditable) は合成ウィジェットで、実際に
+        # フォーカスを受け取るのは search_entry 自身ではなく、内部の
+        # delegate (Gtk.Text) であることが多い。そのため上の比較だけでは
+        # 検索欄にフォーカスがあるのに False 判定になり、h/j/k/l が
+        # サムネイル移動として横取りされてしまう。delegate 経由でも
+        # 判定できるようにする。
+        get_delegate = getattr(self.view.search_entry, "get_delegate", None)
+
+        if get_delegate is not None and focus_widget is get_delegate():
+            return False
+
+        if keyval == Gdk.KEY_F5:
+            self.reload_folder()
+            return True
+
+        flowbox = self.view.flowbox
         selected = flowbox.get_selected_children()
 
         if not selected:
@@ -329,30 +400,39 @@ class GalleryController:
 
         child = selected[0]
 
+        # 検索フィルタで絞り込まれた「表示中のアイテム」だけを対象に扱う。
+        # 以前はこの可視判定が Space/Enter の分岐より後ろにあったため、
+        # 検索で非表示になったサムネイルが選択されたままの状態で
+        # Space/Enter を押すと、検索結果に含まれない画像がそのまま
+        # 開いてしまっていた。移動キーだけでなく画像を開く操作の前にも
+        # 必ず可視判定を通す。
+        visible_children = self._visible_children(flowbox)
+
+        if not visible_children:
+            return False
+
+        if child not in visible_children:
+            child = visible_children[0]
+            flowbox.unselect_all()
+            flowbox.select_child(child)
+
         if keyval in (Gdk.KEY_space, Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            self.on_child_activated(flowbox, selected[0])
+            self.on_child_activated(flowbox, child)
             return True
 
-        index = child.get_index()
+        index = visible_children.index(child)
         new_index = index
-        first_child = flowbox.get_child_at_index(0)
-
-        if first_child is None:
-            return False
+        first_child = visible_children[0]
 
         item_width = first_child.get_allocated_width() + flowbox.get_column_spacing()
         columns = max(1, flowbox.get_allocated_width() // item_width)
-
-        if keyval == Gdk.KEY_F5:
-            self.reload_folder()
-            return True
 
         if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
             if new_index > 0:
                 new_index -= 1
 
         elif keyval in (Gdk.KEY_j, Gdk.KEY_Down):
-            if (new_index + columns) < len(image_files):
+            if (new_index + columns) < len(visible_children):
                 new_index += columns
 
         elif keyval in (Gdk.KEY_k, Gdk.KEY_Up):
@@ -360,14 +440,14 @@ class GalleryController:
                 new_index -= columns
 
         elif keyval in (Gdk.KEY_l, Gdk.KEY_Right, Gdk.KEY_Tab):
-            if (new_index + 1) < len(image_files):
+            if (new_index + 1) < len(visible_children):
                 new_index += 1
 
         elif keyval == Gdk.KEY_Home:
             new_index = 0
 
         elif keyval == Gdk.KEY_End:
-            new_index = len(image_files) - 1
+            new_index = len(visible_children) - 1
 
         elif keyval == Gdk.KEY_Page_Up:
             vadj = self.view.scrolled_window.get_vadjustment()
@@ -381,10 +461,6 @@ class GalleryController:
             else:
                 new_index = 0
 
-            target = flowbox.get_child_at_index(new_index)
-            if target:
-                flowbox.select_child(target)
-
         elif keyval == Gdk.KEY_Page_Down:
             vadj = self.view.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
@@ -392,24 +468,19 @@ class GalleryController:
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 
-            if (new_index + page_size) <= len(image_files):
+            if (new_index + page_size) <= len(visible_children):
                 new_index += page_size
             else:
-                new_index = len(image_files) - 1
-
-            target = flowbox.get_child_at_index(new_index)
-            if target:
-                flowbox.select_child(target)
+                new_index = len(visible_children) - 1
 
         else:
             return False
 
-        new_index = max(0, min(new_index, len(image_files) - 1))
-        target = flowbox.get_child_at_index(new_index)
+        new_index = max(0, min(new_index, len(visible_children) - 1))
+        target = visible_children[new_index]
 
-        if target:
-            flowbox.unselect_all()
-            flowbox.select_child(target)
-            target.grab_focus()
+        flowbox.unselect_all()
+        flowbox.select_child(target)
+        target.grab_focus()
 
         return True

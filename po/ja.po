@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 14:02+0900\n"
-"PO-Revision-Date: 2026-07-21 14:07+0900\n"
+"POT-Creation-Date: 2026-07-23 22:36+0900\n"
+"PO-Revision-Date: 2026-07-23 23:08+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -160,26 +160,26 @@ msgstr "最初のリリース"
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 
-#: src/controllers/gallerycontroller.py:131
+#: src/controllers/gallerycontroller.py:158
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
-#: src/controllers/gallerycontroller.py:154
+#: src/controllers/gallerycontroller.py:181
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
 
-#: src/controllers/gallerycontroller.py:183
+#: src/controllers/gallerycontroller.py:210
 msgid "Failed to open folder."
 msgstr "フォルダを開けませんでした"
 
-#: src/controllers/viewercontroller.py:134
+#: src/controllers/viewercontroller.py:209
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
 
-#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:119
+#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:141
 msgid "Preferences"
 msgstr "設定"
 
@@ -302,7 +302,7 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr "ツール"
 
-#: src/shortcuts.ui:146 src/window.ui:113
+#: src/shortcuts.ui:146 src/window.ui:135
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
@@ -311,7 +311,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/shortcuts.ui:163 src/window.ui:125
+#: src/shortcuts.ui:163 src/window.ui:147
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
@@ -319,35 +319,35 @@ msgstr "キーボードショートカット"
 msgid "About"
 msgstr "画像ビューワについて"
 
-#: src/viewer.py:126
+#: src/viewer.py:129
 msgid "Camera: "
 msgstr "カメラ: "
 
-#: src/viewer.py:127
+#: src/viewer.py:130
 msgid "Shooting Datetime: "
 msgstr "撮影日時: "
 
-#: src/viewer.py:128
+#: src/viewer.py:131
 msgid "Pixel Size: "
 msgstr "ピクセルサイズ: "
 
-#: src/viewer.py:129
+#: src/viewer.py:132
 msgid "Orientation: "
 msgstr "向き: "
 
-#: src/viewer.py:130
+#: src/viewer.py:133
 msgid "Shutter Speed: "
 msgstr "露出時間: "
 
-#: src/viewer.py:131
+#: src/viewer.py:134
 msgid "FNumber: "
 msgstr "絞り: "
 
-#: src/viewer.py:132
+#: src/viewer.py:135
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:133
+#: src/viewer.py:136
 msgid "Focal Length: "
 msgstr "焦点距離: "
 
@@ -367,39 +367,47 @@ msgstr "メインメニュー"
 msgid "Sort"
 msgstr "並べ替え"
 
-#: src/window.ui:47
+#: src/window.ui:35
+msgid "Search"
+msgstr "検索"
+
+#: src/window.ui:49
+msgid "Search by filename…"
+msgstr "ファイル名で検索…"
+
+#: src/window.ui:69
 msgid "Ready."
 msgstr "準備完了"
 
-#: src/window.ui:75
+#: src/window.ui:97
 msgid "Name"
 msgstr "名前"
 
-#: src/window.ui:80
+#: src/window.ui:102
 msgid "Name (Descending)"
 msgstr "名前 (降順)"
 
-#: src/window.ui:87
+#: src/window.ui:109
 msgid "Date"
 msgstr "日付"
 
-#: src/window.ui:92
+#: src/window.ui:114
 msgid "Date (Descending)"
 msgstr "日付 (降順)"
 
-#: src/window.ui:101
+#: src/window.ui:123
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:107
+#: src/window.ui:129
 msgid "Reload Thumbnails"
 msgstr "サムネイルの更新"
 
-#: src/window.ui:129
+#: src/window.ui:151
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 
-#: src/window.ui:135
+#: src/window.ui:157
 msgid "Quit"
 msgstr "終了"
 

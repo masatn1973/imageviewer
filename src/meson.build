@@ -30,6 +30,7 @@ install_data([
   'models/imagestate.py',
   'models/exifinfo.py',
   'models/geometry.py',
+  'models/searchfilter.py',
 ], install_dir: '/app/share/imageviewer/models')
 
 install_data([

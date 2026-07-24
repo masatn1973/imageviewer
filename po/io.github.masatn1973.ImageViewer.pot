@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 14:02+0900\n"
+"POT-Creation-Date: 2026-07-23 22:36+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,27 +149,27 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:131
+#: src/controllers/gallerycontroller.py:158
 msgid "image(s) read."
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:154
+#: src/controllers/gallerycontroller.py:181
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/controllers/gallerycontroller.py:183
+#: src/controllers/gallerycontroller.py:210
 msgid "Failed to open folder."
 msgstr ""
 
-#: src/controllers/viewercontroller.py:134
+#: src/controllers/viewercontroller.py:209
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr ""
 
-#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:119
+#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:141
 msgid "Preferences"
 msgstr ""
 
@@ -292,7 +292,7 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:146 src/window.ui:113
+#: src/shortcuts.ui:146 src/window.ui:135
 msgid "Start Slideshow"
 msgstr ""
 
@@ -301,7 +301,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:163 src/window.ui:125
+#: src/shortcuts.ui:163 src/window.ui:147
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -309,35 +309,35 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: src/viewer.py:126
+#: src/viewer.py:129
 msgid "Camera: "
 msgstr ""
 
-#: src/viewer.py:127
+#: src/viewer.py:130
 msgid "Shooting Datetime: "
 msgstr ""
 
-#: src/viewer.py:128
+#: src/viewer.py:131
 msgid "Pixel Size: "
 msgstr ""
 
-#: src/viewer.py:129
+#: src/viewer.py:132
 msgid "Orientation: "
 msgstr ""
 
-#: src/viewer.py:130
+#: src/viewer.py:133
 msgid "Shutter Speed: "
 msgstr ""
 
-#: src/viewer.py:131
+#: src/viewer.py:134
 msgid "FNumber: "
 msgstr ""
 
-#: src/viewer.py:132
+#: src/viewer.py:135
 msgid "ISO: "
 msgstr ""
 
-#: src/viewer.py:133
+#: src/viewer.py:136
 msgid "Focal Length: "
 msgstr ""
 
@@ -357,38 +357,46 @@ msgstr ""
 msgid "Sort"
 msgstr ""
 
-#: src/window.ui:47
+#: src/window.ui:35
+msgid "Search"
+msgstr ""
+
+#: src/window.ui:49
+msgid "Search by filename…"
+msgstr ""
+
+#: src/window.ui:69
 msgid "Ready."
 msgstr ""
 
-#: src/window.ui:75
+#: src/window.ui:97
 msgid "Name"
 msgstr ""
 
-#: src/window.ui:80
+#: src/window.ui:102
 msgid "Name (Descending)"
 msgstr ""
 
-#: src/window.ui:87
+#: src/window.ui:109
 msgid "Date"
 msgstr ""
 
-#: src/window.ui:92
+#: src/window.ui:114
 msgid "Date (Descending)"
 msgstr ""
 
-#: src/window.ui:101
+#: src/window.ui:123
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:107
+#: src/window.ui:129
 msgid "Reload Thumbnails"
 msgstr ""
 
-#: src/window.ui:129
+#: src/window.ui:151
 msgid "About ImageViewer"
 msgstr ""
 
-#: src/window.ui:135
+#: src/window.ui:157
 msgid "Quit"
 msgstr ""
