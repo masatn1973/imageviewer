@@ -36,8 +36,9 @@ def _make_flowbox_with_children(view, model, count, selected_index, columns=3):
     """flowbox.get_child_at_index(i) が呼ばれたら、対応する MagicMock を
     返すように仕込むヘルパー。
 
-    on_key_pressed は「選択中の子(child)」「index 0 の子(first_child)」
-    「移動先の子(target)」を flowbox から取得するため、事前にこの3種類を
+    on_key_pressed は「選択中の子(child)」「表示中の子一覧
+    (_visible_children が get_first_child/get_next_sibling で辿る)」
+    「移動先の子(target)」を flowbox から取得するため、事前にこれらを
     ちゃんと用意しておく必要がある。
     """
     model.image_files = [f"img{i}.jpg" for i in range(count)]
@@ -46,9 +47,18 @@ def _make_flowbox_with_children(view, model, count, selected_index, columns=3):
     for i in range(count):
         child = MagicMock(name=f"child{i}")
         child.get_index.return_value = i
+        # デフォルトでは検索フィルタによる絞り込みは行われていない
+        # (=すべて表示中)ものとして扱う
+        child.get_child_visible.return_value = True
         children[i] = child
 
+    # _visible_children() が get_first_child() -> get_next_sibling() の
+    # 単方向リンクリストとして辿れるように仕込む
+    for i in range(count):
+        children[i].get_next_sibling.return_value = children.get(i + 1)
+
     flowbox = view.flowbox
+    flowbox.get_first_child.return_value = children.get(0)
     flowbox.get_child_at_index.side_effect = lambda i: children.get(i)
     flowbox.get_selected_children.return_value = [children[selected_index]]
 
@@ -174,6 +184,41 @@ class TestOnKeyPressed:
         controller.on_key_pressed(MagicMock(), Gdk.KEY_F5, 0, 0)
 
         controller.model.load_folder.assert_called_once_with("dummy_folder")
+
+    def test_search_entry_focused_ignores_navigation_keys(self, controller):
+        """検索欄 (view.search_entry) にフォーカスがある間は、
+        h/j/k/l 等のナビゲーションキーがサムネイル移動として横取り
+        されず、on_key_pressed が False (未処理) を返すこと。
+        """
+        _make_flowbox_with_children(
+            controller.view, controller.model, count=10, selected_index=4
+        )
+
+        # view.get_focus() が view.search_entry と同じオブジェクトを
+        # 返す = 検索欄にフォーカスがある状態を再現する
+        controller.view.get_focus.return_value = controller.view.search_entry
+
+        result = controller.on_key_pressed(MagicMock(), Gdk.KEY_Right, 0, 0)
+
+        assert result is False
+        controller.view.flowbox.select_child.assert_not_called()
+
+    def test_focus_elsewhere_still_handles_navigation_keys(self, controller):
+        """検索欄以外にフォーカスがある場合は、従来通りナビゲーション
+        キーが処理されること。
+        """
+        children = _make_flowbox_with_children(
+            controller.view, controller.model, count=10, selected_index=4
+        )
+
+        # get_focus() が search_entry とは別のオブジェクトを返す
+        # (=検索欄にフォーカスがない)状態
+        controller.view.get_focus.return_value = MagicMock(name="some_other_widget")
+
+        result = controller.on_key_pressed(MagicMock(), Gdk.KEY_Right, 0, 0)
+
+        assert result is True
+        controller.view.flowbox.select_child.assert_called_once_with(children[5])
 
 
 # ---------------------------------------------------------------------------
