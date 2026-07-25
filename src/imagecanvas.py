@@ -292,6 +292,14 @@ class ImageCanvas(Gtk.DrawingArea):
         cr.translate(offset_x, offset_y)
         cr.scale(zoom, zoom)
 
+        if self.state.flip_horizontal:
+            cr.translate(image_w, 0)
+            cr.scale(-1, 1)
+
+        if self.state.flip_vertical:
+            cr.translate(0, image_h)
+            cr.scale(1, -1)
+
         if rotation == 90:
             cr.translate(pixbuf.get_height(), 0)
             cr.rotate(math.radians(90))

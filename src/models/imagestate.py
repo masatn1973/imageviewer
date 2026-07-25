@@ -34,6 +34,9 @@ class ImageState:
         self.rotation = 0
         self.slideshow_mode = False
 
+        self.flip_horizontal = False
+        self.flip_vertical = False
+
         # --- 画像一覧・現在位置 (旧: viewer.py / window.py に分散していたもの) ---
         self.image_files = []
         self.current_index = 0
@@ -79,8 +82,17 @@ class ImageState:
         self.fit_mode = True
         self.rotation = 0
 
+        self.flip_horizontal = False
+        self.flip_vertical = False
+
     def rotate_right(self):
         self.rotation = (self.rotation + 90) % 360
 
     def rotate_left(self):
         self.rotation = (self.rotation - 90) % 360
+
+    def toggle_flip_horizontal(self):
+        self.flip_horizontal = not self.flip_horizontal
+
+    def toggle_flip_vertical(self):
+        self.flip_vertical = not self.flip_vertical

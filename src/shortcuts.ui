@@ -120,6 +120,18 @@
         </child>
         <child>
           <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Flip Horizontal</property>
+            <property name="accelerator">f</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes">Flip Vertical</property>
+            <property name="accelerator">&lt;Shift&gt;f</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
             <property name="title" translatable="yes">Show/Hide EXIF data</property>
             <property name="accelerator">e</property>
           </object>

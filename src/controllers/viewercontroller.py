@@ -350,6 +350,18 @@ class ViewerController:
             self.update_title()
             return True
 
+        if keyval == Gdk.KEY_f:
+            self.state.toggle_flip_horizontal()
+            canvas.redraw()
+            self.update_title()
+            return True
+
+        elif keyval == Gdk.KEY_F:
+            self.state.toggle_flip_vertical()
+            canvas.redraw()
+            self.update_title()
+            return True
+
         if keyval == Gdk.KEY_e:
             self.toggle_exif_data()
             return True

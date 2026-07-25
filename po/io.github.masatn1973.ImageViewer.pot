@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 10:40+0900\n"
+"POT-Creation-Date: 2026-07-25 15:08+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,7 +169,7 @@ msgstr ""
 msgid "Failed to open {filename}"
 msgstr ""
 
-#: src/preferences.ui:7 src/shortcuts.ui:164 src/window.ui:141
+#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:141
 msgid "Preferences"
 msgstr ""
 
@@ -278,44 +278,52 @@ msgid "Rotate Counterclockwise"
 msgstr ""
 
 #: src/shortcuts.ui:123
-msgid "Show/Hide EXIF data"
+msgid "Flip Horizontal"
 msgstr ""
 
 #: src/shortcuts.ui:129
-msgid "Fit to Window"
+msgid "Flip Vertical"
 msgstr ""
 
 #: src/shortcuts.ui:135
-msgid "Actual Size"
+msgid "Show/Hide EXIF data"
 msgstr ""
 
 #: src/shortcuts.ui:141
-msgid "Zoom In"
+msgid "Fit to Window"
 msgstr ""
 
 #: src/shortcuts.ui:147
+msgid "Actual Size"
+msgstr ""
+
+#: src/shortcuts.ui:153
+msgid "Zoom In"
+msgstr ""
+
+#: src/shortcuts.ui:159
 msgid "Zoom Out"
 msgstr ""
 
-#: src/shortcuts.ui:155
+#: src/shortcuts.ui:167
 msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:158 src/window.ui:135
+#: src/shortcuts.ui:170 src/window.ui:135
 msgid "Start Slideshow"
 msgstr ""
 
-#: src/shortcuts.ui:172
+#: src/shortcuts.ui:184
 msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:175 src/window.ui:147
+#: src/shortcuts.ui:187 src/window.ui:147
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/shortcuts.ui:181
+#: src/shortcuts.ui:193
 msgid "About"
 msgstr ""
 

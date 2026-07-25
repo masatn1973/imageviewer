@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 10:40+0900\n"
-"PO-Revision-Date: 2026-07-25 10:51+0900\n"
+"POT-Creation-Date: 2026-07-25 15:08+0900\n"
+"PO-Revision-Date: 2026-07-25 15:21+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -179,7 +179,7 @@ msgstr "フォルダを開けませんでした"
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
 
-#: src/preferences.ui:7 src/shortcuts.ui:164 src/window.ui:141
+#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:141
 msgid "Preferences"
 msgstr "設定"
 
@@ -288,44 +288,52 @@ msgid "Rotate Counterclockwise"
 msgstr "反時計回りに回転"
 
 #: src/shortcuts.ui:123
+msgid "Flip Horizontal"
+msgstr "水平に反転"
+
+#: src/shortcuts.ui:129
+msgid "Flip Vertical"
+msgstr "垂直に反転"
+
+#: src/shortcuts.ui:135
 msgid "Show/Hide EXIF data"
 msgstr "EXIF データを表示する/隠す"
 
-#: src/shortcuts.ui:129
+#: src/shortcuts.ui:141
 msgid "Fit to Window"
 msgstr "ウィンドウサイズに合わせる"
 
-#: src/shortcuts.ui:135
+#: src/shortcuts.ui:147
 msgid "Actual Size"
 msgstr "実サイズにする"
 
-#: src/shortcuts.ui:141
+#: src/shortcuts.ui:153
 msgid "Zoom In"
 msgstr "ズームイン"
 
-#: src/shortcuts.ui:147
+#: src/shortcuts.ui:159
 msgid "Zoom Out"
 msgstr "ズームアウト"
 
-#: src/shortcuts.ui:155
+#: src/shortcuts.ui:167
 msgctxt "shotcut window"
 msgid "Tools"
 msgstr "ツール"
 
-#: src/shortcuts.ui:158 src/window.ui:135
+#: src/shortcuts.ui:170 src/window.ui:135
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
-#: src/shortcuts.ui:172
+#: src/shortcuts.ui:184
 msgctxt "shotcut window"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/shortcuts.ui:175 src/window.ui:147
+#: src/shortcuts.ui:187 src/window.ui:147
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: src/shortcuts.ui:181
+#: src/shortcuts.ui:193
 msgid "About"
 msgstr "画像ビューワについて"
 
