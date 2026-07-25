@@ -312,7 +312,7 @@ class TestOnKeyPressed:
         view.get_width.return_value = 800
         view.get_height.return_value = 600
 
-        controller.on_key_pressed(MagicMock(), Gdk.KEY_f, 0, 0)
+        controller.on_key_pressed(MagicMock(), Gdk.KEY_F11, 0, 0)
 
         view.fullscreen.assert_called_once()
 
