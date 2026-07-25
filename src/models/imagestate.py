@@ -28,6 +28,8 @@ class ImageState:
 
     def __init__(self):
         self.pixbuf = None
+        self.pixbuf_animation = None  # GdkPixbuf.PixbufAnimation (GIF等の場合のみ)
+        self.anim_iter = None  # GdkPixbuf.PixbufAnimationIter (現在の再生位置)
         self.zoom = self.DEFAULT_ZOOM_RATIO
         self.fit_zoom = self.DEFAULT_ZOOM_RATIO
         self.fit_mode = True

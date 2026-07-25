@@ -22,6 +22,7 @@ from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
 from controllers import gallerycontroller
 from models.exifinfo import get_exif_info
+from models.animation import is_gif_path, next_frame_delay
 
 
 class ViewerController:
@@ -35,6 +36,7 @@ class ViewerController:
         self.view = view
         self.is_show_exif_data = False
         self._load_cancellable = None
+        self._anim_timeout_id = None
         self._pre_fullscreen_size = None
         self.slideshow_mode = False
         self._loading_slideshow_mode = False
@@ -93,6 +95,8 @@ class ViewerController:
     def _open_media(self, gfile):
         self.view.show_image_container()
 
+        self._stop_animation()
+
         if self._load_cancellable is not None:
             self._load_cancellable.cancel()
 
@@ -117,6 +121,19 @@ class ViewerController:
             if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
                 self._show_load_error(gfile)
 
+            return
+
+        path = gfile.get_path()
+
+        if is_gif_path(path):
+            # GIFはアニメーションの可能性があるため PixbufAnimation で読み込む。
+            # (静止画用の GdkPixbuf.Pixbuf ではアニメーション情報を扱えない)
+            GdkPixbuf.PixbufAnimation.new_from_stream_async(
+                stream,
+                self._load_cancellable,
+                self._on_animation_ready,
+                (gfile, stream),
+            )
             return
 
         if self._loading_slideshow_mode:
@@ -200,6 +217,74 @@ class ViewerController:
 
         finally:
             stream.close(None)
+
+    def _on_animation_ready(self, stream, result, data):
+        gfile, stream = data
+
+        try:
+            animation = GdkPixbuf.PixbufAnimation.new_from_stream_finish(result)
+
+            if animation.is_static_image():
+                # 1フレームしかない(=実質静止画)場合は、通常の画像と
+                # 同じように pixbuf をそのまま表示すればよい
+                self.state.pixbuf = animation.get_static_image()
+                self.state.pixbuf_animation = None
+                self.state.anim_iter = None
+
+            else:
+                self.state.pixbuf_animation = animation
+                self.state.anim_iter = animation.get_iter(None)
+                self.state.pixbuf = self.state.anim_iter.get_pixbuf()
+                self._schedule_next_frame()
+
+            self.update_fit_zoom()
+            self.view.imagecanvas.redraw()
+            self.update_title()
+
+        except GLib.Error as e:
+            if not e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                self._show_load_error(gfile)
+
+        finally:
+            stream.close(None)
+
+    def _schedule_next_frame(self):
+        anim_iter = self.state.anim_iter
+
+        if anim_iter is None:
+            return
+
+        delay_ms = next_frame_delay(anim_iter.get_delay_time())
+
+        if delay_ms is None:
+            # 負の値はこれ以上進むフレームがない(アニメーション終了)ことを示す
+            return
+
+        self._anim_timeout_id = GLib.timeout_add(delay_ms, self._advance_animation)
+
+    def _advance_animation(self):
+        self._anim_timeout_id = None
+
+        anim_iter = self.state.anim_iter
+
+        if anim_iter is None:
+            return False
+
+        anim_iter.advance(None)
+        self.state.pixbuf = anim_iter.get_pixbuf()
+        self.view.imagecanvas.queue_draw()
+
+        self._schedule_next_frame()
+
+        return False  # 自前で次のタイマーを登録するため、GLib側の自動再実行は不要
+
+    def _stop_animation(self):
+        if self._anim_timeout_id is not None:
+            GLib.source_remove(self._anim_timeout_id)
+            self._anim_timeout_id = None
+
+        self.state.pixbuf_animation = None
+        self.state.anim_iter = None
 
     def _show_load_error(self, gfile):
         self.state.pixbuf = None
@@ -402,6 +487,8 @@ class ViewerController:
             GLib.idle_add(self.update_fit_zoom)
 
     def on_close_request(self, *args):
+        self._stop_animation()
+
         if self.view.is_fullscreen() and self._pre_fullscreen_size is not None:
             w, h = self._pre_fullscreen_size
             self.view.save_window_geometry(w, h)

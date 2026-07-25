@@ -26,6 +26,7 @@ install_data([
 
 install_data([
   'models/__init__.py',
+  'models/animation.py',
   'models/gallerymodel.py',
   'models/imagestate.py',
   'models/exifinfo.py',
