@@ -20,14 +20,14 @@
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Close Image</property>
-            <property name="accelerator">Escape</property>
+            <property name="title" translatable="yes" context="shortcuts window">Reload Thumbnails</property>
+            <property name="accelerator">F5</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Reload Thumbnails</property>
-            <property name="accelerator">F5</property>
+            <property name="title" translatable="yes" context="shortcuts window">Search</property>
+            <property name="accelerator">&lt;Ctrl&gt;f</property>
           </object>
         </child>
         <child>
@@ -94,6 +94,18 @@
     <child>
       <object class="AdwShortcutsSection">
         <property name="title" translatable="yes" context="shortcut window">View</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcuts window">Close Image</property>
+            <property name="accelerator">Escape</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcuts window">Toggle Fullscreen</property>
+            <property name="accelerator">F11</property>
+          </object>
+        </child>
         <child>
           <object class="AdwShortcutsItem">
             <property name="title" translatable="yes">Rotate Clockwise</property>

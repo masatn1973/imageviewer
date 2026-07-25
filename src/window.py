@@ -122,12 +122,27 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.add_action(self.slideshow_action)
         app.set_accels_for_action("win.slideshow", ["<Ctrl>s"])
 
+        self.search_action = Gio.SimpleAction.new("toggle-search", None)
+        self.search_action.connect("activate", lambda a, p: self.toggle_search_bar())
+        self.add_action(self.search_action)
+        app.set_accels_for_action("win.toggle-search", ["<Ctrl>f"])
+
     # --- main.py から呼ばれる公開API ---------------------------------------------
     def on_open(self, action, param):
         self.controller.on_open(action, param)
 
     def on_slideshow(self, action, param):
         self.controller.on_slideshow(action, param)
+
+    def toggle_search_bar(self):
+        is_active = self.search_bar.get_search_mode()
+        self.search_bar.set_search_mode(not is_active)
+
+        if not is_active:
+            self.search_entry.grab_focus()
+
+        else:
+            self.flowbox.grab_focus()
 
     # --- View: サムネイル一覧の更新だけ -------------------------------------------
     def clear_thumbnails(self):

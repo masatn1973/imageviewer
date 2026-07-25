@@ -354,7 +354,7 @@ class ViewerController:
             self.toggle_exif_data()
             return True
 
-        if keyval in (Gdk.KEY_f, Gdk.KEY_F11):
+        if keyval == Gdk.KEY_F11:
             self.toggle_fullscreen()
             return True
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-23 22:36+0900\n"
+"POT-Creation-Date: 2026-07-25 10:40+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,18 +149,18 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:158
+#: src/controllers/gallerycontroller.py:177
 msgid "image(s) read."
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:181
+#: src/controllers/gallerycontroller.py:200
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/controllers/gallerycontroller.py:210
+#: src/controllers/gallerycontroller.py:229
 msgid "Failed to open folder."
 msgstr ""
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "Failed to open {filename}"
 msgstr ""
 
-#: src/preferences.ui:7 src/shortcuts.ui:152 src/window.ui:141
+#: src/preferences.ui:7 src/shortcuts.ui:164 src/window.ui:141
 msgid "Preferences"
 msgstr ""
 
@@ -198,12 +198,12 @@ msgstr ""
 
 #: src/shortcuts.ui:23
 msgctxt "shortcuts window"
-msgid "Close Image"
+msgid "Reload Thumbnails"
 msgstr ""
 
 #: src/shortcuts.ui:29
 msgctxt "shortcuts window"
-msgid "Reload Thumbnails"
+msgid "Search"
 msgstr ""
 
 #: src/shortcuts.ui:35
@@ -260,52 +260,62 @@ msgid "View"
 msgstr ""
 
 #: src/shortcuts.ui:99
-msgid "Rotate Clockwise"
+msgctxt "shortcuts window"
+msgid "Close Image"
 msgstr ""
 
 #: src/shortcuts.ui:105
-msgid "Rotate Counterclockwise"
+msgctxt "shortcuts window"
+msgid "Toggle Fullscreen"
 msgstr ""
 
 #: src/shortcuts.ui:111
-msgid "Show/Hide EXIF data"
+msgid "Rotate Clockwise"
 msgstr ""
 
 #: src/shortcuts.ui:117
-msgid "Fit to Window"
+msgid "Rotate Counterclockwise"
 msgstr ""
 
 #: src/shortcuts.ui:123
-msgid "Actual Size"
+msgid "Show/Hide EXIF data"
 msgstr ""
 
 #: src/shortcuts.ui:129
-msgid "Zoom In"
+msgid "Fit to Window"
 msgstr ""
 
 #: src/shortcuts.ui:135
+msgid "Actual Size"
+msgstr ""
+
+#: src/shortcuts.ui:141
+msgid "Zoom In"
+msgstr ""
+
+#: src/shortcuts.ui:147
 msgid "Zoom Out"
 msgstr ""
 
-#: src/shortcuts.ui:143
+#: src/shortcuts.ui:155
 msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:146 src/window.ui:135
+#: src/shortcuts.ui:158 src/window.ui:135
 msgid "Start Slideshow"
 msgstr ""
 
-#: src/shortcuts.ui:160
+#: src/shortcuts.ui:172
 msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:163 src/window.ui:147
+#: src/shortcuts.ui:175 src/window.ui:147
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/shortcuts.ui:169
+#: src/shortcuts.ui:181
 msgid "About"
 msgstr ""
 
