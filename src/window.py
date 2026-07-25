@@ -30,8 +30,6 @@ from viewer import ImageViewerDialog
 from models.gallerymodel import GalleryModel
 from controllers.gallerycontroller import GalleryController
 
-THUMB = 128
-
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/window.ui")
 class ImageViewerWindow(Adw.ApplicationWindow):
@@ -51,12 +49,17 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     search_button = Gtk.Template.Child()
     search_bar = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
+    thumbnail_size_scale = Gtk.Template.Child()
+    thumbnail_size_adjustment = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__(application=app)
 
         self.viewer = None
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+
+        self.thumbnail_size = self.settings.get_int("thumbnail-size")
+        self.thumbnail_size_adjustment.set_value(self.thumbnail_size)
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
@@ -161,7 +164,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         widget.set_content_fit(Gtk.ContentFit.CONTAIN)
 
         child = Gtk.FlowBoxChild()
-        child.set_size_request(THUMB, THUMB)
+        child.set_size_request(self.thumbnail_size, self.thumbnail_size)
         child.set_child(widget)
         child.image_file = gfile
 

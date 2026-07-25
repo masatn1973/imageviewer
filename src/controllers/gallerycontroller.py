@@ -23,8 +23,6 @@ from gi.repository import Gdk, Gtk, Gio, GLib, GdkPixbuf
 
 from models.searchfilter import matches_filename
 
-THUMB = 128
-
 
 class GalleryController:
     """window.py (ImageViewerWindow) のイベントハンドラを集約する Controller。
@@ -67,6 +65,19 @@ class GalleryController:
         key_controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         key_controller.connect("key-pressed", self.on_key_pressed)
         view.add_controller(key_controller)
+
+        view.thumbnail_size_adjustment.connect(
+            "value-changed", self.on_thumbnail_size_changed
+        )
+
+    def on_thumbnail_size_changed(self, adjustment):
+        size = int(adjustment.get_value())
+        self.view.thumbnail_size = size
+        self.view.settings.set_int("thumbnail-size", size)
+        self._broken_paintable = None
+
+        if self.model.current_folder is not None:
+            self.reload_folder()
 
     # --- Model -> View ---------------------------------------------------------
     def on_files_loaded(self, model):
@@ -131,6 +142,27 @@ class GalleryController:
         self.select_target = gfile
         self.model.load_folder(folder)
 
+    def _compute_columns(self, visible_children):
+        """現在の行に何個のサムネイルが並んでいるかを、実際の配置座標から求める。
+
+        幅の割り算による推測(旧実装)は、余白やサムネイルサイズによって
+        実際のFlowBoxのレイアウトとズレることがあるため、
+        先頭から「同じY座標を持つ子」を数える方式に変更した。
+        """
+        if not visible_children:
+            return 1
+
+        first_y = visible_children[0].get_allocation().y
+        columns = 0
+
+        for child in visible_children:
+            if child.get_allocation().y != first_y:
+                break
+
+            columns += 1
+
+        return max(1, columns)
+
     def _load_next_thumbnail(self):
         if not self.pending_files:
             self.thumbnail_idle_id = None
@@ -144,8 +176,9 @@ class GalleryController:
             stream = gfile.read(None)
 
             try:
+                size = self.view.thumbnail_size
                 pixbuf = GdkPixbuf.Pixbuf.new_from_stream_at_scale(
-                    stream, THUMB, THUMB, True, None
+                    stream, size, size, True, None
                 )
                 pixbuf = pixbuf.apply_embedded_orientation()
 
@@ -210,7 +243,12 @@ class GalleryController:
 
         icon_theme = Gtk.IconTheme.get_for_display(self.view.get_display())
         self._broken_paintable = icon_theme.lookup_icon(
-            "image-missing", None, THUMB, 1, Gtk.TextDirection.NONE, 0
+            "image-missing",
+            None,
+            self.view.thumbnail_size,
+            1,
+            Gtk.TextDirection.NONE,
+            0,
         )
 
         return self._broken_paintable
@@ -424,8 +462,7 @@ class GalleryController:
         new_index = index
         first_child = visible_children[0]
 
-        item_width = first_child.get_allocated_width() + flowbox.get_column_spacing()
-        columns = max(1, flowbox.get_allocated_width() // item_width)
+        columns = self._compute_columns(visible_children)
 
         if keyval in (Gdk.KEY_h, Gdk.KEY_Left, Gdk.KEY_ISO_Left_Tab):
             if new_index > 0:

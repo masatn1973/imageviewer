@@ -28,6 +28,11 @@ install_data('io.github.masatn1973.ImageViewer.gschema.xml',
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 
+gnome = import('gnome')
+gnome.compile_schemas(
+  build_by_default: true
+)
+
 compile_schemas = find_program('glib-compile-schemas', required: false, disabler: true)
 test('Validate schema file',
      compile_schemas,

@@ -8,6 +8,10 @@
         Seconds between slides.
       </description>
     </key>
+    <key name="thumbnail-size" type="i">
+      <default>128</default>
+      <summary>Thumbnail size</summary>
+    </key>
     <key name="window-width" type="i">
       <default>900</default>
     </key>

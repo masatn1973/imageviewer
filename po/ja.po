@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 15:08+0900\n"
-"PO-Revision-Date: 2026-07-25 15:21+0900\n"
+"POT-Creation-Date: 2026-07-26 02:31+0900\n"
+"PO-Revision-Date: 2026-07-26 03:08+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -41,6 +41,10 @@ msgstr "スライドショー スライドショーの間隔"
 #: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:16
 msgid "Seconds between slides."
 msgstr "スライド間の間隔(秒)"
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:13
+msgid "Thumbnail size"
+msgstr "サムネイルのサイズ"
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
@@ -160,26 +164,26 @@ msgstr "最初のリリース"
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 
-#: src/controllers/gallerycontroller.py:177
+#: src/controllers/gallerycontroller.py:210
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
-#: src/controllers/gallerycontroller.py:200
+#: src/controllers/gallerycontroller.py:233
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
 
-#: src/controllers/gallerycontroller.py:229
+#: src/controllers/gallerycontroller.py:267
 msgid "Failed to open folder."
 msgstr "フォルダを開けませんでした"
 
-#: src/controllers/viewercontroller.py:209
+#: src/controllers/viewercontroller.py:294
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
 
-#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:141
+#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:191
 msgid "Preferences"
 msgstr "設定"
 
@@ -320,7 +324,7 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr "ツール"
 
-#: src/shortcuts.ui:170 src/window.ui:135
+#: src/shortcuts.ui:170 src/window.ui:185
 msgid "Start Slideshow"
 msgstr "スライドショーの開始"
 
@@ -329,7 +333,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/shortcuts.ui:187 src/window.ui:147
+#: src/shortcuts.ui:187 src/window.ui:197
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
@@ -386,46 +390,50 @@ msgid "Sort"
 msgstr "並べ替え"
 
 #: src/window.ui:35
+msgid "Thumbnail Size"
+msgstr "サムネイルのサイズ"
+
+#: src/window.ui:84
 msgid "Search"
 msgstr "検索"
 
-#: src/window.ui:49
+#: src/window.ui:98
 msgid "Search by filename…"
 msgstr "ファイル名で検索…"
 
-#: src/window.ui:69
+#: src/window.ui:118
 msgid "Ready."
 msgstr "準備完了"
 
-#: src/window.ui:97
+#: src/window.ui:147
 msgid "Name"
 msgstr "名前"
 
-#: src/window.ui:102
+#: src/window.ui:152
 msgid "Name (Descending)"
 msgstr "名前 (降順)"
 
-#: src/window.ui:109
+#: src/window.ui:159
 msgid "Date"
 msgstr "日付"
 
-#: src/window.ui:114
+#: src/window.ui:164
 msgid "Date (Descending)"
 msgstr "日付 (降順)"
 
-#: src/window.ui:123
+#: src/window.ui:173
 msgid "Open"
 msgstr "開く"
 
-#: src/window.ui:129
+#: src/window.ui:179
 msgid "Reload Thumbnails"
 msgstr "サムネイルの更新"
 
-#: src/window.ui:151
+#: src/window.ui:201
 msgid "About ImageViewer"
 msgstr "画像ビューワについて"
 
-#: src/window.ui:157
+#: src/window.ui:207
 msgid "Quit"
 msgstr "終了"
 

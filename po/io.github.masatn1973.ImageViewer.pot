@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 15:08+0900\n"
+"POT-Creation-Date: 2026-07-26 02:31+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,10 @@ msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:16
 msgid "Seconds between slides."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:13
+msgid "Thumbnail size"
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
@@ -149,27 +153,27 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:177
+#: src/controllers/gallerycontroller.py:210
 msgid "image(s) read."
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:200
+#: src/controllers/gallerycontroller.py:233
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/controllers/gallerycontroller.py:229
+#: src/controllers/gallerycontroller.py:267
 msgid "Failed to open folder."
 msgstr ""
 
-#: src/controllers/viewercontroller.py:209
+#: src/controllers/viewercontroller.py:294
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr ""
 
-#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:141
+#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:191
 msgid "Preferences"
 msgstr ""
 
@@ -310,7 +314,7 @@ msgctxt "shotcut window"
 msgid "Tools"
 msgstr ""
 
-#: src/shortcuts.ui:170 src/window.ui:135
+#: src/shortcuts.ui:170 src/window.ui:185
 msgid "Start Slideshow"
 msgstr ""
 
@@ -319,7 +323,7 @@ msgctxt "shotcut window"
 msgid "Help"
 msgstr ""
 
-#: src/shortcuts.ui:187 src/window.ui:147
+#: src/shortcuts.ui:187 src/window.ui:197
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -376,45 +380,49 @@ msgid "Sort"
 msgstr ""
 
 #: src/window.ui:35
+msgid "Thumbnail Size"
+msgstr ""
+
+#: src/window.ui:84
 msgid "Search"
 msgstr ""
 
-#: src/window.ui:49
+#: src/window.ui:98
 msgid "Search by filename…"
 msgstr ""
 
-#: src/window.ui:69
+#: src/window.ui:118
 msgid "Ready."
 msgstr ""
 
-#: src/window.ui:97
+#: src/window.ui:147
 msgid "Name"
 msgstr ""
 
-#: src/window.ui:102
+#: src/window.ui:152
 msgid "Name (Descending)"
 msgstr ""
 
-#: src/window.ui:109
+#: src/window.ui:159
 msgid "Date"
 msgstr ""
 
-#: src/window.ui:114
+#: src/window.ui:164
 msgid "Date (Descending)"
 msgstr ""
 
-#: src/window.ui:123
+#: src/window.ui:173
 msgid "Open"
 msgstr ""
 
-#: src/window.ui:129
+#: src/window.ui:179
 msgid "Reload Thumbnails"
 msgstr ""
 
-#: src/window.ui:151
+#: src/window.ui:201
 msgid "About ImageViewer"
 msgstr ""
 
-#: src/window.ui:157
+#: src/window.ui:207
 msgid "Quit"
 msgstr ""

@@ -28,6 +28,55 @@
                 <property name="tooltip-text" translatable="yes">Sort</property>
               </object>
             </child>
+            <child>
+              <object class="GtkMenuButton" id="thumbnail_size_button">
+                <property name="icon-name">zoom-fit-best-symbolic</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-text" translatable="yes">Thumbnail Size</property>
+                <property name="popover">
+                  <object class="GtkPopover" id="thumbnail_size_popover">
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">8</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">zoom-fit-best-symbolic</property>
+                            <property name="pixel-size">12</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale" id="thumbnail_size_scale">
+                            <property name="orientation">horizontal</property>
+                            <property name="width-request">160</property>
+                            <property name="draw-value">False</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment" id="thumbnail_size_adjustment">
+                                <property name="lower">64</property>
+                                <property name="upper">256</property>
+                                <property name="step-increment">16</property>
+                                <property name="page-increment">32</property>
+                                <property name="value">128</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">zoom-fit-best-symbolic</property>
+                            <property name="pixel-size">20</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
             <child type="end">
               <object class="GtkToggleButton" id="search_button">
                 <property name="icon-name">system-search-symbolic</property>
@@ -80,7 +129,8 @@
                 <child>
                   <object class="GtkFlowBox" id="flowbox">
                     <property name="selection-mode">single</property>
-                    <property name="max-children-per-line">5</property>
+                    <property name="min-children-per-line">1</property>
+                    <property name="max-children-per-line">50</property>
                   </object>
                 </child>
               </object>
