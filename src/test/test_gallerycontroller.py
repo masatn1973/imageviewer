@@ -57,13 +57,24 @@ def _make_flowbox_with_children(view, model, count, selected_index, columns=3):
     for i in range(count):
         children[i].get_next_sibling.return_value = children.get(i + 1)
 
+    # _compute_columns() は各子の get_allocation().y を比較して列数を
+    # 数える実装(幅の割り算ではない)。そのため、同じ行に属する子は
+    # 同じ y を、次の行の子は違う y を返すようにモックする。
+    # 例: columns=3 なら [0,1,2]が y=0(1行目)、[3,4,5]が y=1(2行目)...
+    for i in range(count):
+        row = i // columns
+        allocation = MagicMock(name=f"allocation{i}")
+        allocation.y = row
+        children[i].get_allocation.return_value = allocation
+
     flowbox = view.flowbox
     flowbox.get_first_child.return_value = children.get(0)
     flowbox.get_child_at_index.side_effect = lambda i: children.get(i)
     flowbox.get_selected_children.return_value = [children[selected_index]]
 
-    # 1個あたりの幅100px、余白なし、全体幅 100*columns にして
-    # columns 個ぶんの列になるように仕込む
+    # Page_Up/Page_Down のテストで使う想定の付随的なモック
+    # (幅ベースの列数計算は使われなくなったが、他の処理で
+    # get_allocated_width 等を参照する場合に備えて残している)
     children[0].get_allocated_width.return_value = 100
     flowbox.get_column_spacing.return_value = 0
     flowbox.get_allocated_width.return_value = 100 * columns
