@@ -29,6 +29,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     __gtype_name__ = "PreferencesWindow"
 
     interval_row = Gtk.Template.Child()
+    shuffle_row = Gtk.Template.Child()
 
     def __init__(self, parent):
         super().__init__()
@@ -47,6 +48,13 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.interval_row.set_adjustment(adjustment)
 
         adjustment.connect("value-changed", self.on_interval_changed)
+
+        self.settings.bind(
+            "shuffle-enabled",
+            self.shuffle_row,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
 
     def on_interval_changed(self, adjustment):
         self.settings.set_uint("slideshow-interval", int(adjustment.get_value()))

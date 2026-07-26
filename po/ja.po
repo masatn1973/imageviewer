@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-26 02:31+0900\n"
-"PO-Revision-Date: 2026-07-26 03:08+0900\n"
+"POT-Creation-Date: 2026-07-26 12:57+0900\n"
+"PO-Revision-Date: 2026-07-26 22:20+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -43,6 +43,14 @@ msgid "Seconds between slides."
 msgstr "スライド間の間隔(秒)"
 
 #: data/io.github.masatn1973.ImageViewer.gschema.xml:13
+msgid "Shuffle enabled"
+msgstr "ランダム再生の有効"
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:14 src/preferences.ui:22
+msgid "Play slides in random order."
+msgstr "スライドをランダムに再生します"
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:20
 msgid "Thumbnail size"
 msgstr "サムネイルのサイズ"
 
@@ -164,21 +172,21 @@ msgstr "最初のリリース"
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 
-#: src/controllers/gallerycontroller.py:210
+#: src/controllers/gallerycontroller.py:212
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
-#: src/controllers/gallerycontroller.py:233
+#: src/controllers/gallerycontroller.py:235
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
 
-#: src/controllers/gallerycontroller.py:267
+#: src/controllers/gallerycontroller.py:269
 msgid "Failed to open folder."
 msgstr "フォルダを開けませんでした"
 
-#: src/controllers/viewercontroller.py:294
+#: src/controllers/viewercontroller.py:296
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
@@ -194,6 +202,10 @@ msgstr "スライドショー"
 #: src/preferences.ui:15
 msgid "Interval"
 msgstr "間隔"
+
+#: src/preferences.ui:21
+msgid "Shuffle"
+msgstr "ランダム再生"
 
 #: src/shortcuts.ui:8
 msgctxt "shortcut window"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-26 02:31+0900\n"
+"POT-Creation-Date: 2026-07-26 12:57+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,14 @@ msgid "Seconds between slides."
 msgstr ""
 
 #: data/io.github.masatn1973.ImageViewer.gschema.xml:13
+msgid "Shuffle enabled"
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:14 src/preferences.ui:22
+msgid "Play slides in random order."
+msgstr ""
+
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:20
 msgid "Thumbnail size"
 msgstr ""
 
@@ -153,22 +161,22 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:210
+#: src/controllers/gallerycontroller.py:212
 msgid "image(s) read."
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:233
+#: src/controllers/gallerycontroller.py:235
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/controllers/gallerycontroller.py:267
+#: src/controllers/gallerycontroller.py:269
 msgid "Failed to open folder."
 msgstr ""
 
-#: src/controllers/viewercontroller.py:294
+#: src/controllers/viewercontroller.py:296
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr ""
@@ -183,6 +191,10 @@ msgstr ""
 
 #: src/preferences.ui:15
 msgid "Interval"
+msgstr ""
+
+#: src/preferences.ui:21
+msgid "Shuffle"
 msgstr ""
 
 #: src/shortcuts.ui:8

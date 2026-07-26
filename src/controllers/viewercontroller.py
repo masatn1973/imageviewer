@@ -84,12 +84,14 @@ class ViewerController:
         self.state.previous_file()
         self.show_current_image()
 
-    def set_image_files(self, files):
+    def set_image_files(self, files, preserve_current=True):
         current = self.state.current_file
         self.state.image_files = files
 
-        if current is not None and current in files:
+        if preserve_current and current is not None and current in files:
             self.state.current_index = files.index(current)
+        else:
+            self.state.current_index = 0
 
     # --- 画像読込 -------------------------------------------------------------
     def _open_media(self, gfile):

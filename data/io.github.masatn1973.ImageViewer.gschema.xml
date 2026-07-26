@@ -8,6 +8,13 @@
         Seconds between slides.
       </description>
     </key>
+    <key name="shuffle-enabled" type="b">
+      <default>false</default>
+      <summary>Shuffle enabled</summary>
+      <description>
+        Play slides in random order.
+      </description>
+    </key>
     <key name="thumbnail-size" type="i">
       <default>128</default>
       <summary>Thumbnail size</summary>

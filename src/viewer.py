@@ -149,8 +149,8 @@ class ImageViewerDialog(Adw.Window):
         self.settings.set_boolean("viewer-maximized", self.is_maximized())
 
     # --- window.py から呼ばれる公開API ------------------------------------------
-    def set_image_files(self, files):
-        self.controller.set_image_files(files)
+    def set_image_files(self, files, preserve_current=True):
+        self.controller.set_image_files(files, preserve_current=preserve_current)
 
     def show_next_image(self):
         self.controller.show_next_image()

@@ -19,6 +19,8 @@
 
 from gettext import gettext as _, ngettext
 
+import random
+
 from gi.repository import Gdk, Gtk, Gio, GLib, GdkPixbuf
 
 from models.searchfilter import matches_filename
@@ -337,11 +339,29 @@ class GalleryController:
         if self.view.viewer is None:
             return
 
+        if self.view.settings.get_boolean("shuffle-enabled"):
+            self._apply_shuffle()
+
         self.view.viewer.set_slideshow_mode(True)
         self.view.viewer.controller.enter_fullscreen()
 
         interval = self.view.settings.get_uint("slideshow-interval")
         self.slideshow_id = GLib.timeout_add(interval * 1000, self._slideshow_next)
+
+    def _apply_shuffle(self):
+        """ギャラリー本体の並び順(model.image_files)は変えずに、
+        ビューアーに渡すリストだけシャッフルする。
+
+        preserve_current=False にすることで、シャッフル後は「今選んで
+        いた画像」ではなく、シャッフル後の先頭画像から再生させる。
+        （preserve_current=True のままだと、set_image_files() が現在
+        表示中の画像を新リストの中から探し直してしまい、シャッフルして
+        も常に選択中の画像が最初に表示されてしまう）
+        """
+        shuffled = list(self.model.image_files)
+        random.shuffle(shuffled)
+        self.view.viewer.set_image_files(shuffled, preserve_current=False)
+        self.view.viewer.controller.show_current_image()
 
     def _slideshow_next(self):
         if not self.model.image_files:

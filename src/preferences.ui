@@ -16,6 +16,12 @@
                 <property name="subtitle" translatable="yes">Seconds between slides.</property>
               </object>
             </child>
+            <child>
+              <object class="AdwSwitchRow" id="shuffle_row">
+                <property name="title" translatable="yes">Shuffle</property>
+                <property name="subtitle" translatable="yes">Play slides in random order.</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
