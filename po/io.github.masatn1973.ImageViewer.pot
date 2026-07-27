@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-26 12:57+0900\n"
+"POT-Creation-Date: 2026-07-26 22:30+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,24 +161,29 @@ msgstr ""
 msgid "Folder-orientad thumbnail image browser"
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:212
+#: src/controllers/gallerycontroller.py:204
 msgid "image(s) read."
 msgstr ""
 
-#: src/controllers/gallerycontroller.py:235
+#: src/controllers/gallerycontroller.py:227
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/controllers/gallerycontroller.py:269
+#: src/controllers/gallerycontroller.py:261
 msgid "Failed to open folder."
 msgstr ""
 
 #: src/controllers/viewercontroller.py:296
 #, python-brace-format
 msgid "Failed to open {filename}"
+msgstr ""
+
+#: src/preferences.py:87
+#, python-brace-format
+msgid "Thumbnail cache cleared ({size})."
 msgstr ""
 
 #: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:191
@@ -195,6 +200,26 @@ msgstr ""
 
 #: src/preferences.ui:21
 msgid "Shuffle"
+msgstr ""
+
+#: src/preferences.ui:29
+msgid "Thumbnails"
+msgstr ""
+
+#: src/preferences.ui:32
+msgid "Thumbnail Cache"
+msgstr ""
+
+#: src/preferences.ui:33
+msgid "Calculating…"
+msgstr ""
+
+#: src/preferences.ui:36
+msgid "Clear"
+msgstr ""
+
+#: src/preferences.ui:39
+msgid "Delete all cached thumbnails from disk."
 msgstr ""
 
 #: src/shortcuts.ui:8

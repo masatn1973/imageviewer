@@ -21,9 +21,10 @@ from gettext import gettext as _, ngettext
 
 import random
 
-from gi.repository import Gdk, Gtk, Gio, GLib, GdkPixbuf
+from gi.repository import Gdk, Gtk, Gio, GLib
 
 from models.searchfilter import matches_filename
+from models.thumbnailcache import ThumbnailCache
 
 
 class GalleryController:
@@ -45,6 +46,8 @@ class GalleryController:
 
         self.failed_files = []
         self._broken_paintable = None
+
+        self.thumbnail_cache = ThumbnailCache()
 
         self.search_text = ""
 
@@ -175,19 +178,8 @@ class GalleryController:
         broken = False
 
         try:
-            stream = gfile.read(None)
-
-            try:
-                size = self.view.thumbnail_size
-                pixbuf = GdkPixbuf.Pixbuf.new_from_stream_at_scale(
-                    stream, size, size, True, None
-                )
-                pixbuf = pixbuf.apply_embedded_orientation()
-
-            finally:
-                stream.close(None)
-
-            paintable = Gdk.Texture.new_for_pixbuf(pixbuf)
+            size = self.view.thumbnail_size
+            paintable = self.thumbnail_cache.get_texture(gfile, size)
 
         except Exception:
             self.failed_files.append(gfile.get_basename())

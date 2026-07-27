@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-26 12:57+0900\n"
-"PO-Revision-Date: 2026-07-26 22:20+0900\n"
+"POT-Creation-Date: 2026-07-26 22:30+0900\n"
+"PO-Revision-Date: 2026-07-26 23:26+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -172,17 +172,17 @@ msgstr "最初のリリース"
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 
-#: src/controllers/gallerycontroller.py:212
+#: src/controllers/gallerycontroller.py:204
 msgid "image(s) read."
 msgstr "枚の画像を読み込みました"
 
-#: src/controllers/gallerycontroller.py:235
+#: src/controllers/gallerycontroller.py:227
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
 
-#: src/controllers/gallerycontroller.py:269
+#: src/controllers/gallerycontroller.py:261
 msgid "Failed to open folder."
 msgstr "フォルダを開けませんでした"
 
@@ -190,6 +190,11 @@ msgstr "フォルダを開けませんでした"
 #, python-brace-format
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
+
+#: src/preferences.py:87
+#, python-brace-format
+msgid "Thumbnail cache cleared ({size})."
+msgstr "サムネイルのキャッシュをクリアしました ({size})"
 
 #: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:191
 msgid "Preferences"
@@ -206,6 +211,26 @@ msgstr "間隔"
 #: src/preferences.ui:21
 msgid "Shuffle"
 msgstr "ランダム再生"
+
+#: src/preferences.ui:29
+msgid "Thumbnails"
+msgstr "サムネイル"
+
+#: src/preferences.ui:32
+msgid "Thumbnail Cache"
+msgstr "サムネイルのキャッシュ"
+
+#: src/preferences.ui:33
+msgid "Calculating…"
+msgstr "計算中..."
+
+#: src/preferences.ui:36
+msgid "Clear"
+msgstr "クリア"
+
+#: src/preferences.ui:39
+msgid "Delete all cached thumbnails from disk."
+msgstr "ディスク上の全てのキャッシュをクリアします"
 
 #: src/shortcuts.ui:8
 msgctxt "shortcut window"

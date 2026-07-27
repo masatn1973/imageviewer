@@ -254,7 +254,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def open_path(self, gfile):
         self.controller.open_path(gfile)
 
-    def show_error(self, message):
+    def show_toast(self, message):
         toast = Adw.Toast.new(message)
         toast.set_timeout(4)
         self.toast_overlay.add_toast(toast)
+
+    def show_error(self, message):
+        self.show_toast(message)
