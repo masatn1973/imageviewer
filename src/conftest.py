@@ -44,6 +44,45 @@ def _install_fake_gi():
     sys.modules["gi.repository"] = fake_repository
 
     _install_fake_drawing_area(fake_repository)
+    _install_fake_gtk_template(fake_repository)
+
+
+def _install_fake_gtk_template(fake_repository):
+    """`@Gtk.Template(resource_path=...)` を「クラスをそのまま返すだけ」の
+    identity decorator に差し替える。
+
+    本物の Gtk.Template はクラスを .ui ファイルと結びつける処理をするが、
+    そのままモック(MagicMock)にしておくと、デコレータ呼び出し
+    (`Gtk.Template(resource_path=...)`)のたびに新しい MagicMock が
+    返ってしまい、それをクラスに適用した結果(`decorator(cls)`)も
+    別の MagicMock になってしまう。つまり
+
+        @Gtk.Template(resource_path="...")
+        class PreferencesWindow(Adw.PreferencesWindow):
+            ...
+
+    と書いても、モジュールに束縛される `PreferencesWindow` が
+    「本物のクラスの中身(メソッドなど)を持たない別物」に化けてしまい、
+    そのクラスの中身をテストできなくなる。
+
+    テストでは実際に .ui リソースを読み込む必要はないので、単に
+    元のクラスをそのまま返すようにしておく。`Gtk.Template.Child()`
+    (テンプレート内のウィジェットへの参照を宣言する部分)は、
+    クラス属性のプレースホルダーとして None を返すだけにしておき、
+    各テスト側で必要なウィジェットを直接モックに差し替えて使う。
+    """
+
+    def fake_template(*args, **kwargs):
+        def decorator(cls):
+            return cls
+
+        return decorator
+
+    def fake_template_child(*args, **kwargs):
+        return None
+
+    fake_template.Child = fake_template_child
+    fake_repository.Gtk.Template = fake_template
 
 
 class _FakeGtkWidget:
@@ -66,10 +105,17 @@ class _FakeGtkWidget:
 
 
 def _install_fake_drawing_area(fake_repository):
-    """imagecanvas.py の `class ImageCanvas(Gtk.DrawingArea):` が
-    正しく継承できるように、Gtk.DrawingArea だけ本物のクラスに差し替える。
+    """imagecanvas.py の `class ImageCanvas(Gtk.DrawingArea):` や
+    preferences.py の `class PreferencesWindow(Adw.PreferencesWindow):`
+    のように「継承して使うGTK/Adwaitaのクラス」が正しく継承できるように、
+    それらのクラスだけ本物のPythonクラス(_FakeGtkWidget)に差し替える。
+
+    MagicMock のインスタンスをそのまま基底クラスにすると、Pythonの
+    クラス文が正しく動かない(__mro_entries__ 絡みで、定義したはずの
+    クラスが別のMagicMockに化けてしまう)ため。
     """
     fake_repository.Gtk.DrawingArea = _FakeGtkWidget
+    fake_repository.Adw.PreferencesWindow = _FakeGtkWidget
 
 
 _install_fake_gi()

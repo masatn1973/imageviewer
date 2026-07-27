@@ -18,7 +18,7 @@ import pytest
 # ただし同じ属性(例: Gdk.KEY_Right)には常に同じオブジェクトが返るため、
 # テストコード側とプロダクトコード側で「同じ偽物のキー定数」を
 # 参照でき、比較(==)が成立する。
-from gi.repository import Gdk, Gtk, GdkPixbuf
+from gi.repository import Gdk, Gtk
 
 from controllers.gallerycontroller import GalleryController
 
@@ -234,32 +234,30 @@ class TestOnKeyPressed:
 
 # ---------------------------------------------------------------------------
 # サムネイル読み込み (_load_next_thumbnail) のテスト
+#
+# 実際のサムネイル生成(GdkPixbufでのデコード等)は models/thumbnailcache.py
+# の ThumbnailCache に委譲されている(そちら側の単体テストは
+# tests/test_thumbnailcache.py で行う)。ここでは「コントローラーが
+# thumbnail_cache を正しい引数で呼び、結果を正しく view に渡すか」
+# だけを検証する。
 # ---------------------------------------------------------------------------
 class TestLoadNextThumbnail:
-    def test_successful_load_adds_thumbnail(self, controller, monkeypatch):
+    def test_successful_load_adds_thumbnail(self, controller):
         """読み込みに成功したら、正常なサムネイルとして view.add_thumbnail
         が呼ばれること。
         """
         gfile = MagicMock()
-        stream = MagicMock()
-        gfile.read.return_value = stream
-
-        pixbuf_raw = MagicMock()
-        pixbuf_final = MagicMock()
-        pixbuf_raw.apply_embedded_orientation.return_value = pixbuf_final
-
-        # GdkPixbuf.Pixbuf.new_from_stream_at_scale(...) の戻り値を差し替え
-        GdkPixbuf.Pixbuf.new_from_stream_at_scale.return_value = pixbuf_raw
-
         paintable = MagicMock()
-        Gdk.Texture.new_for_pixbuf.return_value = paintable
+
+        controller.thumbnail_cache = MagicMock()
+        controller.thumbnail_cache.get_texture.return_value = paintable
+        controller.view.thumbnail_size = 128
 
         controller.pending_files = [gfile]
 
         result = controller._load_next_thumbnail()
 
-        # 読み込みが終わったストリームは必ず閉じること
-        stream.close.assert_called_once_with(None)
+        controller.thumbnail_cache.get_texture.assert_called_once_with(gfile, 128)
 
         controller.view.add_thumbnail.assert_called_once_with(
             gfile,
@@ -274,8 +272,8 @@ class TestLoadNextThumbnail:
         assert result is False
 
     def test_failed_load_marks_thumbnail_as_broken(self, controller):
-        """画像の読み込みに失敗しても例外を外に投げず、broken=True の
-        サムネイルとして扱われること。
+        """サムネイル取得(thumbnail_cache.get_texture)が例外を投げても
+        外に伝播させず、broken=True のサムネイルとして扱われること。
 
         なお _load_next_thumbnail は「キューが空になった瞬間」に自動で
         _report_failures() を呼んで failed_files をリセットする仕様
@@ -285,7 +283,11 @@ class TestLoadNextThumbnail:
         """
         gfile = MagicMock()
         gfile.get_basename.return_value = "broken.jpg"
-        gfile.read.side_effect = Exception("読み込み失敗(テスト用)")
+
+        controller.thumbnail_cache = MagicMock()
+        controller.thumbnail_cache.get_texture.side_effect = Exception(
+            "読み込み失敗(テスト用)"
+        )
 
         controller.pending_files = [gfile]
 
@@ -303,7 +305,11 @@ class TestLoadNextThumbnail:
         """
         gfile = MagicMock()
         gfile.get_basename.return_value = "broken.jpg"
-        gfile.read.side_effect = Exception("読み込み失敗(テスト用)")
+
+        controller.thumbnail_cache = MagicMock()
+        controller.thumbnail_cache.get_texture.side_effect = Exception(
+            "読み込み失敗(テスト用)"
+        )
 
         another_gfile = MagicMock()  # まだ読み込まれていない残り1枚
 
