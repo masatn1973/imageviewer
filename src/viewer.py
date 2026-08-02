@@ -28,6 +28,7 @@ from gi.repository import Gtk, Adw, Gio
 
 from models.imagestate import ImageState
 from imagecanvas import ImageCanvas
+from models.videoplayer import FfmpegVideoPlayer
 from controllers.viewercontroller import ViewerController
 
 
@@ -77,6 +78,48 @@ class ImageViewerDialog(Adw.Window):
         self.imagecanvas.set_state(self.state)
         self.image_container.append(self.imagecanvas)
 
+        # 動画再生用ウィジェット。Gtk.Video(GStreamer)はこの環境の
+        # GPU/ドライバとの相性問題(クラッシュ・メモリ肥大化)が
+        # 解決できなかったため、ffmpegを子プロセスとして使う自前の
+        # 簡易プレーヤー(FfmpegVideoPlayer)に切り替えている。
+        self.video_widget = Gtk.Picture()
+        self.video_widget.set_can_shrink(True)
+        self.video_widget.set_content_fit(Gtk.ContentFit.CONTAIN)
+
+        # 停止中(静止画プレビュー表示時・再生終了後)に、ギャラリーの
+        # サムネイルと同じ再生マーク(○に▶)を重ねて表示する。
+        self.video_overlay = Gtk.Overlay()
+        self.video_overlay.set_child(self.video_widget)
+        self.video_overlay.set_cursor_from_name("pointer")
+
+        # クリック判定は再生マークではなく、動画エリア全体に付ける。
+        # 再生中はマーク自体が非表示(=クリックを受け付けない)になる
+        # ため、マークだけに付けると「再生中にクリックして一時停止」が
+        # できなくなってしまう。
+        click = Gtk.GestureClick()
+        click.connect("released", self._on_video_area_clicked)
+        self.video_overlay.add_controller(click)
+
+        self.video_play_icon = Gtk.Box()
+        self.video_play_icon.add_css_class("video-play-circle")
+        self.video_play_icon.set_halign(Gtk.Align.CENTER)
+        self.video_play_icon.set_valign(Gtk.Align.CENTER)
+        # クリックはあくまで動画エリア全体(video_overlay)側で受けるので、
+        # マーク自身はクリック判定を持たせない(奪わないようにする)。
+        self.video_play_icon.set_can_target(False)
+
+        play_icon_image = Gtk.Image.new_from_icon_name(
+            "media-playback-start-symbolic"
+        )
+        play_icon_image.add_css_class("video-play-icon")
+        self.video_play_icon.append(play_icon_image)
+
+        self.video_overlay.add_overlay(self.video_play_icon)
+
+        self.media_stack.add_named(self.video_overlay, "video")
+
+        self.video_player = FfmpegVideoPlayer(self.video_widget, self.video_play_icon)
+
         self.info_box.add_css_class("exif-overlay")
 
         self.key_controller = Gtk.EventControllerKey()
@@ -113,12 +156,18 @@ class ImageViewerDialog(Adw.Window):
     def _on_canvas_zoom_changed(self):
         self.controller.on_canvas_zoom_changed()
 
+    def _on_video_area_clicked(self, gesture, n_press, x, y):
+        self.controller.toggle_video_playback()
+
     def set_slideshow_mode(self, enabled):
         self.controller.set_slideshow_mode(enabled)
 
     # --- View: 見た目の更新だけ ------------------------------------------------
     def show_image_container(self):
         self.media_stack.set_visible_child(self.image_container)
+
+    def show_video_container(self):
+        self.media_stack.set_visible_child(self.video_overlay)
 
     def get_canvas_view_size(self):
         alloc = self.scrolled_window.get_allocation()

@@ -23,6 +23,7 @@ from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 from controllers import gallerycontroller
 from models.exifinfo import get_exif_info
 from models.animation import is_gif_path, next_frame_delay
+from models.gallerymodel import is_video_path
 
 
 class ViewerController:
@@ -95,12 +96,18 @@ class ViewerController:
 
     # --- 画像読込 -------------------------------------------------------------
     def _open_media(self, gfile):
-        self.view.show_image_container()
-
         self._stop_animation()
+        self._stop_video()
 
         if self._load_cancellable is not None:
             self._load_cancellable.cancel()
+            self._load_cancellable = None
+
+        if is_video_path(gfile.get_path()):
+            self._open_video(gfile)
+            return
+
+        self.view.show_image_container()
 
         self._load_cancellable = Gio.Cancellable()
 
@@ -288,6 +295,54 @@ class ViewerController:
         self.state.pixbuf_animation = None
         self.state.anim_iter = None
 
+    # --- 動画再生 --------------------------------------------------------------
+    def _open_video(self, gfile):
+        self.view.show_video_container()
+
+        if self.slideshow_mode:
+            view_w, view_h = self.view.get_canvas_view_size()
+            self.view.video_player.play(gfile.get_path(), view_w, view_h)
+        else:
+            # スライドショー中でなければ自動再生はせず、代表フレームを
+            # 1枚だけ静止画として表示しておく(真っ白のままにしないため)。
+            # 実際に再生したい場合はスペースキーで開始できる。
+            self.view.video_player.show_preview_frame(gfile.get_path())
+
+        self.update_title()
+
+    def _stop_video(self):
+        self.view.video_player.stop()
+
+    def toggle_video_playback(self):
+        """スペースキーや再生マークのクリックから呼ばれる、
+        再生/一時停止/再開の切り替え。
+
+        - 再生中 -> 一時停止
+        - 一時停止中 -> 再開
+        - 停止中(未再生・再生終了後) -> 先頭から再生
+
+        動画以外を表示中の場合は何もせず False を返す。
+        """
+        player = self.view.video_player
+
+        if player.is_playing():
+            player.pause()
+            return True
+
+        if player.is_paused():
+            player.resume()
+            return True
+
+        current_file = self.state.current_file
+
+        if current_file is None or not is_video_path(current_file.get_path()):
+            return False
+
+        view_w, view_h = self.view.get_canvas_view_size()
+        player.play(current_file.get_path(), view_w, view_h)
+
+        return True
+
     def _show_load_error(self, gfile):
         self.state.pixbuf = None
         self.view.imagecanvas.redraw()
@@ -407,6 +462,10 @@ class ViewerController:
 
             return True
 
+        if keyval == Gdk.KEY_space:
+            if self.toggle_video_playback():
+                return True
+
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             canvas.zoom_at_viewport_center(zoom_in=True)
             self.update_title()
@@ -490,6 +549,7 @@ class ViewerController:
 
     def on_close_request(self, *args):
         self._stop_animation()
+        self._stop_video()
 
         if self.view.is_fullscreen() and self._pre_fullscreen_size is not None:
             w, h = self._pre_fullscreen_size

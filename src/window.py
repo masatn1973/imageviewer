@@ -27,7 +27,7 @@ from gi.repository import Gdk, Gtk, Adw, Gio
 from gi.repository import GLib
 
 from viewer import ImageViewerDialog
-from models.gallerymodel import GalleryModel
+from models.gallerymodel import GalleryModel, is_video_path
 from controllers.gallerycontroller import GalleryController
 
 
@@ -159,9 +159,14 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def add_thumbnail(
         self, gfile, paintable, select=False, on_drag_prepare=None, broken=False
     ):
-        widget = Gtk.Picture.new_for_paintable(paintable)
-        widget.set_can_shrink(True)
-        widget.set_content_fit(Gtk.ContentFit.CONTAIN)
+        picture = Gtk.Picture.new_for_paintable(paintable)
+        picture.set_can_shrink(True)
+        picture.set_content_fit(Gtk.ContentFit.CONTAIN)
+
+        if is_video_path(gfile.get_path()):
+            widget = self._wrap_with_play_overlay(picture)
+        else:
+            widget = picture
 
         child = Gtk.FlowBoxChild()
         child.set_size_request(self.thumbnail_size, self.thumbnail_size)
@@ -181,6 +186,28 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         if select:
             self.flowbox.select_child(child)
+
+    def _wrap_with_play_overlay(self, picture):
+        """サムネイル画像(picture)の中央に、style.css の
+        .video-play-circle / .video-play-icon を使った再生マークを重ねる。
+        """
+        overlay = Gtk.Overlay()
+        overlay.set_child(picture)
+
+        circle = Gtk.Box()
+        circle.add_css_class("video-play-circle")
+        circle.set_halign(Gtk.Align.CENTER)
+        circle.set_valign(Gtk.Align.CENTER)
+        # マウス操作(選択/ドラッグ等)を picture 側にそのまま通す
+        circle.set_can_target(False)
+
+        icon = Gtk.Image.new_from_icon_name("media-playback-start-symbolic")
+        icon.add_css_class("video-play-icon")
+        circle.append(icon)
+
+        overlay.add_overlay(circle)
+
+        return overlay
 
     def set_status(self, text):
         self.status_label.set_text(text)

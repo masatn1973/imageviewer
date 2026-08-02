@@ -7,11 +7,13 @@
     "separate-locales": false,
     "finish-args": [
         "--share=ipc",
+        "--socket=pulseaudio",
         "--device=dri",
         "--socket=fallback-x11",
         "--socket=wayland",
         "--filesystem=xdg-pictures",
-        "--filesystem=xdg-download"
+        "--filesystem=xdg-download",
+        "--filesystem=xdg-videos"
     ],
     "cleanup": [
         "/include",
@@ -78,13 +80,29 @@
             ]
         },
         {
+            "name": "ffmpeg",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure --prefix=/app --disable-static --enable-shared --disable-doc --disable-debug --disable-ffplay --disable-network --disable-devices --disable-outdevs --disable-indevs --enable-libpulse --enable-outdev=pulse --disable-encoders --enable-encoder=png --enable-encoder=rawvideo --enable-encoder=pcm_s16le --disable-muxers --enable-muxer=image2 --enable-muxer=image2pipe --enable-muxer=rawvideo",
+                "make -j$(nproc)",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ffmpeg.org/releases/ffmpeg-8.1.2.tar.xz",
+                    "sha256": "464beb5e7bf0c311e68b45ae2f04e9cc2af88851abb4082231742a74d97b524c"
+                }
+            ]
+        },
+        {
             "name": "imageviewer",
             "buildsystem": "meson",
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/masatn1973/imageviewer.git",
-                    "branch": "main"
+                    "url": "https://github.com/masatn1973/ImageViewer.git",
+                    "branch": "video"
                 }
             ]
         }

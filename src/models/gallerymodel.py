@@ -22,6 +22,19 @@ from datetime import datetime
 from gi.repository import GObject, Gio, GLib
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp", ".tiff")
+VIDEO_EXTS = (".mp4", ".mov", ".webm", ".mkv", ".avi")
+MEDIA_EXTS = IMAGE_EXTS + VIDEO_EXTS
+
+
+def is_video_path(path):
+    """ファイルパスが動画かどうかを拡張子で判定する。
+
+    models/animation.py の is_gif_path と同じ考え方の、GTK非依存の純粋関数。
+    """
+    if not path:
+        return False
+
+    return path.lower().endswith(VIDEO_EXTS)
 
 
 class GalleryModel(GObject.Object):
@@ -89,7 +102,7 @@ class GalleryModel(GObject.Object):
 
             name = info.get_name()
 
-            if name.lower().endswith(IMAGE_EXTS):
+            if name.lower().endswith(MEDIA_EXTS):
                 files.append(folder.get_child(name))
 
         enumerator.close(None)

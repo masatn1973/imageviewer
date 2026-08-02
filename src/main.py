@@ -20,6 +20,21 @@
 import gettext
 import locale
 import sys
+import os
+import resource
+
+# その後、動画再生を Gtk.Video から ffmpeg 子プロセスを使う自前の
+# プレーヤー(FfmpegVideoPlayer)に切り替えたため、Gtk.Video/GStreamerは
+# もう使っていない。この対策自体が不要になっている可能性があるため、
+# 一旦無効化して動作を確認している。GTK全体の描画までソフトウェアに
+# 固定していたことが、動画のデコード/縮小と同時にCPUを圧迫し、
+# カクつきの一因になっていた可能性があるため。
+#
+# もしこれを外したことで再びクラッシュ等が起きるようなら、
+# 下の2行のコメントを外して元に戻してください。
+# os.environ.setdefault("GDK_DISABLE", "gl")
+# os.environ.setdefault("GSK_RENDERER", "cairo")
+
 import gi
 
 APP_ID = "io.github.masatn1973.ImageViewer"
@@ -36,9 +51,6 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Gdk, Gio, Adw
-
-
-import os
 
 
 def _find_gresource_path():

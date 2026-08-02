@@ -33,10 +33,115 @@
 from __future__ import annotations
 
 import hashlib
+import shutil
+import subprocess
 from collections import OrderedDict
 from pathlib import Path
 
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib
+
+from models.gallerymodel import is_video_path
+
+# ffmpeg 本体が見つかるかどうかは、モジュール読み込み時に一度だけ調べておく
+# (毎回 shutil.which を呼ぶのは無駄なため)。見つからない場合、動画の
+# サムネイル生成はすべて「失敗」として扱われ、既存の「壊れたファイル」
+# 表示にフォールバックする。
+_FFMPEG_PATH = shutil.which("ffmpeg")
+
+# ffmpeg が固まった場合に備えたタイムアウト(秒)。壊れた/特殊な動画ファイルに
+# 当たっても、ここで必ず諦めて次のファイルに進めるようにする。
+_FFMPEG_TIMEOUT_SEC = 10
+
+
+def _run_ffmpeg_frame(path: str, seek_seconds: float) -> bytes | None:
+    """ffmpeg を子プロセスとして起動し、指定位置のフレームをPNGとして
+    標準出力に吐かせる。失敗した場合(タイムアウト・非0終了・空出力)は
+    None を返す。
+
+    子プロセスとして完全に切り離して実行するので、ffmpeg内部で何か
+    リソースの後始末が甘い部分があったとしても、プロセスが終了した
+    時点でOSが確実にすべて回収してくれる。以前のGStreamerパイプライン
+    使い回し方式で解決できなかった、原因不明のファイルディスクリプタ
+    リークを構造的に避けられる。
+
+    動画の回転メタデータ(スマホの縦撮り動画など)は ffmpeg が復号時に
+    自動で反映してくれるため、ここで自前の回転補正は行っていない。
+    """
+    if _FFMPEG_PATH is None:
+        return None
+
+    cmd = [
+        _FFMPEG_PATH,
+        "-y",
+        "-v", "error",
+        "-ss", str(seek_seconds),
+        "-i", path,
+        # 複数の動画ストリームを持つファイル(Googleカメラの
+        # 「モーションフォト」等)で、ffmpegの自動選択が意図しない方
+        # (静止画に近い/フレーム数が極端に少ない方など)を選んで
+        # しまうことがあるため、常に「最初の動画ストリーム」を
+        # 明示的に指定する。
+        "-map", "0:v:0",
+        "-frames:v", "1",
+        "-f", "image2pipe",
+        "-vcodec", "png",
+        "-",
+    ]
+
+    try:
+        result = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=_FFMPEG_TIMEOUT_SEC,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+
+    if result.returncode != 0 or not result.stdout:
+        return None
+
+    return result.stdout
+
+
+def _extract_video_frame(path: str) -> GdkPixbuf.Pixbuf | None:
+    """動画ファイルの代表フレームを GdkPixbuf として取り出す(ffmpeg経由)。
+
+    失敗した場合は None を返す。呼び出し側はこれを「サムネイル生成失敗」
+    として扱い、画像と同じ「壊れたファイル」表示にフォールバックできる。
+    """
+    # 動画の先頭フレームは真っ暗(フェードイン等)なことが多いため、
+    # まず少しだけ進めた位置を狙う。動画が短くてシークに失敗した場合は
+    # 先頭(0秒)から取り直す。
+    png_bytes = _run_ffmpeg_frame(path, seek_seconds=1)
+
+    if png_bytes is None:
+        png_bytes = _run_ffmpeg_frame(path, seek_seconds=0)
+
+    if png_bytes is None:
+        return None
+
+    try:
+        loader = GdkPixbuf.PixbufLoader()
+        loader.write(png_bytes)
+        loader.close()
+        return loader.get_pixbuf()
+    except GLib.Error:
+        return None
+
+
+def _scale_to_fit(pixbuf: GdkPixbuf.Pixbuf, size: int) -> GdkPixbuf.Pixbuf:
+    width = pixbuf.get_width()
+    height = pixbuf.get_height()
+
+    if width <= 0 or height <= 0:
+        return pixbuf
+
+    scale = min(size / width, size / height)
+    new_width = max(1, round(width * scale))
+    new_height = max(1, round(height * scale))
+
+    return pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
 
 
 def format_size(num_bytes: int) -> str:
@@ -126,7 +231,86 @@ class ThumbnailCache:
                 self._store_in_memory(key, texture)
                 return texture
 
-        texture = self._generate_texture(gfile, size, disk_path)
+        if is_video_path(gfile.get_path()):
+            _key, pixbuf = self.generate_video_pixbuf(gfile, size)
+            texture = self.store_pixbuf_texture(key, pixbuf)
+        else:
+            texture = self._generate_texture(gfile, size, disk_path)
+            self._store_in_memory(key, texture)
+
+        return texture
+
+    def get_cached_texture(self, gfile: Gio.File, size: int) -> Gdk.Texture | None:
+        """メモリ/ディスクキャッシュに既にあれば Gdk.Texture を返す。
+
+        get_texture() と違い、無かった場合に新規生成は行わず None を返す。
+        動画のように生成コストが高いものについて、実際にデコードする前に
+        「もうキャッシュにあるかどうか」だけを(メインスレッドから)
+        安全に確認したいときに使う。
+        """
+        key = self._cache_key(gfile, size)
+
+        texture = self._get_from_memory(key)
+        if texture is not None:
+            return texture
+
+        disk_path = self._disk_path(key)
+        if disk_path.exists():
+            texture = self._try_load_disk_cache(disk_path)
+            if texture is not None:
+                self._store_in_memory(key, texture)
+                return texture
+
+        return None
+
+    def generate_video_pixbuf(
+        self, gfile: Gio.File, size: int
+    ) -> tuple[str, GdkPixbuf.Pixbuf]:
+        """動画ファイルから代表フレームを取り出し、ディスクキャッシュにも
+        保存する。戻り値はキャッシュキーと GdkPixbuf.Pixbuf。
+
+        意図的に Gdk.Texture は作らない。Gdk.Texture の生成はGPU側の
+        リソースに触れる可能性があり、メインスレッド以外から呼ぶと
+        (特にVulkanレンダラー使用時などに)クラッシュの原因になり得る
+        ため、このメソッドはバックグラウンドスレッドから呼んでもよい
+        ように、GdkPixbuf(単なる画素データ)を返すところまでに留めている。
+        Gdk.Texture への変換は必ずメインスレッドで store_pixbuf_texture()
+        を使って行うこと。
+
+        画像の _generate_texture と同じく、失敗時は例外をそのまま
+        呼び出し元(GalleryController)に投げる。
+        呼び出し元はそれを「壊れたファイル」として扱う。
+        """
+        path = gfile.get_path()
+
+        if path is None:
+            raise RuntimeError("Cannot generate a video thumbnail without a local path")
+
+        pixbuf = _extract_video_frame(path)
+
+        if pixbuf is None:
+            raise RuntimeError(f"Failed to extract a frame from video: {path}")
+
+        pixbuf = _scale_to_fit(pixbuf, size)
+
+        key = self._cache_key(gfile, size)
+        disk_path = self._disk_path(key)
+
+        try:
+            pixbuf.savev(str(disk_path), "png", [], [])
+        except GLib.Error as e:
+            # ディスク保存に失敗してもメモリ上では使えるので致命的エラーにはしない
+            print(f"[ThumbnailCache] 動画サムネイルのディスクキャッシュ保存に失敗: {e}")
+
+        return key, pixbuf
+
+    def store_pixbuf_texture(self, key: str, pixbuf: GdkPixbuf.Pixbuf) -> Gdk.Texture:
+        """GdkPixbuf.Pixbuf から Gdk.Texture を作り、メモリキャッシュに
+        格納して返す。
+
+        Gdk.Texture の生成を行うため、必ずメインスレッドから呼ぶこと。
+        """
+        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
         self._store_in_memory(key, texture)
         return texture
 

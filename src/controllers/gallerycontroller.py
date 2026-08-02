@@ -20,9 +20,11 @@
 from gettext import gettext as _, ngettext
 
 import random
+import threading
 
 from gi.repository import Gdk, Gtk, Gio, GLib
 
+from models.gallerymodel import is_video_path
 from models.searchfilter import matches_filename
 from models.thumbnailcache import ThumbnailCache
 
@@ -46,6 +48,12 @@ class GalleryController:
 
         self.failed_files = []
         self._broken_paintable = None
+
+        # フォルダ再読込やサムネイルサイズ変更が起きたときに、その前に
+        # 走らせていた動画サムネイル生成スレッドの結果を無視するための
+        # カウンタ。スレッド開始時点の値を覚えておき、完了時に現在の値と
+        # 比較する。値が変わっていれば「もう不要になった結果」として捨てる。
+        self._load_generation = 0
 
         self.thumbnail_cache = ThumbnailCache()
 
@@ -89,6 +97,8 @@ class GalleryController:
         if self.thumbnail_idle_id is not None:
             GLib.source_remove(self.thumbnail_idle_id)
             self.thumbnail_idle_id = None
+
+        self._load_generation += 1
 
         self.view.clear_thumbnails()
 
@@ -175,14 +185,109 @@ class GalleryController:
             return False
 
         gfile = self.pending_files.pop(0)
-        broken = False
+        size = self.view.thumbnail_size
 
+        if is_video_path(gfile.get_path()):
+            # すでにキャッシュ(メモリ/ディスク)にあるかどうかは軽い処理
+            # なので、まずメインスレッドのまま確認する。無い場合だけ、
+            # 重い処理(GStreamerでのフレーム取り出し)をバックグラウンド
+            # スレッドに任せる。
+            cached = self.thumbnail_cache.get_cached_texture(gfile, size)
+
+            if cached is None:
+                self.thumbnail_idle_id = None
+
+                generation = self._load_generation
+                threading.Thread(
+                    target=self._generate_video_pixbuf_in_thread,
+                    args=(gfile, size, generation),
+                    daemon=True,
+                ).start()
+
+                return False
+
+            self._finish_thumbnail_load(gfile, cached, False)
+
+        else:
+            paintable, broken = self._generate_texture_sync(gfile, size)
+            self._finish_thumbnail_load(gfile, paintable, broken)
+
+        if not self.pending_files:
+            self.thumbnail_idle_id = None
+            self.select_target = None
+            self._report_failures()
+
+            return False
+
+        return True
+
+    def _generate_texture_sync(self, gfile, size):
+        """画像用。呼び出し元のスレッド(=メインスレッド)でそのまま実行する。"""
         try:
-            size = self.view.thumbnail_size
-            paintable = self.thumbnail_cache.get_texture(gfile, size)
+            return self.thumbnail_cache.get_texture(gfile, size), False
 
         except Exception:
             self.failed_files.append(gfile.get_basename())
+            return None, True
+
+    def _generate_video_pixbuf_in_thread(self, gfile, size, generation):
+        """動画用。ワーカースレッドで実行される。
+
+        GTK/Gdk のウィジェット操作や Gdk.Texture の生成はここでは
+        絶対に行わない。Gdk.Texture の生成はGPU側のリソースに触れる
+        可能性があり、メインスレッド以外から行うと(特にVulkanレンダラー
+        使用時などに)アプリがクラッシュする原因になり得るため。
+        ここでは GdkPixbuf.Pixbuf(単なる画素データ)を作るところまでに
+        留め、Gdk.Texture への変換はメインスレッド側
+        (_on_video_pixbuf_ready)で行う。
+        """
+        try:
+            key, pixbuf = self.thumbnail_cache.generate_video_pixbuf(gfile, size)
+            broken = False
+
+        except Exception:
+            key, pixbuf = None, None
+            broken = True
+
+        GLib.idle_add(
+            self._on_video_pixbuf_ready, gfile, key, pixbuf, broken, generation
+        )
+
+    def _on_video_pixbuf_ready(self, gfile, key, pixbuf, broken, generation):
+        """バックグラウンドスレッドの結果を、メインスレッド側で受け取る。
+
+        Gdk.Texture への変換(GPUリソースに触れうる処理)は、必ずここ
+        (メインスレッド)で行う。
+        """
+        if generation != self._load_generation:
+            # フォルダの再読込やサムネイルサイズ変更が先に起きていて、
+            # この結果はもう使わない(古い一覧のもの)ので何もしない。
+            return False
+
+        if broken or pixbuf is None:
+            self.failed_files.append(gfile.get_basename())
+            paintable = None
+
+        else:
+            paintable = self.thumbnail_cache.store_pixbuf_texture(key, pixbuf)
+
+        self._finish_thumbnail_load(gfile, paintable, broken)
+
+        if self.pending_files:
+            if self.thumbnail_idle_id is None:
+                self.thumbnail_idle_id = GLib.idle_add(self._load_next_thumbnail)
+        else:
+            self.thumbnail_idle_id = None
+            self.select_target = None
+            self._report_failures()
+
+        return False  # GLib.idle_add: 一度実行したら解除する
+
+    def _finish_thumbnail_load(self, gfile, paintable, broken):
+        """生成されたテクスチャ(または失敗時のフォールバック)を
+        ギャラリーに追加する。必ずメインスレッドから呼ぶこと。
+        """
+        if broken or paintable is None:
             paintable = self._broken_image_pixbuf()
             broken = True
 
@@ -202,15 +307,6 @@ class GalleryController:
 
         self.loaded_count += 1
         self.view.set_status(f"{self.loaded_count} " + _("image(s) read."))
-
-        if not self.pending_files:
-            self.thumbnail_idle_id = None
-            self.select_target = None
-            self._report_failures()
-
-            return False
-
-        return True
 
     def _on_thumbnail_drag_prepare(self, source, x, y, gfile):
         file_list = Gdk.FileList.new_from_array([gfile])
@@ -335,7 +431,20 @@ class GalleryController:
             self._apply_shuffle()
 
         self.view.viewer.set_slideshow_mode(True)
+
+        # フルスクリーンへの切り替えを先に要求する。fullscreen() は
+        # ウィンドウマネージャ側の処理を伴う非同期的な操作なので、
+        # 呼び出した直後はまだウィンドウサイズが反映されていないことが
+        # ある。ここで先に要求だけ出しておく。
         self.view.viewer.controller.enter_fullscreen()
+
+        # 画像を開き直すのは、次のアイドルタイミング(=フルスクリーン
+        # 化がひと段落したあと)まで待ってから行う。先に画像を開いて
+        # しまうと、まだウィンドウが小さいうちに縮小デコードが行われ、
+        # フルスクリーンになった瞬間に引き伸ばされて(異常に拡大されて)
+        # 見えることがあるため。これは動画の自動再生や、画像の
+        # スライドショー用縮小デコードを正しいサイズで行うためでもある。
+        GLib.idle_add(self.view.viewer.controller.show_current_image)
 
         interval = self.view.settings.get_uint("slideshow-interval")
         self.slideshow_id = GLib.timeout_add(interval * 1000, self._slideshow_next)
@@ -353,7 +462,8 @@ class GalleryController:
         shuffled = list(self.model.image_files)
         random.shuffle(shuffled)
         self.view.viewer.set_image_files(shuffled, preserve_current=False)
-        self.view.viewer.controller.show_current_image()
+        # 実際に表示を開き直すのは _start_slideshow 側でまとめて行う
+        # (slideshow_mode を True にしたあとに1回だけ開けば十分なため)
 
     def _slideshow_next(self):
         if not self.model.image_files:

@@ -33,6 +33,7 @@ install_data([
   'models/geometry.py',
   'models/searchfilter.py',
   'models/thumbnailcache.py',
+  'models/videoplayer.py',
 ], install_dir: '/app/share/imageviewer/models')
 
 install_data([
