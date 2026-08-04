@@ -29,9 +29,10 @@ from models.thumbnailcache import format_size
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/preferences.ui")
-class PreferencesWindow(Adw.PreferencesWindow):
-    __gtype_name__ = "PreferencesWindow"
+class PreferencesDialog(Adw.PreferencesDialog):
+    __gtype_name__ = "PreferencesDialog"
 
+    adjustment = Gtk.Template.Child()
     interval_row = Gtk.Template.Child()
     shuffle_row = Gtk.Template.Child()
     cache_row = Gtk.Template.Child()
@@ -40,21 +41,16 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def __init__(self, parent):
         super().__init__()
 
-        self.set_transient_for(parent)
         self.parent_window = parent
 
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
-        adjustment = Gtk.Adjustment(
-            value=self.settings.get_uint("slideshow-interval"),
-            lower=1,
-            upper=60,
-            step_increment=1,
+        self.settings.bind(
+            "slideshow-interval",
+            self.adjustment,
+            "value",
+            Gio.SettingsBindFlags.DEFAULT,
         )
-
-        self.interval_row.set_adjustment(adjustment)
-
-        adjustment.connect("value-changed", self.on_interval_changed)
 
         self.settings.bind(
             "shuffle-enabled",
@@ -65,9 +61,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
         self.clear_cache_button.connect("clicked", self.on_clear_cache_clicked)
         self._update_cache_subtitle()
-
-    def on_interval_changed(self, adjustment):
-        self.settings.set_uint("slideshow-interval", int(adjustment.get_value()))
 
     # --- サムネイルキャッシュ ---------------------------------------------------
     def _update_cache_subtitle(self):
@@ -84,7 +77,5 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
         self._update_cache_subtitle()
         self.parent_window.show_toast(
-            _("Thumbnail cache cleared ({size}).").format(
-                size=format_size(freed_bytes)
-            )
+            _("Thumbnail cache cleared ({size}).").format(size=format_size(freed_bytes))
         )

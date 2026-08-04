@@ -65,7 +65,7 @@ resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
 resource._register()
 
 from window import ImageViewerWindow
-from preferences import PreferencesWindow
+from preferences import PreferencesDialog
 
 
 class ImageviewerApplication(Adw.Application):
@@ -123,8 +123,8 @@ class ImageviewerApplication(Adw.Application):
         about.present(self.get_active_window())
 
     def on_preferences(self, action, param):
-        prefs = PreferencesWindow(self.get_active_window())
-        prefs.present()
+        prefs = PreferencesDialog(self.get_active_window())
+        prefs.present(self.get_active_window())
 
     def on_shortcuts(self, action, param):
         builder = Gtk.Builder.new_from_resource(

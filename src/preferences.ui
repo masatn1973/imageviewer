@@ -2,8 +2,14 @@
 <interface domain="io.github.masatn1973.ImageViewer">
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
-  <template class="PreferencesWindow"
-   parent="AdwPreferencesWindow">
+  <object class="GtkAdjustment" id="adjustment">
+    <property name="lower">1</property>
+    <property name="upper">60</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <template class="PreferencesDialog"
+   parent="AdwPreferencesDialog">
     <property name="title" translatable="yes">Preferences</property>
     <child>
       <object class="AdwPreferencesPage">
@@ -14,6 +20,7 @@
               <object class="AdwSpinRow" id="interval_row">
                 <property name="title" translatable="yes">Interval</property>
                 <property name="subtitle" translatable="yes">Seconds between slides.</property>
+                <property name="adjustment">adjustment</property>
               </object>
             </child>
             <child>
