@@ -59,9 +59,6 @@ def _find_gresource_path():
 
 
 resource = Gio.Resource.load(_find_gresource_path())
-"""
-resource = Gio.Resource.load("/app/share/imageviewer/imageviewer.gresource")
-"""
 resource._register()
 
 from window import ImageViewerWindow
