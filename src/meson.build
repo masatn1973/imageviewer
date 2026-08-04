@@ -20,7 +20,6 @@ install_data([
   'window.py',
   'viewer.py',
   'imagecanvas.py',
-  'shortcuts.py',
   'preferences.py',
 ], install_dir: '/app/share/imageviewer')
 
