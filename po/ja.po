@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.masatn1973.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-26 22:30+0900\n"
-"PO-Revision-Date: 2026-07-26 23:26+0900\n"
+"POT-Creation-Date: 2026-08-14 21:03+0900\n"
+"PO-Revision-Date: 2026-08-14 21:07+0900\n"
 "Last-Translator: masatn <masatn1973@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Slideshow slideshow-interval"
 msgstr "スライドショー スライドショーの間隔"
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:16
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:22
 msgid "Seconds between slides."
 msgstr "スライド間の間隔(秒)"
 
@@ -46,7 +46,7 @@ msgstr "スライド間の間隔(秒)"
 msgid "Shuffle enabled"
 msgstr "ランダム再生の有効"
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:14 src/preferences.ui:22
+#: data/io.github.masatn1973.ImageViewer.gschema.xml:14 src/preferences.ui:29
 msgid "Play slides in random order."
 msgstr "スライドをランダムに再生します"
 
@@ -172,17 +172,18 @@ msgstr "最初のリリース"
 msgid "Folder-orientad thumbnail image browser"
 msgstr "フォルダー別サムネイル画像ビューアー"
 
-#: src/controllers/gallerycontroller.py:204
-msgid "image(s) read."
-msgstr "枚の画像を読み込みました"
+#: src/controllers/gallerycontroller.py:206
+msgid "image read."
+msgid_plural "images read."
+msgstr[0] "枚の画像を読み込みました"
 
-#: src/controllers/gallerycontroller.py:227
+#: src/controllers/gallerycontroller.py:230
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
 msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
 
-#: src/controllers/gallerycontroller.py:261
+#: src/controllers/gallerycontroller.py:264
 msgid "Failed to open folder."
 msgstr "フォルダを開けませんでした"
 
@@ -191,44 +192,44 @@ msgstr "フォルダを開けませんでした"
 msgid "Failed to open {filename}"
 msgstr "{filename} を開けませんでした"
 
-#: src/preferences.py:87
+#: src/preferences.py:80
 #, python-brace-format
 msgid "Thumbnail cache cleared ({size})."
 msgstr "サムネイルのキャッシュをクリアしました ({size})"
 
-#: src/preferences.ui:7 src/shortcuts.ui:176 src/window.ui:191
+#: src/preferences.ui:13 src/shortcuts.ui:176 src/window.ui:191
 msgid "Preferences"
 msgstr "設定"
 
-#: src/preferences.ui:12
+#: src/preferences.ui:18
 msgid "Slideshow"
 msgstr "スライドショー"
 
-#: src/preferences.ui:15
+#: src/preferences.ui:21
 msgid "Interval"
 msgstr "間隔"
 
-#: src/preferences.ui:21
+#: src/preferences.ui:28
 msgid "Shuffle"
 msgstr "ランダム再生"
 
-#: src/preferences.ui:29
+#: src/preferences.ui:36
 msgid "Thumbnails"
 msgstr "サムネイル"
 
-#: src/preferences.ui:32
+#: src/preferences.ui:39
 msgid "Thumbnail Cache"
 msgstr "サムネイルのキャッシュ"
 
-#: src/preferences.ui:33
+#: src/preferences.ui:40
 msgid "Calculating…"
 msgstr "計算中..."
 
-#: src/preferences.ui:36
+#: src/preferences.ui:43
 msgid "Clear"
 msgstr "クリア"
 
-#: src/preferences.ui:39
+#: src/preferences.ui:46
 msgid "Delete all cached thumbnails from disk."
 msgstr "ディスク上の全てのキャッシュをクリアします"
 

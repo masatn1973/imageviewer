@@ -201,7 +201,10 @@ class GalleryController:
         )
 
         self.loaded_count += 1
-        self.view.set_status(f"{self.loaded_count} " + _("image(s) read."))
+        self.view.set_status(
+            f"{self.loaded_count} "
+            + ngettext(f"image read.", f"images read.", self.loaded_count)
+        )
 
         if not self.pending_files:
             self.thumbnail_idle_id = None
