@@ -78,7 +78,7 @@ class ImageviewerApplication(Adw.Application):
         open_action = Gio.SimpleAction.new("open", None)
         open_action.connect("activate", self.on_open)
         self.add_action(open_action)
-        self.set_accels_for_action("app.open", ["<primary>O"])
+        self.set_accels_for_action("app.open", ["<primary>o"])
 
         prefs_action = Gio.SimpleAction.new("preferences", None)
         prefs_action.connect("activate", self.on_preferences)
@@ -98,7 +98,7 @@ class ImageviewerApplication(Adw.Application):
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", lambda *_: self.quit())
         self.add_action(quit_action)
-        self.set_accels_for_action("app.quit", ["<primary>Q"])
+        self.set_accels_for_action("app.quit", ["<primary>q"])
 
     def _ensure_css_loaded(self):
         if getattr(self, "_css_loaded", False):

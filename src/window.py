@@ -123,12 +123,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.slideshow_action.connect("activate", self.controller.on_slideshow)
         self.slideshow_action.set_enabled(False)
         self.add_action(self.slideshow_action)
-        app.set_accels_for_action("win.slideshow", ["<Ctrl>s"])
+        app.set_accels_for_action("win.slideshow", ["<primary>s"])
 
         self.search_action = Gio.SimpleAction.new("toggle-search", None)
         self.search_action.connect("activate", lambda a, p: self.toggle_search_bar())
         self.add_action(self.search_action)
-        app.set_accels_for_action("win.toggle-search", ["<Ctrl>f"])
+        app.set_accels_for_action("win.toggle-search", ["<primary>f"])
 
     # --- main.py から呼ばれる公開API ---------------------------------------------
     def on_open(self, action, param):
