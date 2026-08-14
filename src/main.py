@@ -78,7 +78,7 @@ class ImageviewerApplication(Adw.Application):
         open_action = Gio.SimpleAction.new("open", None)
         open_action.connect("activate", self.on_open)
         self.add_action(open_action)
-        self.set_accels_for_action("app.open", ["<Ctrl>O"])
+        self.set_accels_for_action("app.open", ["<primary>O"])
 
         prefs_action = Gio.SimpleAction.new("preferences", None)
         prefs_action.connect("activate", self.on_preferences)
@@ -98,7 +98,7 @@ class ImageviewerApplication(Adw.Application):
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", lambda *_: self.quit())
         self.add_action(quit_action)
-        self.set_accels_for_action("app.quit", ["<Ctrl>Q"])
+        self.set_accels_for_action("app.quit", ["<primary>Q"])
 
     def _ensure_css_loaded(self):
         if getattr(self, "_css_loaded", False):
@@ -117,18 +117,18 @@ class ImageviewerApplication(Adw.Application):
         )
 
         about = builder.get_object("about")
-        about.present(self.get_active_window())
+        about.present(self.props.active_window)
 
     def on_preferences(self, action, param):
-        prefs = PreferencesDialog(self.get_active_window())
-        prefs.present(self.get_active_window())
+        prefs = PreferencesDialog(self.props.active_window)
+        prefs.present(self.props.active_window)
 
     def on_shortcuts(self, action, param):
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/shortcuts.ui"
         )
         shortcuts = builder.get_object("shortcuts")
-        shortcuts.present(self.get_active_window())
+        shortcuts.present(self.props.active_window)
 
     def on_open(self, action, param):
         win = self.props.active_window
@@ -144,7 +144,7 @@ class ImageviewerApplication(Adw.Application):
 
     def do_activate(self):
         self._ensure_css_loaded()
-        self.win = self.get_active_window()
+        self.win = self.props.active_window
         if not self.win:
             self.win = ImageViewerWindow(self)
 
@@ -152,7 +152,7 @@ class ImageviewerApplication(Adw.Application):
 
     def do_open(self, files, n_files, hint):
         self._ensure_css_loaded()
-        self.win = self.get_active_window()
+        self.win = self.props.active_window
         if not self.win:
             self.win = ImageViewerWindow(self)
 
@@ -160,31 +160,12 @@ class ImageviewerApplication(Adw.Application):
         self.win.open_path(gfile)
         self.win.present()
 
-    def create_action(self, name, callback, shortcuts=None):
-        """Add an application action.
 
-        Args:
-            name: the name of the action
-            callback: the function to be called when the action is
-              activated
-            shortcuts: an optional list of accelerators
-        """
-        action = Gio.SimpleAction.new(name, None)
-
-        if callback is not None:
-            action.connect("activate", callback)
-
-        self.add_action(action)
-
-        if shortcuts:
-            self.set_accels_for_action(f"app.{name}", shortcuts)
-
-
-def main(version):
+def main():
     """The application's entry point."""
     app = ImageviewerApplication()
-    return app.run(sys.argv)
+    app.run(sys.argv)
 
 
 if __name__ == "__main__":
-    sys.exit(main(None))
+    sys.exit(main())
