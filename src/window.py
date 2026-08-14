@@ -246,7 +246,6 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.settings.set_int("window-height", self.get_height())
         self.settings.set_boolean("window-maximized", self.is_maximized())
 
-        self.clear_thumbnails()
         self.model.stop_monitor()
 
         return False
