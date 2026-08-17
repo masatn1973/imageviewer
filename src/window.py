@@ -92,6 +92,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         action = Gio.SimpleAction.new("sort-name", None)
         action.connect("activate", lambda a, p: self.controller.set_sort_mode("name"))
         self.add_action(action)
+        app.set_accels_for_action("win.sort('name')", ["<primary>n"])
 
         action = Gio.SimpleAction.new("sort-name-desc", None)
         action.connect(
@@ -99,10 +100,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             lambda a, p: self.controller.set_sort_mode("name", reverse=True),
         )
         self.add_action(action)
+        app.set_accels_for_action("win.sort('name-desc')", ["<primary><shift>n"])
 
         action = Gio.SimpleAction.new("sort-date", None)
         action.connect("activate", lambda a, p: self.controller.set_sort_mode("date"))
         self.add_action(action)
+        app.set_accels_for_action("win.sort('date')", ["<primary>d"])
 
         action = Gio.SimpleAction.new("sort-date-desc", None)
         action.connect(
@@ -110,6 +113,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             lambda a, p: self.controller.set_sort_mode("date", reverse=True),
         )
         self.add_action(action)
+        app.set_accels_for_action("win.sort('date-desc')", ["<primary><shift>d"])
 
         self.reload_action = Gio.SimpleAction.new("reload", None)
         self.reload_action.connect(
