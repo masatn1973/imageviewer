@@ -18,13 +18,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import gi
 
-from gettext import gettext as _
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Adw, Gio
-from gi.repository import GLib
+from gi.repository import Gdk, GLib, Gtk, Adw, Gio
 
 from viewer import ImageViewerDialog
 from models.gallerymodel import GalleryModel
@@ -44,12 +42,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     flowbox = Gtk.Template.Child()
     status_label = Gtk.Template.Child()
-    scrolled_window = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
-    search_button = Gtk.Template.Child()
     search_bar = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
-    thumbnail_size_scale = Gtk.Template.Child()
     thumbnail_size_adjustment = Gtk.Template.Child()
 
     def __init__(self, app):
@@ -89,30 +84,12 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         self.sort_action.connect("change-state", self.controller.on_sort_changed)
         self.add_action(self.sort_action)
 
-        action = Gio.SimpleAction.new("sort-name", None)
-        action.connect("activate", lambda a, p: self.controller.set_sort_mode("name"))
-        self.add_action(action)
         app.set_accels_for_action("win.sort('name')", ["<primary>n"])
 
-        action = Gio.SimpleAction.new("sort-name-desc", None)
-        action.connect(
-            "activate",
-            lambda a, p: self.controller.set_sort_mode("name", reverse=True),
-        )
-        self.add_action(action)
         app.set_accels_for_action("win.sort('name-desc')", ["<primary><shift>n"])
 
-        action = Gio.SimpleAction.new("sort-date", None)
-        action.connect("activate", lambda a, p: self.controller.set_sort_mode("date"))
-        self.add_action(action)
         app.set_accels_for_action("win.sort('date')", ["<primary>d"])
 
-        action = Gio.SimpleAction.new("sort-date-desc", None)
-        action.connect(
-            "activate",
-            lambda a, p: self.controller.set_sort_mode("date", reverse=True),
-        )
-        self.add_action(action)
         app.set_accels_for_action("win.sort('date-desc')", ["<primary><shift>d"])
 
         self.reload_action = Gio.SimpleAction.new("reload", None)
@@ -140,6 +117,9 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     def on_slideshow(self, action, param):
         self.controller.on_slideshow(action, param)
+
+    def open_path(self, gfile):
+        self.controller.open_path(gfile)
 
     def toggle_search_bar(self):
         is_active = self.search_bar.get_search_mode()
@@ -205,11 +185,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         filename = gfile.get_basename()
 
-        if gfile in image_files:
+        try:
             index = image_files.index(gfile)
             self.status_label.set_text(f"{index + 1}/{len(image_files)} : {filename}")
 
-        else:
+        except ValueError:
             self.status_label.set_text(filename)
 
     # --- View: ビューアーダイアログの開閉 -----------------------------------------
@@ -218,17 +198,22 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.viewer.close()
             self.viewer = None
 
+        try:
+            start_index = image_files.index(gfile)
+        except ValueError:
+            start_index = 0
+
         viewer = ImageViewerDialog(
             self,
             image_files,
-            image_files.index(gfile) if gfile in image_files else 0,
+            start_index,
         )
         viewer.connect("close-request", self.on_viewer_close)
         viewer.present()
 
         self.viewer = viewer
 
-    def open_selected_image(self, image_files):
+    def open_selected_image(self, image_files: list):
         selected = self.flowbox.get_selected_children()
 
         if not selected:
@@ -245,22 +230,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         return False
 
     # --- ウィンドウ終了時の後始末 ------------------------------------------------
-    def on_close_request(self, *args):
-        self.settings.set_int("window-width", self.get_width())
-        self.settings.set_int("window-height", self.get_height())
+    def on_close_request(self, *args) -> bool:
+        if not self.is_maximized():
+            self.settings.set_int("window-width", self.get_width())
+            self.settings.set_int("window-height", self.get_height())
+
         self.settings.set_boolean("window-maximized", self.is_maximized())
 
         self.model.stop_monitor()
 
         return False
 
-    def open_path(self, gfile):
-        self.controller.open_path(gfile)
-
-    def show_toast(self, message):
+    def show_toast(self, message: str):
         toast = Adw.Toast.new(message)
         toast.set_timeout(4)
         self.toast_overlay.add_toast(toast)
 
-    def show_error(self, message):
+    def show_error(self, message: str):
         self.show_toast(message)

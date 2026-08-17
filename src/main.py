@@ -19,7 +19,9 @@
 
 import gettext
 import locale
+import os
 import sys
+
 import gi
 
 APP_ID = "io.github.masatn1973.ImageViewer"
@@ -30,15 +32,11 @@ locale.textdomain(APP_ID)
 gettext.bindtextdomain(APP_ID, "/app/share/locale")
 gettext.textdomain(APP_ID)
 
-from gettext import gettext as _
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Gdk, Gio, Adw
-
-
-import os
 
 
 def _find_gresource_path():
@@ -53,8 +51,8 @@ def _find_gresource_path():
         return local_path
 
     raise FileNotFoundError(
-        f"Not found imageviewer.gresource"
-        f"build using 'meson compile -C build' when run on local"
+        f"Not found imageviewer.gresource. "
+        f"build using 'meson compile -C build' when run on local."
     )
 
 
@@ -65,7 +63,7 @@ from window import ImageViewerWindow
 from preferences import PreferencesDialog
 
 
-class ImageviewerApplication(Adw.Application):
+class ImageViewerApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
@@ -75,43 +73,34 @@ class ImageviewerApplication(Adw.Application):
             resource_base_path="/io/github/masatn1973/ImageViewer",
         )
 
-        open_action = Gio.SimpleAction.new("open", None)
-        open_action.connect("activate", self.on_open)
-        self.add_action(open_action)
-        self.set_accels_for_action("app.open", ["<primary>o"])
+    def do_startup(self):
+        Adw.Application.do_startup(self)
 
-        prefs_action = Gio.SimpleAction.new("preferences", None)
-        prefs_action.connect("activate", self.on_preferences)
-        self.add_action(prefs_action)
-        self.set_accels_for_action("app.preferences", ["<primary>p"])
-
-        shortcuts_action = Gio.SimpleAction.new("shortcuts", None)
-        shortcuts_action.connect("activate", self.on_shortcuts)
-        self.add_action(shortcuts_action)
-        self.set_accels_for_action("app.shortcuts", ["<primary>question"])
-
-        about_action = Gio.SimpleAction.new("about", None)
-        about_action.connect("activate", self.on_about)
-        self.add_action(about_action)
-        self.set_accels_for_action("app.about", ["<primary>a"])
-
-        quit_action = Gio.SimpleAction.new("quit", None)
-        quit_action.connect("activate", lambda *_: self.quit())
-        self.add_action(quit_action)
-        self.set_accels_for_action("app.quit", ["<primary>q"])
-
-    def _ensure_css_loaded(self):
-        if getattr(self, "_css_loaded", False):
-            return
+        self._add_action("open", self._on_open, ["<primary>o"])
+        self._add_action("preferences", self._on_preferences,
+            ["<primary>p"])
+        self._add_action("shortcuts", self._on_shortcuts,
+            ["<primary>question"])
+        self._add_action("about", self._on_about, ["<primary>a"])
+        self._add_action("quit", lambda *_: self.quit(),
+            ["<primary>q"])
 
         css = Gtk.CssProvider()
         css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-        self._css_loaded = True
 
-    def on_about(self, action, param):
+    def _add_action(self, name, callback, accels=None):
+        action = Gio.SimpleAction.new(name, None)
+        action.connect("activate", callback)
+        self.add_action(action)
+        if accels:
+            self.set_accels_for_action(f"app.{name}", accels)
+
+        return action
+
+    def _on_about(self, action, param):
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/about.ui"
         )
@@ -119,18 +108,18 @@ class ImageviewerApplication(Adw.Application):
         about = builder.get_object("about")
         about.present(self.props.active_window)
 
-    def on_preferences(self, action, param):
+    def _on_preferences(self, action, param):
         prefs = PreferencesDialog(self.props.active_window)
         prefs.present(self.props.active_window)
 
-    def on_shortcuts(self, action, param):
+    def _on_shortcuts(self, action, param):
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/shortcuts.ui"
         )
         shortcuts = builder.get_object("shortcuts")
         shortcuts.present(self.props.active_window)
 
-    def on_open(self, action, param):
+    def _on_open(self, action, param):
         win = self.props.active_window
 
         if win:
@@ -143,28 +132,26 @@ class ImageviewerApplication(Adw.Application):
             win.on_slideshow(action, param)
 
     def do_activate(self):
-        self._ensure_css_loaded()
-        self.win = self.props.active_window
-        if not self.win:
-            self.win = ImageViewerWindow(self)
-
-        self.win.present()
+        win = self._get_or_create_window()
+        win.present()
 
     def do_open(self, files, n_files, hint):
-        self._ensure_css_loaded()
-        self.win = self.props.active_window
-        if not self.win:
-            self.win = ImageViewerWindow(self)
+        win = self._get_or_create_window()
 
         gfile = files[0]
-        self.win.open_path(gfile)
-        self.win.present()
+        win.open_path(gfile)
+        win.present()
 
+    def _get_or_create_window(self):
+        win = self.props.active_window
+        if not win:
+            win = ImageViewerWindow(self)
 
+        return win
 def main():
     """The application's entry point."""
-    app = ImageviewerApplication()
-    app.run(sys.argv)
+    app = ImageViewerApplication()
+    return app.run(sys.argv)
 
 
 if __name__ == "__main__":
