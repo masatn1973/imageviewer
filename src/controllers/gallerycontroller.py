@@ -203,7 +203,7 @@ class GalleryController:
         self.loaded_count += 1
         self.view.set_status(
             f"{self.loaded_count} "
-            + ngettext(f"image read.", f"images read.", self.loaded_count)
+            + ngettext("image read.", "images read.", self.loaded_count)
         )
 
         if not self.pending_files:
