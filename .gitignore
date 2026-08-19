@@ -8,3 +8,4 @@ repo/
 *.log
 __pycache__
 *.pdf
+*.sh
