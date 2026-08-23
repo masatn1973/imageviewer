@@ -24,6 +24,7 @@ def _install_fake_gi():
     fake_repository = types.ModuleType("gi.repository")
 
     for name in (
+        "cairo",
         "Gtk",
         "Gdk",
         "GLib",
@@ -58,7 +59,7 @@ def _install_fake_gtk_template(fake_repository):
     別の MagicMock になってしまう。つまり
 
         @Gtk.Template(resource_path="...")
-        class PreferencesWindow(Adw.PreferencesWindow):
+        class PreferencesDialog(Adw.PreferencesDialog):
             ...
 
     と書いても、モジュールに束縛される `PreferencesWindow` が
@@ -106,7 +107,7 @@ class _FakeGtkWidget:
 
 def _install_fake_drawing_area(fake_repository):
     """imagecanvas.py の `class ImageCanvas(Gtk.DrawingArea):` や
-    preferences.py の `class PreferencesWindow(Adw.PreferencesWindow):`
+    preferences.py の `class PreferencesWindow(Adw.PreferencesDialog):`
     のように「継承して使うGTK/Adwaitaのクラス」が正しく継承できるように、
     それらのクラスだけ本物のPythonクラス(_FakeGtkWidget)に差し替える。
 
@@ -115,7 +116,7 @@ def _install_fake_drawing_area(fake_repository):
     クラスが別のMagicMockに化けてしまう)ため。
     """
     fake_repository.Gtk.DrawingArea = _FakeGtkWidget
-    fake_repository.Adw.PreferencesWindow = _FakeGtkWidget
+    fake_repository.Adw.PreferencesDialog = _FakeGtkWidget
 
 
 _install_fake_gi()

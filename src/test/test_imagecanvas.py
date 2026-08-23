@@ -22,7 +22,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from gi.repository import Gdk, GLib, Gtk
+from gi.repository import cairo, Gdk, GLib, Gtk
 
 from imagecanvas import ImageCanvas
 from models.imagestate import ImageState
@@ -35,6 +35,7 @@ from models.imagestate import ImageState
 # ---------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
 def _reset_shared_gtk_mocks():
+    cairo.reset_mock()
     Gtk.reset_mock()
     Gdk.reset_mock()
     GLib.reset_mock()

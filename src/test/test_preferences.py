@@ -1,13 +1,13 @@
 # test_preferences.py
 #
-# preferences.py (PreferencesWindow) のうち、サムネイルキャッシュの
+# preferences.py (PreferencesDialog) のうち、サムネイルキャッシュの
 # 容量表示・クリア処理 (_update_cache_subtitle / on_clear_cache_clicked)
 # の単体テスト。
 #
-# PreferencesWindow は Adw.PreferencesWindow を継承し、
+# PreferencesDialog は Adw.PreferencesDialog を継承し、
 # @Gtk.Template(...) でUIファイルと結びつく「GTKウィジェット」だが、
 # conftest.py が
-#   - Adw.PreferencesWindow を本物のPythonクラス(_FakeGtkWidget)に、
+#   - Adw.PreferencesDialog を本物のPythonクラス(_FakeGtkWidget)に、
 #   - Gtk.Template を「クラスをそのまま返すだけ」の identity decorator に
 # それぞれ差し替えているため、実際のUIファイルやディスプレイなしで
 # クラス定義そのものをimportできる。
@@ -20,14 +20,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from preferences import PreferencesWindow
+from preferences import PreferencesDialog
 
 
 def make_preferences_window(thumbnail_cache):
     """cache_row・parent_window.controller.thumbnail_cache だけを
-    差し替えた PreferencesWindow を用意する。
+    差し替えた PreferencesDialog を用意する。
     """
-    window = PreferencesWindow.__new__(PreferencesWindow)
+    window = PreferencesDialog.__new__(PreferencesDialog)
     window.cache_row = MagicMock(name="cache_row")
     window.parent_window = MagicMock(name="parent_window")
     window.parent_window.controller.thumbnail_cache = thumbnail_cache
