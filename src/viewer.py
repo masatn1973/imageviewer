@@ -29,9 +29,10 @@ from gi.repository import Gtk, Adw, Gio
 from models.imagestate import ImageState
 from imagecanvas import ImageCanvas
 from controllers.viewercontroller import ViewerController
+from models.exifinfo import ExifData
 
 
-@Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/viewer.ui")
+@Gtk.Template(resource_path="/io/github/masatn2026/ImageViewer/viewer.ui")
 class ImageViewerDialog(Adw.Window):
     """画像1枚表示ダイアログ (View)。
 
@@ -66,7 +67,7 @@ class ImageViewerDialog(Adw.Window):
         super().__init__()
 
         self.parent = parent
-        self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+        self.settings = Gio.Settings.new("io.github.masatn2026.ImageViewer")
 
         self.state = ImageState()
         self.state.set_files(image_files or [], current_index)

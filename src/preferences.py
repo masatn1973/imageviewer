@@ -28,7 +28,7 @@ from gi.repository import Gtk, Gio, Adw
 from models.thumbnailcache import format_size
 
 
-@Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/preferences.ui")
+@Gtk.Template(resource_path="/io/github/masatn2026/ImageViewer/preferences.ui")
 class PreferencesDialog(Adw.PreferencesDialog):
     __gtype_name__ = "PreferencesDialog"
 
@@ -43,7 +43,7 @@ class PreferencesDialog(Adw.PreferencesDialog):
 
         self.parent_window = parent
 
-        self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+        self.settings = Gio.Settings.new("io.github.masatn2026.ImageViewer")
 
         self.settings.bind(
             "slideshow-interval",

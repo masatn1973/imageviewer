@@ -17,6 +17,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import gi
+
+from gi.repository import GdkPixbuf, Gio
+
 
 class ImageState:
     DEFAULT_ZOOM_RATIO = 1.0

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.masatn1973.ImageViewer</id>
+  <id>io.github.masatn2026.ImageViewer</id>
   <name translatable="yes">Image Viewer</name>
   <summary translatable="yes">Folder-oriented thumbnail image browser</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <developer id="io.github.masatn1973">
+  <developer id="io.github.masatn2026">
     <name>masatn</name>
   </developer>
-  <launchable type="desktop-id">io.github.masatn1973.ImageViewer.desktop</launchable>
+  <launchable type="desktop-id">io.github.masatn2026.ImageViewer.desktop</launchable>
   <description>
     <p translatable="yes">
         ImageViewer is a folder-oriented thumbnail browser for quickly browsing image collections.
@@ -17,15 +17,15 @@
   </description>
   <screenshots>
     <screenshot type="default">
-        <image>https://raw.githubusercontent.com/masatn1973/imageviewer/main/screenshots/image1.png</image>
+        <image>https://raw.githubusercontent.com/masatn2026/imageviewer/main/screenshots/image1.png</image>
     </screenshot>
     <screenshot>
-        <image>https://raw.githubusercontent.com/masatn1973/imageviewer/main/screenshots/image2.png</image>
+        <image>https://raw.githubusercontent.com/masatn2026/imageviewer/main/screenshots/image2.png</image>
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://github.com/masatn1973/imageviewer</url>
-  <url type="bugtracker">https://github.com/masatn1973/imageviewer/issues</url>
+  <url type="homepage">https://github.com/masatn2026/imageviewer</url>
+  <url type="bugtracker">https://github.com/masatn2026/imageviewer/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
     <release version="0.2.2" date="2026-07-21">

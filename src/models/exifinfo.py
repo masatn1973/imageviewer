@@ -17,12 +17,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import annotations
+
 import gi
 import os
 
 gi.require_version("GExiv2", "0.16")
 
-from gi.repository import GExiv2
+from gi.repository import GExiv2, Gio
 
 from dataclasses import dataclass
 from typing import cast, Any

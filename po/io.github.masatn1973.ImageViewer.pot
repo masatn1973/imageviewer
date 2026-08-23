@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the io.github.masatn1973.ImageViewer package.
+# This file is distributed under the same license as the io.github.masatn2026.ImageViewer package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: io.github.masatn1973.ImageViewer\n"
+"Project-Id-Version: io.github.masatn2026.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-14 21:03+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -18,142 +18,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: data/io.github.masatn1973.ImageViewer.desktop.in:2
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:4 src/about.ui:7
+#: data/io.github.masatn2026.ImageViewer.desktop.in:2
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:4 src/about.ui:7
 #: src/window.ui:6
 msgid "Image Viewer"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.desktop.in:3
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:5
+#: data/io.github.masatn2026.ImageViewer.desktop.in:3
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:5
 msgid "Folder-oriented thumbnail image browser"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.desktop.in:9
+#: data/io.github.masatn2026.ImageViewer.desktop.in:9
 msgid "GTK;"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:6
+#: data/io.github.masatn2026.ImageViewer.gschema.xml:6
 msgid "Slideshow slideshow-interval"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:7 src/preferences.ui:22
+#: data/io.github.masatn2026.ImageViewer.gschema.xml:7 src/preferences.ui:22
 msgid "Seconds between slides."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:13
+#: data/io.github.masatn2026.ImageViewer.gschema.xml:13
 msgid "Shuffle enabled"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:14 src/preferences.ui:29
+#: data/io.github.masatn2026.ImageViewer.gschema.xml:14 src/preferences.ui:29
 msgid "Play slides in random order."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.gschema.xml:20
+#: data/io.github.masatn2026.ImageViewer.gschema.xml:20
 msgid "Thumbnail size"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:9
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:13
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:13
 msgid ""
 "ImageViewer is a folder-oriented thumbnail browser for quickly browsing "
 "image collections. It is built with GTK4 and libadwaita and supports common "
 "image formats."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:34
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:34
 msgid "Added support for the \"Pan\" feature in image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:35
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:35
 msgid "Can open files in \"Download\" directory."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:36
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:36
 msgid "Added tooltip in image view window."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:43
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:51
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:43
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:51
 msgid "Performed a refactoring. No features were added or removed."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:44
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:44
 msgid "Fixed it so that when you zoom in, it zooms to the correct position."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:58
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:58
 msgid ""
 "Modified the system to monitor the “Pictures” folder and update thumbnails "
 "whenever images are added or deleted."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:65
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:65
 msgid "Support image sorting."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:66
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:66
 msgid "Support reload thumbnails."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:67
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:67
 msgid ""
 "Made it so that the window size is remembered when you close the image view "
 "or thumbnail window."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:68
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:68
 msgid "Removed the video playback feature."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:75
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:75
 msgid "Support Zoom In/Out."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:82
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:82
 msgid "Support slideshow."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:89
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:89
 msgid "Fixed an issue where no sound was playing when videos were played."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:96
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:96
 msgid "Add video playback support."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:103
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:103
 msgid "EXIF information display is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:110
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:110
 msgid "Image rotation is now supported."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:117
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:117
 msgid "Added status bar."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:118
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:118
 msgid "Supports Home, End, PageUp, PageDown keys."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:125
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:125
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:132
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:132
 msgid "Supports .bmp and .tiff file format."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:133
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:133
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
 
-#: data/io.github.masatn1973.ImageViewer.metainfo.xml.in:139
+#: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:139
 msgid "Initial release"
 msgstr ""
 

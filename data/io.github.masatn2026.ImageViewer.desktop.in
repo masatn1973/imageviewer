@@ -2,7 +2,7 @@
 Name=Image Viewer
 Comment=Folder-oriented thumbnail image browser
 Exec=imageviewer %f
-Icon=io.github.masatn1973.ImageViewer
+Icon=io.github.masatn2026.ImageViewer
 Terminal=false
 Type=Application
 Categories=Graphics;

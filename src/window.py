@@ -33,7 +33,7 @@ from models.gallerymodel import GalleryModel
 from viewer import ImageViewerDialog
 
 
-@Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/window.ui")
+@Gtk.Template(resource_path="/io/github/masatn2026/ImageViewer/window.ui")
 class ImageViewerWindow(Adw.ApplicationWindow):
     """メインウィンドウ (View)。
 
@@ -56,7 +56,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         super().__init__(application=app)
 
         self.viewer: ImageViewerDialog | None = None
-        self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
+        self.settings = Gio.Settings.new("io.github.masatn2026.ImageViewer")
 
         self.thumbnail_size: int = self.settings.get_int("thumbnail-size")
         self.thumbnail_size_adjustment.set_value(self.thumbnail_size)

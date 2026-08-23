@@ -5,13 +5,13 @@ project('imageviewer',
   default_options: [ 'warning_level=2', 'werror=false', ],
 )
 
-gettext_package = 'io.github.masatn1973.ImageViewer'
+gettext_package = 'io.github.masatn2026.ImageViewer'
 
 i18n = import('i18n')
 gnome = import('gnome')
 
 install_data(
-  'data/icons/hicolor/scalable/apps/io.github.masatn1973.ImageViewer.svg',
+  'data/icons/hicolor/scalable/apps/io.github.masatn2026.ImageViewer.svg',
   install_dir: join_paths(get_option('datadir'),
                           'icons/hicolor/scalable/apps')
 )

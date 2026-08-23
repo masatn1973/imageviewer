@@ -62,7 +62,7 @@ class ThumbnailCache:
         self,
         memory_limit: int = 300,
         cache_dir: str | Path | None = None,
-        app_name: str = "io.github.masatn1973.ImageViewer",
+        app_name: str = "io.github.masatn2026.ImageViewer",
     ) -> None:
         """
         Args:

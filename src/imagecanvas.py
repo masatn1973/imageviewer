@@ -19,8 +19,10 @@
 
 import math
 
-from gi.repository import Gtk, Gdk, GLib
+from typing import Callable
+from gi.repository import cairo, Gtk, Gdk, GLib
 
+from models.imagestate import ImageState
 from models.geometry import compute_geometry, compute_zoom_anchor
 
 

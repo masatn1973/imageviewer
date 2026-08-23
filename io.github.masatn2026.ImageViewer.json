@@ -1,5 +1,5 @@
 {
-    "app-id": "io.github.masatn1973.ImageViewer",
+    "app-id": "io.github.masatn2026.ImageViewer",
     "runtime": "org.gnome.Platform",
     "runtime-version": "50",
     "sdk": "org.gnome.Sdk",
@@ -82,9 +82,8 @@
             "buildsystem": "meson",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/masatn1973/imageviewer.git",
-                    "branch": "main"
+                    "type": "dir",
+                    "path": "."
                 }
             ]
         }

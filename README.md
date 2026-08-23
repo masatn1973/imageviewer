@@ -16,15 +16,15 @@ flatpak install -y org.gnome.Platform//50
 ## Build
 
 ```
-git clone https://github.com/masatn1973/ImageViewer.git
+git clone https://github.com/masatn2026/ImageViewer.git
 cd ImageViewer
-flatpak-builder --repo=repo --force-clean builddir io.github.masatn1973.ImageViewer.json
-flatpak build-bundle repo io.github.masatn1973.ImageViewer.flatpak io.github.masatn1973.ImageViewer
+flatpak-builder --repo=repo --force-clean builddir io.github.masatn2026.ImageViewer.json
+flatpak build-bundle repo io.github.masatn2026.ImageViewer.flatpak io.github.masatn1973.ImageViewer
 ```
 
 ## Install
 
 ```
 flatpak remote-add --user --no-gpg-verify imageviewer-repo repo
-flatpak install -y io.github.masatn1973.ImageViewer
+flatpak install -y io.github.masatn2026.ImageViewer
 ```

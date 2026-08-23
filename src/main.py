@@ -17,6 +17,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import annotations
+
 import gettext
 import locale
 import os
@@ -25,7 +27,7 @@ from typing import Sequence
 
 import gi
 
-APP_ID = "io.github.masatn1973.ImageViewer"
+APP_ID = "io.github.masatn2026.ImageViewer"
 
 locale.bindtextdomain(APP_ID, "/app/share/locale")
 locale.textdomain(APP_ID)
@@ -71,7 +73,7 @@ class ImageViewerApplication(Adw.Application):
         super().__init__(
             application_id=APP_ID,
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
-            resource_base_path="/io/github/masatn1973/ImageViewer",
+            resource_base_path="/io/github/masatn2026/ImageViewer",
         )
 
     def do_startup(self) -> None:
@@ -87,7 +89,7 @@ class ImageViewerApplication(Adw.Application):
             ["<primary>q"])
 
         css = Gtk.CssProvider()
-        css.load_from_resource("/io/github/masatn1973/ImageViewer/style.css")
+        css.load_from_resource("/io/github/masatn2026/ImageViewer/style.css")
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
@@ -103,7 +105,7 @@ class ImageViewerApplication(Adw.Application):
 
     def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         builder = Gtk.Builder.new_from_resource(
-            "/io/github/masatn1973/ImageViewer/about.ui"
+            "/io/github/masatn2026/ImageViewer/about.ui"
         )
 
         about = builder.get_object("about")
@@ -115,7 +117,7 @@ class ImageViewerApplication(Adw.Application):
 
     def _on_shortcuts(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         builder = Gtk.Builder.new_from_resource(
-            "/io/github/masatn1973/ImageViewer/shortcuts.ui"
+            "/io/github/masatn2026/ImageViewer/shortcuts.ui"
         )
         shortcuts = builder.get_object("shortcuts")
         shortcuts.present(self.props.active_window)

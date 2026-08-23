@@ -1,8 +1,8 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/io.github.masatn1973.ImageViewer.desktop.in
-data/io.github.masatn1973.ImageViewer.gschema.xml
-data/io.github.masatn1973.ImageViewer.metainfo.xml.in
+data/io.github.masatn2026.ImageViewer.desktop.in
+data/io.github.masatn2026.ImageViewer.gschema.xml
+data/io.github.masatn2026.ImageViewer.metainfo.xml.in
 src/about.ui
 src/controllers/gallerycontroller.py
 src/controllers/viewercontroller.py

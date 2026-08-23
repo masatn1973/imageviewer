@@ -1,4 +1,4 @@
-application_id = 'io.github.masatn1973.ImageViewer'
+application_id = 'io.github.masatn2026.ImageViewer'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(
