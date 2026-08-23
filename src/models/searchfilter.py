@@ -23,7 +23,7 @@ gallerycontroller.py のファイル名絞り込み検索のロジックを、GT
 """
 
 
-def matches_filename(filename, query):
+def matches_filename(filename: str, query: str) -> bool:
     """ファイル名(filename)が検索クエリ(query)にマッチするかどうかを判定する。
 
     - 大文字小文字を区別しない部分一致で判定する

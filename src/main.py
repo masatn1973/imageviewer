@@ -21,6 +21,7 @@ import gettext
 import locale
 import os
 import sys
+from typing import Sequence
 
 import gi
 
@@ -66,14 +67,14 @@ from preferences import PreferencesDialog
 class ImageViewerApplication(Adw.Application):
     """The main application singleton class."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             application_id=APP_ID,
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
             resource_base_path="/io/github/masatn1973/ImageViewer",
         )
 
-    def do_startup(self):
+    def do_startup(self) -> None:
         Adw.Application.do_startup(self)
 
         self._add_action("open", self._on_open, ["<primary>o"])
@@ -91,7 +92,7 @@ class ImageViewerApplication(Adw.Application):
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
-    def _add_action(self, name, callback, accels=None):
+    def _add_action(self, name: str, callback: Callable[[Gio.SimpleAction, GLib.Variant | None], None], accels: Sequence[str] | None = None) -> Gio.SimpleAction:
         action = Gio.SimpleAction.new(name, None)
         action.connect("activate", callback)
         self.add_action(action)
@@ -100,7 +101,7 @@ class ImageViewerApplication(Adw.Application):
 
         return action
 
-    def _on_about(self, action, param):
+    def _on_about(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/about.ui"
         )
@@ -108,24 +109,24 @@ class ImageViewerApplication(Adw.Application):
         about = builder.get_object("about")
         about.present(self.props.active_window)
 
-    def _on_preferences(self, action, param):
+    def _on_preferences(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         prefs = PreferencesDialog(self.props.active_window)
         prefs.present(self.props.active_window)
 
-    def _on_shortcuts(self, action, param):
+    def _on_shortcuts(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         builder = Gtk.Builder.new_from_resource(
             "/io/github/masatn1973/ImageViewer/shortcuts.ui"
         )
         shortcuts = builder.get_object("shortcuts")
         shortcuts.present(self.props.active_window)
 
-    def _on_open(self, action, param):
+    def _on_open(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         win = self.props.active_window
 
         if win:
             win.on_open(action, param)
 
-    def on_slideshow(self, action, param):
+    def on_slideshow(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         win = self.props.active_window
 
         if win:
@@ -135,7 +136,7 @@ class ImageViewerApplication(Adw.Application):
         win = self._get_or_create_window()
         win.present()
 
-    def do_open(self, files, n_files, hint):
+    def do_open(self, files: Sequence[Gio.File], n_files: int, hint: str) -> None:
         win = self._get_or_create_window()
 
         gfile = files[0]

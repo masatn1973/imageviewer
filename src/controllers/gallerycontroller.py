@@ -17,14 +17,21 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import annotations
+
 from gettext import gettext as _, ngettext
 
 import random
+from typing import TYPE_CHECKING
 
 from gi.repository import Gdk, Gtk, Gio, GLib
 
 from models.searchfilter import matches_filename
 from models.thumbnailcache import ThumbnailCache
+
+if TYPE_CHECKING:
+    from models.gallerymodel import GalleryModel
+    from window import ImageViewerWindow
 
 
 class GalleryController:
@@ -34,7 +41,7 @@ class GalleryController:
     GalleryModel の変化を View に反映する橋渡し役。
     """
 
-    def __init__(self, model, view):
+    def __init__(self, model: GalleryModel, view: ImageViewerWindow) -> None:
         self.model = model
         self.view = view
 
@@ -75,7 +82,7 @@ class GalleryController:
             "value-changed", self.on_thumbnail_size_changed
         )
 
-    def on_thumbnail_size_changed(self, adjustment):
+    def on_thumbnail_size_changed(self, adjustment: Gtk.Adjustment) -> None:
         size = int(adjustment.get_value())
         self.view.thumbnail_size = size
         self.view.settings.set_int("thumbnail-size", size)
@@ -85,7 +92,7 @@ class GalleryController:
             self.reload_folder()
 
     # --- Model -> View ---------------------------------------------------------
-    def on_files_loaded(self, model):
+    def on_files_loaded(self, model: GalleryModel) -> None:
         if self.thumbnail_idle_id is not None:
             GLib.source_remove(self.thumbnail_idle_id)
             self.thumbnail_idle_id = None
@@ -100,7 +107,7 @@ class GalleryController:
         self.view.slideshow_action.set_enabled(len(model.image_files) > 0)
 
     # --- 絞り込み検索 (ファイル名) ----------------------------------------------
-    def on_search_changed(self, entry):
+    def on_search_changed(self, entry: Gtk.SearchEntry) -> None:
         self.search_text = entry.get_text()
         flowbox = self.view.flowbox
         flowbox.invalidate_filter()
@@ -123,7 +130,7 @@ class GalleryController:
             flowbox.unselect_all()
             flowbox.select_child(target)
 
-    def filter_thumbnail(self, child):
+    def filter_thumbnail(self, child: Gtk.FlowBoxChild) -> bool:
         """GtkFlowBox.set_filter_func に渡すコールバック。
 
         True を返したサムネイルだけが表示される。
@@ -137,7 +144,7 @@ class GalleryController:
 
         return matches_filename(gfile.get_basename(), self.search_text)
 
-    def open_path(self, gfile):
+    def open_path(self, gfile: Gio.File) -> None:
         folder = gfile.get_parent()
 
         if folder is None:
@@ -147,7 +154,7 @@ class GalleryController:
         self.select_target = gfile
         self.model.load_folder(folder)
 
-    def _compute_columns(self, visible_children):
+    def _compute_columns(self, visible_children: list[Gtk.FlowBoxChild]) -> int:
         """現在の行に何個のサムネイルが並んでいるかを、実際の配置座標から求める。
 
         幅の割り算による推測(旧実装)は、余白やサムネイルサイズによって
@@ -168,7 +175,7 @@ class GalleryController:
 
         return max(1, columns)
 
-    def _load_next_thumbnail(self):
+    def _load_next_thumbnail(self) -> bool:
         if not self.pending_files:
             self.thumbnail_idle_id = None
             self._report_failures()
@@ -183,7 +190,7 @@ class GalleryController:
 
         except Exception:
             self.failed_files.append(gfile.get_basename())
-            paintable = self._broken_image_pixbuf()
+            paintable = self._broken_image_paintable()
             broken = True
 
         if self.select_target is not None:
@@ -215,12 +222,14 @@ class GalleryController:
 
         return True
 
-    def _on_thumbnail_drag_prepare(self, source, x, y, gfile):
+    def _on_thumbnail_drag_prepare(
+        self, source: Gtk.DragSource, x: float, y: float, gfile: Gio.File
+    ) -> Gdk.ContentProvider:
         file_list = Gdk.FileList.new_from_array([gfile])
 
         return Gdk.ContentProvider.new_for_value(file_list)
 
-    def _report_failures(self):
+    def _report_failures(self) -> None:
         if not self.failed_files:
             return
 
@@ -234,7 +243,7 @@ class GalleryController:
         )
         self.failed_files = []
 
-    def _broken_image_pixbuf(self):
+    def _broken_image_paintable(self) -> Gtk.IconPaintable:
         if self._broken_paintable is not None:
             return self._broken_paintable
 
@@ -251,11 +260,11 @@ class GalleryController:
         return self._broken_paintable
 
     # --- View -> Model: フォルダ操作 ----------------------------------------
-    def on_open(self, action, param):
+    def on_open(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         dialog = Gtk.FileDialog()
         dialog.select_folder(self.view, None, self._on_folder_selected)
 
-    def _on_folder_selected(self, dialog, result):
+    def _on_folder_selected(self, dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
         try:
             folder = dialog.select_folder_finish(result)
 
@@ -268,7 +277,7 @@ class GalleryController:
         if folder:
             self.model.load_folder(folder)
 
-    def on_drop(self, target, value, x, y):
+    def on_drop(self, target: Gtk.DropTarget, value: Gdk.FileList, x: float, y: float) -> bool:
         files = value.get_files()
 
         for file in files:
@@ -281,18 +290,18 @@ class GalleryController:
 
         return False
 
-    def _open_dropped_folder(self, folder):
+    def _open_dropped_folder(self, folder: Gio.File) -> bool:
         self.model.load_folder(folder)
         return False
 
-    def reload_folder(self):
+    def reload_folder(self) -> None:
         self.model.load_folder(self.model.current_folder)
 
         if self.view.viewer:
             self.view.viewer.set_image_files(self.model.image_files)
 
     # --- View -> Model: ソート ---------------------------------------------
-    def on_sort_changed(self, action, value):
+    def on_sort_changed(self, action: Gio.SimpleAction, value: GLib.Variant) -> None:
         mode = value.get_string()
         action.set_state(value)
 
@@ -305,11 +314,11 @@ class GalleryController:
         elif mode == "date-desc":
             self.model.set_sort_mode("date", reverse=True)
 
-    def set_sort_mode(self, mode, reverse=False):
+    def set_sort_mode(self, mode: str, reverse: bool = False) -> None:
         self.model.set_sort_mode(mode, reverse)
 
     # --- サムネイル選択 / ビューアー起動 ---------------------------------------
-    def on_child_activated(self, flowbox, child):
+    def on_child_activated(self, flowbox: Gtk.FlowBox, child: Gtk.FlowBoxChild) -> None:
         gfile = getattr(child, "image_file", None)
 
         if not gfile:
@@ -317,17 +326,17 @@ class GalleryController:
 
         self.view.open_viewer(gfile, self.model.image_files)
 
-    def on_selection_changed(self, flowbox):
+    def on_selection_changed(self, flowbox: Gtk.FlowBox) -> None:
         self.view.update_status(flowbox, self.model.image_files)
 
     # --- スライドショー ---------------------------------------------------------
-    def on_slideshow(self, action, param):
+    def on_slideshow(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         if self.slideshow_id is None:
             self._start_slideshow()
         else:
             self._stop_slideshow()
 
-    def _start_slideshow(self):
+    def _start_slideshow(self) -> None:
         if self.view.viewer is None:
             self.view.open_selected_image(self.model.image_files)
 
@@ -343,7 +352,7 @@ class GalleryController:
         interval = self.view.settings.get_uint("slideshow-interval")
         self.slideshow_id = GLib.timeout_add(interval * 1000, self._slideshow_next)
 
-    def _apply_shuffle(self):
+    def _apply_shuffle(self) -> None:
         """ギャラリー本体の並び順(model.image_files)は変えずに、
         ビューアーに渡すリストだけシャッフルする。
 
@@ -358,7 +367,7 @@ class GalleryController:
         self.view.viewer.set_image_files(shuffled, preserve_current=False)
         self.view.viewer.controller.show_current_image()
 
-    def _slideshow_next(self):
+    def _slideshow_next(self) -> bool:
         if not self.model.image_files:
             self._stop_slideshow()
             return False
@@ -370,13 +379,13 @@ class GalleryController:
         self.view.viewer.show_next_image()
         return True
 
-    def is_slideshow_active(self):
+    def is_slideshow_active(self) -> bool:
         return self.slideshow_id is not None
 
-    def stop_slideshow(self):
+    def stop_slideshow(self) -> None:
         self._stop_slideshow()
 
-    def _stop_slideshow(self):
+    def _stop_slideshow(self) -> None:
         if self.slideshow_id is not None:
             GLib.source_remove(self.slideshow_id)
             self.slideshow_id = None
@@ -386,8 +395,18 @@ class GalleryController:
             self.view.viewer.set_slideshow_mode(False)
             self.view.viewer.controller.show_current_image()
 
+    def cleanup(self) -> None:
+        """ウィンドウ終了時の後始末。タイマー、アイドル処理、フォルダ監視を停止する。"""
+        self.stop_slideshow()
+
+        if self.thumbnail_idle_id is not None:
+            GLib.source_remove(self.thumbnail_idle_id)
+            self.thumbnail_idle_id = None
+
+        self.model.stop_monitor()
+
     # --- キーボードナビゲーション -------------------------------------------------
-    def _visible_children(self, flowbox):
+    def _visible_children(self, flowbox: Gtk.FlowBox) -> list[Gtk.FlowBoxChild]:
         """検索フィルタを通過して現在表示されている FlowBoxChild だけを、
         表示順のリストとして返す。
 
@@ -415,7 +434,13 @@ class GalleryController:
     # NOTE: 元の window.py の on_key_pressed のロジックをそのまま移設したもの。
     #       参照先を self.flowbox -> flowbox / self.image_files -> image_files
     #       に置き換えただけで、判定ロジック自体は変更していない。
-    def on_key_pressed(self, controller, keyval, keycode, state):
+    def on_key_pressed(
+        self,
+        controller: Gtk.EventControllerKey,
+        keyval: int,
+        keycode: int,
+        state: Gdk.ModifierType,
+    ) -> bool:
         # 検索欄 (search_entry) にフォーカスがある間は、h/j/k/l 等を
         # サムネイル移動として横取りせず、そのまま入力させる。
         # このハンドラは CAPTURE フェーズで動いているため、ここで False

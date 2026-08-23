@@ -23,7 +23,13 @@ imagecanvas.py のズーム/描画位置計算を GTK 非依存の純粋関数�
 """
 
 
-def compute_geometry(image_w, image_h, view_w, view_h, zoom):
+def compute_geometry(
+    image_w: int | float,
+    image_h: int | float,
+    view_w: int,
+    view_h: int,
+    zoom: float,
+) -> tuple[int, int, float, float]:
     """指定ズーム率での描画領域サイズとオフセットを計算する。
 
     元は ImageCanvas._compute_geometry のロジック。
@@ -40,9 +46,16 @@ def compute_geometry(image_w, image_h, view_w, view_h, zoom):
     return content_w, content_h, offset_x, offset_y
 
 
-def compute_zoom_anchor(x, y, old_zoom, new_zoom,
-                         offset_x_old, offset_y_old,
-                         offset_x_new, offset_y_new):
+def compute_zoom_anchor(
+    x: float,
+    y: float,
+    old_zoom: float,
+    new_zoom: float,
+    offset_x_old: float,
+    offset_y_old: float,
+    offset_x_new: float,
+    offset_y_new: float
+) -> tuple[float, float]:
     """ズーム前後で「同じ画像上の点」がカーソル/中心の下に留まるように、
     新しいズーム率でのキャンバス座標を計算する。
 

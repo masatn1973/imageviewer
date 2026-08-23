@@ -27,7 +27,7 @@ from models.geometry import compute_geometry, compute_zoom_anchor
 class ImageCanvas(Gtk.DrawingArea):
     __gtype_name__ = "ImageCanvas"
 
-    def __init__(self, scrolled_window, on_zoom_changed=None):
+    def __init__(self, scrolled_window: Gtk.ScrolledWindow, on_zoom_changed: Callable[[], None] | None = None) -> None:
         super().__init__()
 
         self.state = None
@@ -68,11 +68,11 @@ class ImageCanvas(Gtk.DrawingArea):
         self.is_pannable = False
         self.set_cursor(None)
 
-    def _get_view_size(self):
+    def _get_view_size(self) -> tuple[int, int]:
         alloc = self.scrolled_window.get_allocation()
         return max(1, alloc.width), max(1, alloc.height)
 
-    def _get_image_size(self):
+    def _get_image_size(self) -> tuple[int, int]:
         pixbuf = self.state.pixbuf
         w = pixbuf.get_width()
         h = pixbuf.get_height()
@@ -82,13 +82,13 @@ class ImageCanvas(Gtk.DrawingArea):
 
         return w, h
 
-    def _compute_geometry(self, zoom):
+    def _compute_geometry(self, zoom: float) -> tuple[int, int, float, float]:
         image_w, image_h = self._get_image_size()
         view_w, view_h = self._get_view_size()
 
         return compute_geometry(image_w, image_h, view_w, view_h, zoom)
 
-    def zoom_at_viewport_center(self, zoom_in):
+    def zoom_at_viewport_center(self, zoom_in: bool) -> None:
         hadj = self.scrolled_window.get_hadjustment()
         vadj = self.scrolled_window.get_vadjustment()
 
@@ -97,10 +97,10 @@ class ImageCanvas(Gtk.DrawingArea):
 
         self.zoom_at_point(center_x, center_y, zoom_in)
 
-    def zoom_at_cursor(self, zoom_in):
+    def zoom_at_cursor(self, zoom_in: bool) -> None:
         self.zoom_at_point(self.mouse_x, self.mouse_y, zoom_in)
 
-    def zoom_at_point(self, x, y, zoom_in):
+    def zoom_at_point(self, x: float, y: float, zoom_in: bool) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -173,7 +173,7 @@ class ImageCanvas(Gtk.DrawingArea):
         self.mouse_x = canvas_x_new
         self.mouse_y = canvas_y_new
 
-    def redraw(self):
+    def redraw(self) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -211,7 +211,7 @@ class ImageCanvas(Gtk.DrawingArea):
         # から判定する
         GLib.idle_add(self.update_cursor)
 
-    def update_cursor(self):
+    def update_cursor(self) -> bool:
         """画像がビューより大きく、パン可能な場合だけ移動カーソルにする。
 
         フィットしている間(はみ出していない間)は矢印のまま。
@@ -245,7 +245,7 @@ class ImageCanvas(Gtk.DrawingArea):
 
         return False  # GLib.idle_add: 一度実行したら解除する
 
-    def draw_image(self, area, cr, width, height):
+    def draw_image(self, area: Gtk.DrawingArea, cr: cairo.Context, width: int, height: int) -> None:
         self.draw_width = width
         self.draw_height = height
 
@@ -317,16 +317,16 @@ class ImageCanvas(Gtk.DrawingArea):
 
         cr.restore()
 
-    def set_state(self, state):
+    def set_state(self, state: ImageState | None) -> None:
         self.state = state
         self.queue_draw()
 
-    def on_motion(self, controller, x, y):
+    def on_motion(self, controller:Gtk.EventControllerMotion, x:float, y:float) -> None:
         self.mouse_x = x
         self.mouse_y = y
 
     # --- パン (ドラッグでスクロール) ---------------------------------------------
-    def on_drag_begin(self, gesture, start_x, start_y):
+    def on_drag_begin(self, gesture:Gtk.GestureDrag, start_x:float, start_y:float) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -339,7 +339,7 @@ class ImageCanvas(Gtk.DrawingArea):
         self.drag_start_hadj = hadj.get_value()
         self.drag_start_vadj = vadj.get_value()
 
-    def on_drag_update(self, gesture, offset_x, offset_y):
+    def on_drag_update(self, gesture:Gtk.GestureDrag, offset_x:float, offset_y:float) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -353,5 +353,5 @@ class ImageCanvas(Gtk.DrawingArea):
         hadj.set_value(self.drag_start_hadj - offset_x)
         vadj.set_value(self.drag_start_vadj - offset_y)
 
-    def on_drag_end(self, gesture, offset_x, offset_y):
+    def on_drag_end(self, gesture:Gtk.GestureDrag, offset_x:float, offset_y:float) -> None:
         self.update_cursor()

@@ -30,7 +30,7 @@ GIF_EXTENSIONS = (".gif",)
 MIN_FRAME_DELAY_MS = 20
 
 
-def is_gif_path(path):
+def is_gif_path(path: str) -> bool:
     """ファイルパスがGIFかどうかを拡張子で判定する。
 
     Args:
@@ -46,7 +46,7 @@ def is_gif_path(path):
     return path.lower().endswith(GIF_EXTENSIONS)
 
 
-def next_frame_delay(delay_ms, minimum=MIN_FRAME_DELAY_MS):
+def next_frame_delay(delay_ms: int, minimum : int = MIN_FRAME_DELAY_MS) -> int | None:
     """GdkPixbuf.PixbufAnimationIter.get_delay_time() の戻り値から、
     次のフレームまで待つべきミリ秒を計算する。
 

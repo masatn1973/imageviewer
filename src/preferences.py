@@ -38,7 +38,7 @@ class PreferencesDialog(Adw.PreferencesDialog):
     cache_row = Gtk.Template.Child()
     clear_cache_button = Gtk.Template.Child()
 
-    def __init__(self, parent):
+    def __init__(self, parent:Gtk.Window) -> None:
         super().__init__()
 
         self.parent_window = parent
@@ -68,7 +68,7 @@ class PreferencesDialog(Adw.PreferencesDialog):
         size = cache.disk_cache_size_bytes()
         self.cache_row.set_subtitle(format_size(size))
 
-    def on_clear_cache_clicked(self, button):
+    def on_clear_cache_clicked(self, button: Gtk.Button) -> None:
         cache = self.parent_window.controller.thumbnail_cache
         freed_bytes = cache.disk_cache_size_bytes()
 

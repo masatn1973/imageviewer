@@ -1,4 +1,4 @@
-# gallery_model.py
+# gallerymodel.py
 #
 # Copyright 2026 masatn
 #
@@ -62,7 +62,7 @@ class GalleryModel(GObject.Object):
         "files-loaded": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.current_folder: Gio.File | None = None
@@ -110,7 +110,7 @@ class GalleryModel(GObject.Object):
         self.image_files = self._scan_folder(folder)
         self.emit("files-loaded")
 
-    def _scan_folder(self, folder):
+    def _scan_folder(self, folder: Union[Gio.File, str, None]) -> List[Gio.File]:
         files: List[Gio.File] = []
 
         try:
@@ -192,7 +192,7 @@ class GalleryModel(GObject.Object):
 
         return False
 
-    def stop_monitor(self):
+    def stop_monitor(self) -> None:
         if self._reload_timeout:
             GLib.source_remove(self._reload_timeout)
             self._reload_timeout = 0

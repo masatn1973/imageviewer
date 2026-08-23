@@ -17,12 +17,20 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from gettext import gettext as _
 from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
 from controllers import gallerycontroller
 from models.exifinfo import get_exif_info
 from models.animation import is_gif_path, next_frame_delay
+
+if TYPE_CHECKING:
+    from models.imagestate import ImageState
+    from viewer import ImageViewerDialog
 
 
 class ViewerController:
@@ -31,15 +39,15 @@ class ViewerController:
     ImageState (Model) と ImageViewerDialog (View) を橋渡しする。
     """
 
-    def __init__(self, state, view):
-        self.state = state
-        self.view = view
-        self.is_show_exif_data = False
-        self._load_cancellable = None
-        self._anim_timeout_id = None
-        self._pre_fullscreen_size = None
-        self.slideshow_mode = False
-        self._loading_slideshow_mode = False
+    def __init__(self, state: ImageState, view: ImageViewerDialog) -> None:
+        self.state: ImageState = state
+        self.view: ImageViewerDialog = view
+        self.is_show_exif_data: bool = False
+        self._load_cancellable: Gio.Cancellable | None = None
+        self._anim_timeout_id: int | None = None  # GLib source id
+        self._pre_fullscreen_size: tuple[int, int] | None = None
+        self.slideshow_mode: bool = False
+        self._loading_slideshow_mode: bool = False
 
         scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.VERTICAL)
         scroll.connect("scroll", self.on_scroll)
@@ -57,13 +65,13 @@ class ViewerController:
         if state.image_files:
             self.show_current_image()
 
-    def set_slideshow_mode(self, enabled):
+    def set_slideshow_mode(self, enabled: bool) -> None:
         self.slideshow_mode = enabled
         self.state.slideshow_mode = enabled
         self.update_title()
 
     # --- 画像切り替え -----------------------------------------------------------
-    def show_current_image(self):
+    def show_current_image(self) -> None:
         if not self.state.image_files:
             return
 
@@ -76,15 +84,15 @@ class ViewerController:
 
         self.view.imagecanvas.queue_draw()
 
-    def show_next_image(self):
+    def show_next_image(self) -> None:
         self.state.next_file()
         self.show_current_image()
 
-    def show_previous_image(self):
+    def show_previous_image(self) -> None:
         self.state.previous_file()
         self.show_current_image()
 
-    def set_image_files(self, files, preserve_current=True):
+    def set_image_files(self, files: list[Gio.File], preserve_current: bool = True) -> None:
         current = self.state.current_file
         self.state.image_files = files
 
@@ -94,7 +102,7 @@ class ViewerController:
             self.state.current_index = 0
 
     # --- 画像読込 -------------------------------------------------------------
-    def _open_media(self, gfile):
+    def _open_media(self, gfile: Gio.File) -> None:
         self.view.show_image_container()
 
         self._stop_animation()
@@ -115,7 +123,12 @@ class ViewerController:
             GLib.PRIORITY_DEFAULT, self._load_cancellable, self._on_file_read, gfile
         )
 
-    def _on_file_read(self, gfile, result, _gfile):
+    def _on_file_read(
+        self,
+        gfile: Gio.File,
+        result: Gio.AsyncResult,
+        _user_data: object,  # read_async に渡した gfile と同一だが未使用
+    ) -> None:
         try:
             stream = gfile.read_finish(result)
 
@@ -179,7 +192,7 @@ class ViewerController:
                 stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
             )
 
-    def _get_native_image_size(self, gfile):
+    def _get_native_image_size(self, gfile: Gio.File) -> tuple[int, int] | None:
         path = gfile.get_path()
 
         if path is None:
@@ -188,7 +201,7 @@ class ViewerController:
         try:
             info = GdkPixbuf.Pixbuf.get_file_info(path)
 
-        except GLib.Error:
+        except Exception:
             return None
 
         if info is None:
@@ -201,7 +214,12 @@ class ViewerController:
 
         return (width, height)
 
-    def _on_pixbuf_ready(self, stream, result, data):
+    def _on_pixbuf_ready(
+        self,
+        stream: Gio.InputStream,
+        result: Gio.AsyncResult,
+        data: tuple[Gio.File, Gio.InputStream],
+    ) -> None:
         gfile, stream = data
 
         try:
@@ -220,7 +238,12 @@ class ViewerController:
         finally:
             stream.close(None)
 
-    def _on_animation_ready(self, stream, result, data):
+    def _on_animation_ready(
+        self,
+        stream: Gio.InputStream,
+        result: Gio.AsyncResult,
+        data: tuple[Gio.File, Gio.InputStream],
+    ) -> None:
         gfile, stream = data
 
         try:
@@ -250,7 +273,7 @@ class ViewerController:
         finally:
             stream.close(None)
 
-    def _schedule_next_frame(self):
+    def _schedule_next_frame(self) -> None:
         anim_iter = self.state.anim_iter
 
         if anim_iter is None:
@@ -264,7 +287,7 @@ class ViewerController:
 
         self._anim_timeout_id = GLib.timeout_add(delay_ms, self._advance_animation)
 
-    def _advance_animation(self):
+    def _advance_animation(self) -> bool:
         self._anim_timeout_id = None
 
         anim_iter = self.state.anim_iter
@@ -280,7 +303,7 @@ class ViewerController:
 
         return False  # 自前で次のタイマーを登録するため、GLib側の自動再実行は不要
 
-    def _stop_animation(self):
+    def _stop_animation(self) -> None:
         if self._anim_timeout_id is not None:
             GLib.source_remove(self._anim_timeout_id)
             self._anim_timeout_id = None
@@ -288,7 +311,7 @@ class ViewerController:
         self.state.pixbuf_animation = None
         self.state.anim_iter = None
 
-    def _show_load_error(self, gfile):
+    def _show_load_error(self, gfile: Gio.File) -> None:
         self.state.pixbuf = None
         self.view.imagecanvas.redraw()
 
@@ -298,12 +321,12 @@ class ViewerController:
         self.view.set_title(gfile.get_basename())
 
     # --- ズーム ----------------------------------------------------------------
-    def update_fit_zoom(self):
+    def update_fit_zoom(self) -> None:
         self.state.set_fit_zoom(self._calculate_fit_zoom())
         self.view.imagecanvas.redraw()
         self.update_title()
 
-    def _calculate_fit_zoom(self):
+    def _calculate_fit_zoom(self) -> float:
         if self.state.pixbuf is None:
             return self.state.DEFAULT_ZOOM_RATIO
 
@@ -314,10 +337,10 @@ class ViewerController:
 
         return min(win_w / img_w, win_h / img_h)
 
-    def update_title(self):
+    def update_title(self) -> None:
         self.view.set_title(self._window_title())
 
-    def _window_title(self):
+    def _window_title(self) -> str:
         if self.state.current_file is None:
             return ""
 
@@ -330,24 +353,24 @@ class ViewerController:
 
         return f"{filename} ({percent}%)"
 
-    def on_canvas_zoom_changed(self):
+    def on_canvas_zoom_changed(self) -> None:
         self.update_title()
 
-    def toggle_fullscreen(self):
+    def toggle_fullscreen(self) -> None:
         if self.view.is_fullscreen():
             self.exit_fullscreen()
 
         else:
             self.enter_fullscreen()
 
-    def enter_fullscreen(self):
+    def enter_fullscreen(self) -> None:
         if self.view.is_fullscreen():
             return
 
         self._pre_fullscreen_size = self._get_current_window_size()
         self.view.fullscreen()
 
-    def _get_current_window_size(self):
+    def _get_current_window_size(self) -> tuple[int, int]:
         width = self.view.get_width()
         height = self.view.get_height()
 
@@ -360,7 +383,7 @@ class ViewerController:
 
         return (width, height)
 
-    def exit_fullscreen(self):
+    def exit_fullscreen(self) -> None:
         if not self.view.is_fullscreen():
             return
 
@@ -373,16 +396,16 @@ class ViewerController:
             w, h = self._pre_fullscreen_size
             GLib.idle_add(self._restore_pre_fullscreen_size, w, h)
 
-    def _restore_pre_fullscreen_size(self, w, h):
+    def _restore_pre_fullscreen_size(self, w: int, h: int) -> bool:
         self.view.set_default_size(w, h)
         return False  # GLib.idle_add: 一度実行したら解除する
 
     # --- EXIF ------------------------------------------------------------------
-    def show_exif_data(self):
+    def show_exif_data(self) -> None:
         info = get_exif_info(self.state.current_file)
         self.view.update_exif_labels(info)
 
-    def toggle_exif_data(self):
+    def toggle_exif_data(self) -> None:
         if not self.is_show_exif_data:
             self.view.info_box.set_visible(True)
             self.show_exif_data()
@@ -393,7 +416,13 @@ class ViewerController:
 
     # --- イベントハンドラ ---------------------------------------------------------
     # NOTE: 元の viewer.py の on_key_pressed のロジックをそのまま移設したもの。
-    def on_key_pressed(self, controller, keyval, keycode, state):
+    def on_key_pressed(
+        self,
+        controller: Gtk.EventControllerKey,
+        keyval: int,
+        keycode: int,
+        state: Gdk.ModifierType,
+    ) -> bool:
         canvas = self.view.imagecanvas
 
         if keyval == Gdk.KEY_Escape and self.view.is_fullscreen():
@@ -431,7 +460,7 @@ class ViewerController:
             self.update_title()
             return True
 
-        elif keyval == Gdk.KEY_R:
+        if keyval == Gdk.KEY_R:
             self.state.rotate_left()
             canvas.redraw()
             self.update_title()
@@ -443,7 +472,7 @@ class ViewerController:
             self.update_title()
             return True
 
-        elif keyval == Gdk.KEY_F:
+        if keyval == Gdk.KEY_F:
             self.state.toggle_flip_vertical()
             canvas.redraw()
             self.update_title()
@@ -470,7 +499,12 @@ class ViewerController:
 
         return False
 
-    def on_scroll(self, controller, dx, dy):
+    def on_scroll(
+        self,
+        controller: Gtk.EventControllerScroll,
+        dx: float,
+        dy: float,
+    ) -> bool:
         event_state = controller.get_current_event_state()
 
         if not (event_state & Gdk.ModifierType.CONTROL_MASK):

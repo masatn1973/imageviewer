@@ -62,7 +62,7 @@ class ImageViewerDialog(Adw.Window):
     ISO = Gtk.Template.Child()
     FocalLength = Gtk.Template.Child()
 
-    def __init__(self, parent, image_files=None, current_index=0):
+    def __init__(self, parent: Gtk.Window, image_files: list[Gio.File] | None = None, current_index: int = 0) -> None:
         super().__init__()
 
         self.parent = parent
@@ -110,21 +110,21 @@ class ImageViewerDialog(Adw.Window):
         # View / Model の初期化が終わった最後に Controller を組み立てる
         self.controller = ViewerController(self.state, self)
 
-    def _on_canvas_zoom_changed(self):
+    def _on_canvas_zoom_changed(self) -> None:
         self.controller.on_canvas_zoom_changed()
 
-    def set_slideshow_mode(self, enabled):
+    def set_slideshow_mode(self, enabled: bool) -> None:
         self.controller.set_slideshow_mode(enabled)
 
     # --- View: 見た目の更新だけ ------------------------------------------------
-    def show_image_container(self):
+    def show_image_container(self) -> None:
         self.media_stack.set_visible_child(self.image_container)
 
-    def get_canvas_view_size(self):
+    def get_canvas_view_size(self) -> tuple[int, int]:
         alloc = self.scrolled_window.get_allocation()
         return max(1, alloc.width), max(1, alloc.height)
 
-    def update_exif_labels(self, info):
+    def update_exif_labels(self, info:ExifData) -> None:
         fields = (
             (self.Camera_label, _("Camera: "), info.camera),
             (self.Date_label, _("Shooting Datetime: "), info.date_str),
@@ -139,7 +139,7 @@ class ImageViewerDialog(Adw.Window):
         for label, title, value in fields:
             label.set_text(title + value if value else title)
 
-    def save_window_geometry(self, width=None, height=None):
+    def save_window_geometry(self, width: int | None = None, height: int | None = None) -> None:
         self.settings.set_int(
             "viewer-width", width if width is not None else self.get_width()
         )
@@ -149,16 +149,16 @@ class ImageViewerDialog(Adw.Window):
         self.settings.set_boolean("viewer-maximized", self.is_maximized())
 
     # --- window.py から呼ばれる公開API ------------------------------------------
-    def set_image_files(self, files, preserve_current=True):
+    def set_image_files(self, files: list[Gio.File], preserve_current: bool = True) -> None:
         self.controller.set_image_files(files, preserve_current=preserve_current)
 
-    def show_next_image(self):
+    def show_next_image(self) -> None:
         self.controller.show_next_image()
 
-    def show_previous_image(self):
+    def show_previous_image(self) -> None:
         self.controller.show_previous_image()
 
-    def show_error(self, message):
+    def show_error(self, message: str) -> None:
         toast = Adw.Toast.new(message)
         toast.set_timeout(4)
         self.toast_overlay.add_toast(toast)

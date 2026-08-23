@@ -26,60 +26,60 @@ class ImageState:
 
     ZOOM_RATIO = 1.02
 
-    def __init__(self):
-        self.pixbuf = None
-        self.pixbuf_animation = None  # GdkPixbuf.PixbufAnimation (GIF等の場合のみ)
-        self.anim_iter = None  # GdkPixbuf.PixbufAnimationIter (現在の再生位置)
-        self.zoom = self.DEFAULT_ZOOM_RATIO
-        self.fit_zoom = self.DEFAULT_ZOOM_RATIO
-        self.fit_mode = True
-        self.rotation = 0
-        self.slideshow_mode = False
+    def __init__(self) -> None:
+        self.pixbuf: GdkPixbuf.Pixbuf | None = None
+        self.pixbuf_animation: GdkPixbuf.PixbufAnimation | None = None  # GdkPixbuf.PixbufAnimation (GIF等の場合のみ)
+        self.anim_iter: GdkPixbuf.PixbufAnimationIter | None = None  # GdkPixbuf.PixbufAnimationIter (現在の再生位置)
+        self.zoom: float = self.DEFAULT_ZOOM_RATIO
+        self.fit_zoom: float = self.DEFAULT_ZOOM_RATIO
+        self.fit_mode: bool = True
+        self.rotation: int = 0
+        self.slideshow_mode: bool = False
 
-        self.flip_horizontal = False
-        self.flip_vertical = False
+        self.flip_horizontal: bool = False
+        self.flip_vertical: bool = False
 
         # --- 画像一覧・現在位置 (旧: viewer.py / window.py に分散していたもの) ---
-        self.image_files = []
-        self.current_index = 0
+        self.image_files: list[Gio.File] = []
+        self.current_index: int = 0
 
     @property
-    def current_file(self):
+    def current_file(self) -> Gio.File | None:
         if not self.image_files:
             return None
 
         return self.image_files[self.current_index]
 
-    def set_files(self, files, index=0):
+    def set_files(self, files: list[Gio.File], index: int = 0) -> None:
         self.image_files = files
         self.current_index = index
 
-    def next_file(self):
+    def next_file(self) -> Gio.File | None:
         if not self.image_files:
             return None
 
         self.current_index = (self.current_index + 1) % len(self.image_files)
         return self.current_file
 
-    def previous_file(self):
+    def previous_file(self) -> Gio.File | None:
         if not self.image_files:
             return None
 
         self.current_index = (self.current_index - 1) % len(self.image_files)
         return self.current_file
 
-    def zoom_reset(self):
+    def zoom_reset(self) -> None:
         self.zoom = self.fit_zoom
         self.fit_mode = True
 
-    def zoom_actual_size(self):
+    def zoom_actual_size(self) -> None:
         self.fit_mode = False
         self.zoom = self.DEFAULT_ZOOM_RATIO
 
-    def set_fit_zoom(self, zoom):
+    def set_fit_zoom(self, zoom: float) -> None:
         self.fit_zoom = zoom
 
-    def initialize_view(self):
+    def initialize_view(self) -> None:
         self.zoom = self.DEFAULT_ZOOM_RATIO
         self.fit_mode = True
         self.rotation = 0
@@ -87,14 +87,14 @@ class ImageState:
         self.flip_horizontal = False
         self.flip_vertical = False
 
-    def rotate_right(self):
+    def rotate_right(self) -> None:
         self.rotation = (self.rotation + 90) % 360
 
-    def rotate_left(self):
+    def rotate_left(self) -> None:
         self.rotation = (self.rotation - 90) % 360
 
-    def toggle_flip_horizontal(self):
+    def toggle_flip_horizontal(self) -> None:
         self.flip_horizontal = not self.flip_horizontal
 
-    def toggle_flip_vertical(self):
+    def toggle_flip_vertical(self) -> None:
         self.flip_vertical = not self.flip_vertical

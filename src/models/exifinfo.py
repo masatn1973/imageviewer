@@ -99,7 +99,7 @@ class ExifData:
         return f"{self.focal_length:g} mm"
 
 
-def get_exif_info(current_file) -> ExifData:
+def get_exif_info(current_file: Gio.File | None) -> ExifData:
     info = ExifData()
     path = current_file.get_path()
 

@@ -16,17 +16,21 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-import gi
+from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
+import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, GLib, Gtk, Adw, Gio
+from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
-from viewer import ImageViewerDialog
-from models.gallerymodel import GalleryModel
 from controllers.gallerycontroller import GalleryController
+from models.gallerymodel import GalleryModel
+from viewer import ImageViewerDialog
 
 
 @Gtk.Template(resource_path="/io/github/masatn1973/ImageViewer/window.ui")
@@ -40,20 +44,21 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
     __gtype_name__ = "ImageViewerWindow"
 
-    flowbox = Gtk.Template.Child()
-    status_label = Gtk.Template.Child()
-    toast_overlay = Gtk.Template.Child()
-    search_bar = Gtk.Template.Child()
-    search_entry = Gtk.Template.Child()
-    thumbnail_size_adjustment = Gtk.Template.Child()
+    flowbox: Gtk.FlowBox = Gtk.Template.Child()
+    scrolled_window: Gtk.ScrolledWindow = Gtk.Template.Child()
+    status_label: Gtk.Label = Gtk.Template.Child()
+    toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
+    search_bar: Gtk.SearchBar = Gtk.Template.Child()
+    search_entry: Gtk.SearchEntry = Gtk.Template.Child()
+    thumbnail_size_adjustment: Gtk.Adjustment = Gtk.Template.Child()
 
-    def __init__(self, app):
+    def __init__(self, app: Adw.Application) -> None:
         super().__init__(application=app)
 
-        self.viewer = None
+        self.viewer: ImageViewerDialog | None = None
         self.settings = Gio.Settings.new("io.github.masatn1973.ImageViewer")
 
-        self.thumbnail_size = self.settings.get_int("thumbnail-size")
+        self.thumbnail_size: int = self.settings.get_int("thumbnail-size")
         self.thumbnail_size_adjustment.set_value(self.thumbnail_size)
 
         self.flowbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
@@ -77,7 +82,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.on_close_request)
 
-    def _setup_actions(self, app):
+    def _setup_actions(self, app: Adw.Application) -> None:
         self.sort_action = Gio.SimpleAction.new_stateful(
             "sort", GLib.VariantType.new("s"), GLib.Variant.new_string("date")
         )
@@ -112,16 +117,16 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         app.set_accels_for_action("win.toggle-search", ["<primary>f"])
 
     # --- main.py から呼ばれる公開API ---------------------------------------------
-    def on_open(self, action, param):
+    def on_open(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         self.controller.on_open(action, param)
 
-    def on_slideshow(self, action, param):
+    def on_slideshow(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         self.controller.on_slideshow(action, param)
 
-    def open_path(self, gfile):
+    def open_path(self, gfile: Gio.File) -> None:
         self.controller.open_path(gfile)
 
-    def toggle_search_bar(self):
+    def toggle_search_bar(self) -> None:
         is_active = self.search_bar.get_search_mode()
         self.search_bar.set_search_mode(not is_active)
 
@@ -132,17 +137,20 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.flowbox.grab_focus()
 
     # --- View: サムネイル一覧の更新だけ -------------------------------------------
-    def clear_thumbnails(self):
-        child = self.flowbox.get_first_child()
-
-        while child:
-            next_child = child.get_next_sibling()
-            self.flowbox.remove(child)
-            child = next_child
+    def clear_thumbnails(self) -> None:
+        self.flowbox.remove_all()
 
     def add_thumbnail(
-        self, gfile, paintable, select=False, on_drag_prepare=None, broken=False
-    ):
+        self,
+        gfile: Gio.File,
+        paintable: Gdk.Paintable,
+        select: bool = False,
+        on_drag_prepare: Callable[
+            [Gtk.DragSource, float, float, Gio.File],
+            Gdk.ContentProvider | None
+        ] | None = None,
+        broken: bool = False
+    ) -> None:
         widget = Gtk.Picture.new_for_paintable(paintable)
         widget.set_can_shrink(True)
         widget.set_content_fit(Gtk.ContentFit.CONTAIN)
@@ -166,10 +174,10 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if select:
             self.flowbox.select_child(child)
 
-    def set_status(self, text):
+    def set_status(self, text: str) -> None:
         self.status_label.set_text(text)
 
-    def update_status(self, flowbox, image_files):
+    def update_status(self, flowbox: Gtk.FlowBox, image_files: list[Gio.File]) -> None:
         selected = flowbox.get_selected_children()
 
         if not selected:
@@ -193,7 +201,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             self.status_label.set_text(filename)
 
     # --- View: ビューアーダイアログの開閉 -----------------------------------------
-    def open_viewer(self, gfile, image_files):
+    def open_viewer(self, gfile: Gio.File, image_files: list[Gio.File]) -> None:
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
@@ -213,7 +221,7 @@ class ImageViewerWindow(Adw.ApplicationWindow):
 
         self.viewer = viewer
 
-    def open_selected_image(self, image_files: list):
+    def open_selected_image(self, image_files: list[Gio.File]) -> None:
         selected = self.flowbox.get_selected_children()
 
         if not selected:
@@ -224,27 +232,33 @@ class ImageViewerWindow(Adw.ApplicationWindow):
         if gfile:
             self.open_viewer(gfile, image_files)
 
-    def on_viewer_close(self, win):
+    def on_viewer_close(self, win: Gtk.Window) -> bool:
         self.controller.stop_slideshow()
         self.viewer = None
         return False
 
     # --- ウィンドウ終了時の後始末 ------------------------------------------------
-    def on_close_request(self, *args) -> bool:
+    def on_close_request(self, *args: Any) -> bool:
         if not self.is_maximized():
             self.settings.set_int("window-width", self.get_width())
             self.settings.set_int("window-height", self.get_height())
 
         self.settings.set_boolean("window-maximized", self.is_maximized())
 
-        self.model.stop_monitor()
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
+
+        self.flowbox.remove_all()
+        self.controller.cleanup()
 
         return False
 
-    def show_toast(self, message: str):
+    def show_toast(self, message: str) -> None:
         toast = Adw.Toast.new(message)
         toast.set_timeout(4)
+        toast.set_priority(Adw.ToastPriority.HIGH)
         self.toast_overlay.add_toast(toast)
 
-    def show_error(self, message: str):
+    def show_error(self, message: str) -> None:
         self.show_toast(message)
