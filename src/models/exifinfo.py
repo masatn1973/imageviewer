@@ -137,7 +137,7 @@ def get_exif_info(current_file: Gio.File | None) -> ExifData:
             info.pixel_y = int(height)
 
         else:
-            info.pixel_y = meta.get_pixel_width()
+            info.pixel_y = meta.get_pixel_height()
 
         info.orientation = meta.try_get_tag_string("Exif.Image.Orientation") or ""
 
