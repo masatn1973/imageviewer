@@ -19,21 +19,25 @@
 
 from __future__ import annotations
 
-import gi
+import logging
 import os
+from dataclasses import dataclass
+
+import gi
 
 gi.require_version("GExiv2", "0.16")
 
 from gi.repository import GExiv2, Gio
 
-from dataclasses import dataclass
-from typing import cast, Any
+logger = logging.getLogger(__name__)
 
 EXIF_EXTS = {
     ".jpg",
     ".jpeg",
     ".tif",
     ".tiff",
+    ".png",
+    ".webp",
 }
 
 
@@ -87,8 +91,10 @@ class ExifData:
             return ""
 
         try:
-            a, b = self.fnumber.split("/")
-            return f"f/{int(a) / int(b):g}"
+            if "/" in self.fnumber:
+                a, b = self.fnumber.split("/")
+                return f"f/{int(a) / int(b):g}"
+            return f"f/{float(self.fnumber):g}"
 
         except (ValueError, ZeroDivisionError):
             return self.fnumber
@@ -103,7 +109,12 @@ class ExifData:
 
 def get_exif_info(current_file: Gio.File | None) -> ExifData:
     info = ExifData()
+    if current_file is None:
+        return info
+
     path = current_file.get_path()
+    if not path:
+        return info
 
     ext = os.path.splitext(path)[1].lower()
 
@@ -125,17 +136,15 @@ def get_exif_info(current_file: Gio.File | None) -> ExifData:
 
         width = meta.try_get_tag_string("Exif.Photo.PixelXDimension")
 
-        if width:
+        if width and width.isdigit():
             info.pixel_x = int(width)
-
         else:
             info.pixel_x = meta.get_pixel_width()
 
         height = meta.try_get_tag_string("Exif.Photo.PixelYDimension")
 
-        if height:
+        if height and height.isdigit():
             info.pixel_y = int(height)
-
         else:
             info.pixel_y = meta.get_pixel_height()
 
@@ -153,6 +162,6 @@ def get_exif_info(current_file: Gio.File | None) -> ExifData:
         info.focal_length = meta.try_get_focal_length()
 
     except Exception as e:
-        print(f"EXIF ({path}): {e}")
+        logger.warning("Failed to read EXIF from %s: %s", path, e)
 
     return info

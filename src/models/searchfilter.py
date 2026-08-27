@@ -23,10 +23,14 @@ gallerycontroller.py のファイル名絞り込み検索のロジックを、GT
 """
 
 
+import unicodedata
+
+
 def matches_filename(filename: str, query: str) -> bool:
     """ファイル名(filename)が検索クエリ(query)にマッチするかどうかを判定する。
 
-    - 大文字小文字を区別しない部分一致で判定する
+    - 大文字小文字を区別しない部分一致で判定する (casefold)
+    - Unicode正規化 (NFKC) を行う
     - query が空文字列、または空白のみの場合は常に True を返す
       (検索欄が空 = 絞り込みなし = 全件表示、という挙動にするため)
 
@@ -37,9 +41,10 @@ def matches_filename(filename: str, query: str) -> bool:
     Returns:
         bool: マッチする(=表示すべき)場合 True
     """
-    query = query.strip().lower()
+    query = unicodedata.normalize("NFKC", query).strip().casefold()
 
     if not query:
         return True
 
-    return query in filename.lower()
+    return query in unicodedata.normalize("NFKC", filename).casefold()
+

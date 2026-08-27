@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING
 from gettext import gettext as _
 from gi.repository import Gdk, Gtk, GLib, GdkPixbuf, Gio
 
-from controllers import gallerycontroller
 from models.exifinfo import get_exif_info
 from models.animation import is_gif_path, next_frame_delay
 
@@ -72,12 +71,13 @@ class ViewerController:
 
     # --- 画像切り替え -----------------------------------------------------------
     def show_current_image(self) -> None:
-        if not self.state.image_files:
+        current = self.state.current_file
+        if current is None:
             return
 
         self.state.initialize_view()
         self.view.show_image_container()
-        self._open_media(self.state.current_file)
+        self._open_media(current)
 
         if self.is_show_exif_data:
             self.show_exif_data()
@@ -402,6 +402,9 @@ class ViewerController:
 
     # --- EXIF ------------------------------------------------------------------
     def show_exif_data(self) -> None:
+        if self.state.current_file is None:
+            return
+
         info = get_exif_info(self.state.current_file)
         self.view.update_exif_labels(info)
 
@@ -426,15 +429,17 @@ class ViewerController:
         canvas = self.view.imagecanvas
 
         if keyval == Gdk.KEY_Escape and self.view.is_fullscreen():
-            gallerycontroller = self.view.parent.controller
+            gallery_ctrl = self.view.parent.controller
 
-            if gallerycontroller.is_slideshow_active():
-                gallerycontroller.stop_slideshow()
+            if gallery_ctrl.is_slideshow_active():
+                gallery_ctrl.stop_slideshow()
 
             else:
                 self.exit_fullscreen()
 
             return True
+        elif keyval == Gdk.KEY_Escape:
+            self.view.close()
 
         if keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             canvas.zoom_at_viewport_center(zoom_in=True)
@@ -518,11 +523,11 @@ class ViewerController:
         self.update_title()
         return True
 
-    def on_window_resize(self, *args):
+    def on_window_resize(self, *args: object) -> None:
         if self.state.fit_mode:
             GLib.idle_add(self.update_fit_zoom)
 
-    def on_close_request(self, *args):
+    def on_close_request(self, *args: object) -> bool:
         self._stop_animation()
 
         if self.view.is_fullscreen() and self._pre_fullscreen_size is not None:

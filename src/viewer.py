@@ -17,19 +17,18 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import gi
-
 from gettext import gettext as _
+import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw, Gio
+from gi.repository import Adw, Gio, Gtk
 
-from models.imagestate import ImageState
-from imagecanvas import ImageCanvas
 from controllers.viewercontroller import ViewerController
+from imagecanvas import ImageCanvas
 from models.exifinfo import ExifData
+from models.imagestate import ImageState
 
 
 @Gtk.Template(resource_path="/io/github/masatn2026/ImageViewer/viewer.ui")
@@ -42,31 +41,38 @@ class ImageViewerDialog(Adw.Window):
 
     __gtype_name__ = "ImageViewerDialog"
 
-    scrolled_window = Gtk.Template.Child()
+    scrolled_window: Gtk.ScrolledWindow = Gtk.Template.Child()
 
-    image_container = Gtk.Template.Child()
+    image_container:Gtk.Box = Gtk.Template.Child()
 
-    prev_button = Gtk.Template.Child()
-    next_button = Gtk.Template.Child()
+    prev_button: Gtk.Button = Gtk.Template.Child()
+    next_button: Gtk.Button = Gtk.Template.Child()
 
-    headerbar = Gtk.Template.Child()
-    media_stack = Gtk.Template.Child()
-    toast_overlay = Gtk.Template.Child()
+    headerbar: Adw.HeaderBar = Gtk.Template.Child()
+    media_stack: Gtk.Stack = Gtk.Template.Child()
+    toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
 
-    info_box = Gtk.Template.Child()
-    Camera_label = Gtk.Template.Child()
-    Date_label = Gtk.Template.Child()
-    Pixel_size = Gtk.Template.Child()
-    Orientation = Gtk.Template.Child()
-    ShutterSpeed = Gtk.Template.Child()
-    FNumber = Gtk.Template.Child()
-    ISO = Gtk.Template.Child()
-    FocalLength = Gtk.Template.Child()
+    info_box: Gtk.Box = Gtk.Template.Child()
+    camera_label: Gtk.Label = Gtk.Template.Child()
+    date_label: Gtk.Label = Gtk.Template.Child()
+    pixel_size: Gtk.Label = Gtk.Template.Child()
+    orientation: Gtk.Label = Gtk.Template.Child()
+    shutter_speed: Gtk.Label = Gtk.Template.Child()
+    f_number: Gtk.Label = Gtk.Template.Child()
+    iso: Gtk.Label = Gtk.Template.Child()
+    focal_length: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, parent: Gtk.Window, image_files: list[Gio.File] | None = None, current_index: int = 0) -> None:
+    def __init__(
+        self,
+        parent: Gtk.Window,
+        image_files: list[Gio.File] | None = None,
+        current_index: int = 0
+    ) -> None:
         super().__init__()
 
         self.parent = parent
+        self.set_transient_for(parent)
+
         self.settings = Gio.Settings.new("io.github.masatn2026.ImageViewer")
 
         self.state = ImageState()
@@ -78,24 +84,10 @@ class ImageViewerDialog(Adw.Window):
         self.imagecanvas.set_state(self.state)
         self.image_container.append(self.imagecanvas)
 
-        self.info_box.add_css_class("exif-overlay")
-
         self.key_controller = Gtk.EventControllerKey()
         self.add_controller(self.key_controller)
 
-        self.add_shortcut(
-            Gtk.Shortcut.new(
-                Gtk.ShortcutTrigger.parse_string("Right"),
-                Gtk.NamedAction.new("next-image"),
-            )
-        )
-
-        self.add_shortcut(
-            Gtk.Shortcut.new(
-                Gtk.ShortcutTrigger.parse_string("Escape"),
-                Gtk.NamedAction.new("window.close"),
-            )
-        )
+        self.controller = ViewerController(self.state, self)
 
         self.set_focusable(True)
         self.grab_focus()
@@ -107,9 +99,6 @@ class ImageViewerDialog(Adw.Window):
 
         if self.settings.get_boolean("viewer-maximized"):
             self.maximize()
-
-        # View / Model の初期化が終わった最後に Controller を組み立てる
-        self.controller = ViewerController(self.state, self)
 
     def _on_canvas_zoom_changed(self) -> None:
         self.controller.on_canvas_zoom_changed()
@@ -125,20 +114,20 @@ class ImageViewerDialog(Adw.Window):
         alloc = self.scrolled_window.get_allocation()
         return max(1, alloc.width), max(1, alloc.height)
 
-    def update_exif_labels(self, info:ExifData) -> None:
+    def update_exif_labels(self, info: ExifData) -> None:
         fields = (
-            (self.Camera_label, _("Camera: "), info.camera),
-            (self.Date_label, _("Shooting Datetime: "), info.date_str),
-            (self.Pixel_size, _("Pixel Size: "), info.pixel_size),
-            (self.Orientation, _("Orientation: "), f"{info.orientation}"),
-            (self.ShutterSpeed, _("Shutter Speed: "), f"{info.shutter_speed_text}"),
-            (self.FNumber, _("FNumber: "), f"{info.fnumber_text}"),
-            (self.ISO, _("ISO: "), f"{info.iso}"),
-            (self.FocalLength, _("Focal Length: "), f"{info.focal_length_text}"),
+            (self.camera_label, _("Camera: "), info.camera),
+            (self.date_label, _("Shooting Datetime: "), info.date_str),
+            (self.pixel_size, _("Pixel Size: "), info.pixel_size),
+            (self.orientation, _("Orientation: "), str(info.orientation) if info.orientation is not None else None),
+            (self.shutter_speed, _("Shutter Speed: "), info.shutter_speed_text),
+            (self.f_number, _("FNumber: "), info.fnumber_text),
+            (self.iso, _("ISO: "), str(info.iso) if info.iso is not None else None),
+            (self.focal_length, _("Focal Length: "), info.focal_length_text),
         )
 
         for label, title, value in fields:
-            label.set_text(title + value if value else title)
+            label.set_text(f"{title}{value}")
 
     def save_window_geometry(self, width: int | None = None, height: int | None = None) -> None:
         self.settings.set_int(

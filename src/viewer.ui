@@ -61,52 +61,47 @@
                     <property name="margin-top">12</property>
                     <property name="margin-end">12</property>
                     <property name="visible">False</property>
+                    <style>
+                      <class name="exif-overlay"/>
+                    </style>
                     <child>
-                      <object class="GtkLabel" id="Camera_label">
+                      <object class="GtkLabel" id="camera_label">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="Date_label">
+                      <object class="GtkLabel" id="date_label">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="Pixel_size">
+                      <object class="GtkLabel" id="pixel_size">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="Orientation">
+                      <object class="GtkLabel" id="orientation">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="ShutterSpeed">
+                      <object class="GtkLabel" id="shutter_speed">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="FNumber">
+                      <object class="GtkLabel" id="f_number">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="ISO">
+                      <object class="GtkLabel" id="iso">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="FocalLength">
+                      <object class="GtkLabel" id="focal_length">
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes"></property>
                       </object>
                     </child>
                   </object>

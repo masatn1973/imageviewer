@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from gettext import gettext as _, ngettext
 
+from collections import deque
 import random
 from typing import TYPE_CHECKING
 
@@ -42,21 +43,21 @@ class GalleryController:
     """
 
     def __init__(self, model: GalleryModel, view: ImageViewerWindow) -> None:
-        self.model = model
-        self.view = view
+        self.model: GalleryModel = model
+        self.view: ImageViewerWindow = view
 
-        self.slideshow_id = None
-        self.pending_files = []
-        self.loaded_count = 0
-        self.thumbnail_idle_id = None
-        self.select_target = None
+        self.slideshow_id: int | None = None
+        self.pending_files: deque[Gio.File] = deque()
+        self.loaded_count: int = 0
+        self.thumbnail_idle_id: int | None = None
+        self.select_target: Gio.File | None = None
 
-        self.failed_files = []
-        self._broken_paintable = None
+        self.failed_files: list[str] = []
+        self._broken_paintable: Gtk.IconPaintable | None = None
 
-        self.thumbnail_cache = ThumbnailCache()
+        self.thumbnail_cache: ThumbnailCache = ThumbnailCache()
 
-        self.search_text = ""
+        self.search_text: str = ""
 
         # Model -> Controller
         self.model.connect("files-loaded", self.on_files_loaded)
@@ -99,7 +100,7 @@ class GalleryController:
 
         self.view.clear_thumbnails()
 
-        self.pending_files = list(model.image_files)
+        self.pending_files = deque(model.image_files)
         self.loaded_count = 0
         self.thumbnail_idle_id = GLib.idle_add(self._load_next_thumbnail)
 
@@ -181,7 +182,7 @@ class GalleryController:
             self._report_failures()
             return False
 
-        gfile = self.pending_files.pop(0)
+        gfile = self.pending_files.popleft()
         broken = False
 
         try:
@@ -305,14 +306,16 @@ class GalleryController:
         mode = value.get_string()
         action.set_state(value)
 
-        if mode == "name":
-            self.model.set_sort_mode("name", reverse=False)
-        elif mode == "name-desc":
-            self.model.set_sort_mode("name", reverse=True)
-        elif mode == "date":
-            self.model.set_sort_mode("date", reverse=False)
-        elif mode == "date-desc":
-            self.model.set_sort_mode("date", reverse=True)
+        sort_modes: dict[str, tuple[str, bool]] = {
+            "name": ("name", False),
+            "name-desc": ("name", True),
+            "date": ("date", False),
+            "date-desc": ("date", True),
+        }
+
+        if mode in sort_modes:
+            sort_key, reverse = sort_modes[mode]
+            self.model.set_sort_mode(sort_key, reverse=reverse)
 
     def set_sort_mode(self, mode: str, reverse: bool = False) -> None:
         self.model.set_sort_mode(mode, reverse)
@@ -529,7 +532,7 @@ class GalleryController:
         elif keyval == Gdk.KEY_Page_Up:
             vadj = self.view.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-            row_height = first_child.get_allocated_height() + flowbox.get_row_spacing()
+            row_height = max(1, first_child.get_allocated_height() + flowbox.get_row_spacing())
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 
@@ -541,7 +544,7 @@ class GalleryController:
         elif keyval == Gdk.KEY_Page_Down:
             vadj = self.view.scrolled_window.get_vadjustment()
             page_height = vadj.get_page_size()
-            row_height = first_child.get_allocated_height() + flowbox.get_row_spacing()
+            row_height = max(1, first_child.get_allocated_height() + flowbox.get_row_spacing())
             visible_rows = max(1, int(page_height // row_height))
             page_size = visible_rows * columns
 

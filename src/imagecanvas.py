@@ -32,7 +32,7 @@ class ImageCanvas(Gtk.DrawingArea):
     def __init__(self, scrolled_window: Gtk.ScrolledWindow, on_zoom_changed: Callable[[], None] | None = None) -> None:
         super().__init__()
 
-        self.state = None
+        self.state: ImageState | None = None
         self.scrolled_window = scrolled_window
         self.on_zoom_changed = on_zoom_changed
 
@@ -179,12 +179,6 @@ class ImageCanvas(Gtk.DrawingArea):
         if self.state is None or self.state.pixbuf is None:
             return
 
-        width = self.state.pixbuf.get_width()
-        height = self.state.pixbuf.get_height()
-
-        if self.state.rotation in (90, 270):
-            width, height = height, width
-
         if self.state.fit_mode:
             self.set_content_width(0)
             self.set_content_height(0)
@@ -192,18 +186,9 @@ class ImageCanvas(Gtk.DrawingArea):
             self.set_vexpand(True)
 
         else:
-            zoom = self.state.zoom
-
-            display_width = int(width * zoom)
-            display_height = int(height * zoom)
-
-            alloc = self.scrolled_window.get_allocation()
-
-            view_width = max(1, alloc.width)
-            view_height = max(1, alloc.height)
-
-            self.set_content_width(max(display_width, view_width))
-            self.set_content_height(max(display_height, view_height))
+            content_w, content_h, _, _ = self._compute_geometry(self.state.zoom)
+            self.set_content_width(content_w)
+            self.set_content_height(content_h)
 
         self.queue_resize()
         self.queue_draw()
@@ -323,12 +308,12 @@ class ImageCanvas(Gtk.DrawingArea):
         self.state = state
         self.queue_draw()
 
-    def on_motion(self, controller:Gtk.EventControllerMotion, x:float, y:float) -> None:
+    def on_motion(self, controller: Gtk.EventControllerMotion, x: float, y: float) -> None:
         self.mouse_x = x
         self.mouse_y = y
 
     # --- パン (ドラッグでスクロール) ---------------------------------------------
-    def on_drag_begin(self, gesture:Gtk.GestureDrag, start_x:float, start_y:float) -> None:
+    def on_drag_begin(self, gesture: Gtk.GestureDrag, start_x: float, start_y: float) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -341,7 +326,7 @@ class ImageCanvas(Gtk.DrawingArea):
         self.drag_start_hadj = hadj.get_value()
         self.drag_start_vadj = vadj.get_value()
 
-    def on_drag_update(self, gesture:Gtk.GestureDrag, offset_x:float, offset_y:float) -> None:
+    def on_drag_update(self, gesture: Gtk.GestureDrag, offset_x: float, offset_y: float) -> None:
         if self.state is None or self.state.pixbuf is None:
             return
 
@@ -355,5 +340,5 @@ class ImageCanvas(Gtk.DrawingArea):
         hadj.set_value(self.drag_start_hadj - offset_x)
         vadj.set_value(self.drag_start_vadj - offset_y)
 
-    def on_drag_end(self, gesture:Gtk.GestureDrag, offset_x:float, offset_y:float) -> None:
+    def on_drag_end(self, gesture: Gtk.GestureDrag, offset_x: float, offset_y: float) -> None:
         self.update_cursor()

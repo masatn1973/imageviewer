@@ -21,9 +21,8 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List, Union
 
-from gi.repository import GObject, Gio, GLib
+from gi.repository import Gio, GLib, GObject
 
 IMAGE_EXTS = (
     ".png",
@@ -38,7 +37,7 @@ IMAGE_EXTS = (
 )
 
 
-def _natural_sort_key(gfile:Gio.File) -> list[Union[int, str]]:
+def _natural_sort_key(gfile: Gio.File) -> list[int | str]:
     """ファイル名を自然順 (例: img1 -> img2 -> img10)
     で並べるためのソートキー。"""
     name = gfile.get_basename() or ""
@@ -66,7 +65,7 @@ class GalleryModel(GObject.Object):
         super().__init__()
 
         self.current_folder: Gio.File | None = None
-        self.image_files: List[Gio.File] = []
+        self.image_files: list[Gio.File] = []
         self.sort_mode: str = "date"
         self.sort_reverse: bool = False
 
@@ -82,16 +81,15 @@ class GalleryModel(GObject.Object):
             self._sort_files(self.image_files)
             self.emit("files-loaded")
 
-    def _sort_files(self, files: List[Gio.file]) -> None:
+    def _sort_files(self, files: list[Gio.File]) -> None:
         """保持しているファイルリストを現在の設定でソートする。"""
         if self.sort_mode == "name":
             files.sort(key=_natural_sort_key, reverse=self.sort_reverse)
-
         else:
             files.sort(key=self._get_image_date, reverse=self.sort_reverse)
 
     # --- フォルダ読込 ---------------------------------------------------------
-    def load_folder(self, folder: Union[Gio.File, str, None]) -> None:
+    def load_folder(self, folder: Gio.File | str | None) -> None:
         if folder is None:
             return
 
@@ -110,36 +108,32 @@ class GalleryModel(GObject.Object):
         self.image_files = self._scan_folder(folder)
         self.emit("files-loaded")
 
-    def _scan_folder(self, folder: Union[Gio.File, str, None]) -> List[Gio.File]:
-        files: List[Gio.File] = []
+    def _scan_folder(self, folder: Gio.File) -> list[Gio.File]:
+        files: list[Gio.File] = []
 
         try:
             enumerator = folder.enumerate_children(
                 "standard::*", Gio.FileQueryInfoFlags.NONE, None
             )
-
         except GLib.Error as e:
             # 権限がないフォルダや削除されたパスなどの例外に対応
-            print(f"GalleryModel._scan_folder error: { e.message}")
+            print(f"GalleryModel._scan_folder error: {e.message}")
             return files
 
         try:
             while True:
                 info = enumerator.next_file(None)
-
                 if info is None:
                     break
 
-                # ディレクトリを除外し、通常のファイルシンボリックリンクのみを対象にする
+                # ディレクトリを除外し、通常のファイル・シンボリックリンクのみを対象にする
                 file_type = info.get_file_type()
                 if file_type not in (Gio.FileType.REGULAR, Gio.FileType.SYMBOLIC_LINK):
                     continue
 
                 name = info.get_name()
-
                 if name.lower().endswith(IMAGE_EXTS):
                     files.append(folder.get_child(name))
-
         finally:
             enumerator.close(None)
 
@@ -155,7 +149,6 @@ class GalleryModel(GObject.Object):
 
         try:
             return os.path.getmtime(path)
-
         except OSError:
             return 0.0
 
@@ -168,7 +161,6 @@ class GalleryModel(GObject.Object):
                 Gio.FileMonitorFlags.NONE, None
             )
             self._folder_monitor.connect("changed", self._on_folder_changed)
-
         except GLib.Error as e:
             print(f"GalleryModel._start_monitor error: {e.message}")
             self._folder_monitor = None

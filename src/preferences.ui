@@ -19,14 +19,14 @@
             <child>
               <object class="AdwSpinRow" id="interval_row">
                 <property name="title" translatable="yes">Interval</property>
-                <property name="subtitle" translatable="yes">Seconds between slides.</property>
+                <property name="subtitle" translatable="yes">Seconds between slides</property>
                 <property name="adjustment">adjustment</property>
               </object>
             </child>
             <child>
               <object class="AdwSwitchRow" id="shuffle_row">
                 <property name="title" translatable="yes">Shuffle</property>
-                <property name="subtitle" translatable="yes">Play slides in random order.</property>
+                <property name="subtitle" translatable="yes">Play slides in random order</property>
               </object>
             </child>
           </object>
@@ -43,7 +43,7 @@
                     <property name="label" translatable="yes">Clear</property>
                     <property name="valign">center</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-text" translatable="yes">Delete all cached thumbnails from disk.</property>
+                    <property name="tooltip-text" translatable="yes">Delete all cached thumbnails from disk</property>
                     <style>
                       <class name="destructive-action"/>
                     </style>

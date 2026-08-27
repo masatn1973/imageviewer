@@ -17,9 +17,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import gi
+from __future__ import annotations
 
-from gi.repository import GdkPixbuf, Gio
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gi.repository import GdkPixbuf, Gio
 
 
 class ImageState:
@@ -49,14 +52,17 @@ class ImageState:
 
     @property
     def current_file(self) -> Gio.File | None:
-        if not self.image_files:
+        if not self.image_files or not (0 <= self.current_index < len(self.image_files)):
             return None
 
         return self.image_files[self.current_index]
 
     def set_files(self, files: list[Gio.File], index: int = 0) -> None:
         self.image_files = files
-        self.current_index = index
+        if not files:
+            self.current_index = 0
+        else:
+            self.current_index = max(0, min(index, len(files) - 1))
 
     def next_file(self) -> Gio.File | None:
         if not self.image_files:

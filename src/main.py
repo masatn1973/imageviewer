@@ -42,7 +42,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Gdk, Gio, Adw
 
 
-def _find_gresource_path():
+def _find_gresource_path() -> str:
     flatpak_path = "/app/share/imageviewer/imageviewer.gresource"
     if os.path.exists(flatpak_path):
         return flatpak_path
@@ -54,13 +54,13 @@ def _find_gresource_path():
         return local_path
 
     raise FileNotFoundError(
-        f"Not found imageviewer.gresource. "
-        f"build using 'meson compile -C build' when run on local."
+        "Not found imageviewer.gresource.\n"
+        "build using 'meson compile -C build' when run on local."
     )
 
 
 resource = Gio.Resource.load(_find_gresource_path())
-resource._register()
+Gio.resources_register(resource)
 
 from window import ImageViewerWindow
 from preferences import PreferencesDialog
@@ -128,30 +128,26 @@ class ImageViewerApplication(Adw.Application):
         if win:
             win.on_open(action, param)
 
-    def on_slideshow(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
-        win = self.props.active_window
-
-        if win:
-            win.on_slideshow(action, param)
-
-    def do_activate(self):
+    def do_activate(self) -> None:
         win = self._get_or_create_window()
         win.present()
 
     def do_open(self, files: Sequence[Gio.File], n_files: int, hint: str) -> None:
         win = self._get_or_create_window()
 
-        gfile = files[0]
+        if files:
+            gfile = files[0]
+
         win.open_path(gfile)
         win.present()
 
-    def _get_or_create_window(self):
+    def _get_or_create_window(self) -> ImageViewerWindow:
         win = self.props.active_window
         if not win:
             win = ImageViewerWindow(self)
 
         return win
-def main():
+def main() -> int:
     """The application's entry point."""
     app = ImageViewerApplication()
     return app.run(sys.argv)

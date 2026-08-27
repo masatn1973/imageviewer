@@ -135,11 +135,20 @@ class ThumbnailCache:
 
     def clear_disk_cache(self) -> None:
         for f in self.cache_dir.glob("*.png"):
-            f.unlink()
+            try:
+                f.unlink(missing_ok=True)
+            except OSError:
+                pass
 
     def disk_cache_size_bytes(self) -> int:
         """現在のディスクキャッシュの合計サイズ(バイト)。設定画面などで使う用。"""
-        return sum(f.stat().st_size for f in self.cache_dir.glob("*.png"))
+        total = 0
+        for f in self.cache_dir.glob("*.png"):
+            try:
+                total += f.stat().st_size
+            except OSError:
+                pass
+        return total
 
     # ------------------------------------------------------------------
     # 内部処理
@@ -187,7 +196,7 @@ class ThumbnailCache:
             pixbuf.savev(str(disk_path), "png", [], [])
         except GLib.Error as e:
             # ディスク保存に失敗してもメモリ上では使えるので致命的エラーにはしない
-            print(f"[ThumbnailCache] ディスクキャッシュ保存に失敗: {e}")
+            print(f"[ThumbnailCache] Failed to save disk cache: {e}")
 
         return Gdk.Texture.new_for_pixbuf(pixbuf)
 
@@ -195,7 +204,7 @@ class ThumbnailCache:
         try:
             return Gdk.Texture.new_from_filename(str(disk_path))
         except GLib.Error as e:
-            print(f"[ThumbnailCache] ディスクキャッシュの読み込みに失敗: {e}")
+            print(f"[ThumbnailCache] Failed to load disk cache: {e}")
             return None
 
     def _get_from_memory(self, key: str) -> Gdk.Texture | None:

@@ -20,19 +20,31 @@
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Reload Thumbnails</property>
+            <property name="title" translatable="yes" context="shortcut window">Reload Thumbnails</property>
             <property name="accelerator">F5</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Search</property>
+            <property name="title" translatable="yes" context="shortcut window">Search</property>
             <property name="accelerator">&lt;Ctrl&gt;f</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Quit</property>
+            <property name="title" translatable="yes" context="shortcut window">Sort by Name</property>
+            <property name="accelerator">&lt;Ctrl&gt;n</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Sort by Date</property>
+            <property name="accelerator">&lt;Ctrl&gt;d</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Quit</property>
             <property name="accelerator">&lt;Ctrl&gt;q</property>
           </object>
         </child>
@@ -79,13 +91,13 @@
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Previous Page</property>
+            <property name="title" translatable="yes" context="shortcut window">Previous Page</property>
             <property name="accelerator">Page_Up</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Next Page</property>
+            <property name="title" translatable="yes" context="shortcut window">Next Page</property>
             <property name="accelerator">Page_Down</property>
           </object>
         </child>
@@ -96,67 +108,67 @@
         <property name="title" translatable="yes" context="shortcut window">View</property>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Close Image</property>
+            <property name="title" translatable="yes" context="shortcut window">Close Image</property>
             <property name="accelerator">Escape</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes" context="shortcuts window">Toggle Fullscreen</property>
+            <property name="title" translatable="yes" context="shortcut window">Toggle Fullscreen</property>
             <property name="accelerator">F11</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Rotate Clockwise</property>
+            <property name="title" translatable="yes" context="shortcut window">Rotate Clockwise</property>
             <property name="accelerator">r</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Rotate Counterclockwise</property>
+            <property name="title" translatable="yes" context="shortcut window">Rotate Counterclockwise</property>
             <property name="accelerator">&lt;Shift&gt;r</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Flip Horizontal</property>
+            <property name="title" translatable="yes" context="shortcut window">Flip Horizontal</property>
             <property name="accelerator">f</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Flip Vertical</property>
+            <property name="title" translatable="yes" context="shortcut window">Flip Vertical</property>
             <property name="accelerator">&lt;Shift&gt;f</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Show/Hide EXIF data</property>
+            <property name="title" translatable="yes" context="shortcut window">Show/Hide EXIF data</property>
             <property name="accelerator">e</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Fit to Window</property>
+            <property name="title" translatable="yes" context="shortcut window">Fit to Window</property>
             <property name="accelerator">0</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-          <property name="title" translatable="yes">Actual Size</property>
-          <property name="accelerator">1</property>
+            <property name="title" translatable="yes" context="shortcut window">Actual Size</property>
+            <property name="accelerator">1</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Zoom In</property>
+            <property name="title" translatable="yes" context="shortcut window">Zoom In</property>
             <property name="accelerator">plus KP_Add</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Zoom Out</property>
+            <property name="title" translatable="yes" context="shortcut window">Zoom Out</property>
             <property name="accelerator">minus KP_Subtract</property>
           </object>
         </child>
@@ -164,16 +176,16 @@
     </child>
     <child>
       <object class="AdwShortcutsSection">
-        <property name="title" translatable="yes" context="shotcut window">Tools</property>
+        <property name="title" translatable="yes" context="shortcut window">Tools</property>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Start Slideshow</property>
+            <property name="title" translatable="yes" context="shortcut window">Start Slideshow</property>
             <property name="accelerator">&lt;Ctrl&gt;s</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Preferences</property>
+            <property name="title" translatable="yes" context="shortcut window">Preferences</property>
             <property name="accelerator">&lt;Ctrl&gt;p</property>
           </object>
         </child>
@@ -181,16 +193,16 @@
     </child>
     <child>
       <object class="AdwShortcutsSection">
-        <property name="title" translatable="yes" context="shotcut window">Help</property>
+        <property name="title" translatable="yes" context="shortcut window">Help</property>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">Keyboard Shortcuts</property>
+            <property name="title" translatable="yes" context="shortcut window">Keyboard Shortcuts</property>
             <property name="accelerator">&lt;Ctrl&gt;question</property>
           </object>
         </child>
         <child>
           <object class="AdwShortcutsItem">
-            <property name="title" translatable="yes">About</property>
+            <property name="title" translatable="yes" context="shortcut window">About</property>
             <property name="accelerator">&lt;Ctrl&gt;a</property>
           </object>
         </child>

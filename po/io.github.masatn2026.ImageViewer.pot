@@ -1,7 +1,7 @@
-# io.github.masatn2026.ImageViewer.pot
-# Copyright (C) 2026 masatn
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the io.github.masatn2026.ImageViewer package.
-# masatn <masatn2026@gmail.com>, 2026.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
@@ -9,26 +9,25 @@ msgstr ""
 "Project-Id-Version: io.github.masatn2026.ImageViewer\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-27 20:04+0900\n"
-"PO-Revision-Date: 2026-08-27 20:10+0900\n"
-"Last-Translator: masatn <masatn1973@gmail.com>\n"
-"Language-Team: \n"
-"Language: ja_JP\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.9\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: data/io.github.masatn2026.ImageViewer.desktop.in:2
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:4 src/about.ui:7
 #: src/window.ui:6
 msgid "Image Viewer"
-msgstr "画像ビューワ"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.desktop.in:3
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:5 src/about.ui:15
 msgid "Folder-oriented thumbnail image browser"
-msgstr "フォルダー別サムネイル画像ビューアー"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.desktop.in:9
 msgid "GTK;"
@@ -36,23 +35,23 @@ msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.gschema.xml:6
 msgid "Slideshow slideshow-interval"
-msgstr "スライドショー スライドショーの間隔"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.gschema.xml:7
 msgid "Seconds between slides."
-msgstr "スライド間の間隔(秒)"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.gschema.xml:13
 msgid "Shuffle enabled"
-msgstr "ランダム再生の有効"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.gschema.xml:14
 msgid "Play slides in random order."
-msgstr "スライドをランダムに再生します"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.gschema.xml:20
 msgid "Thumbnail size"
-msgstr "サムネイルのサイズ"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:9
 msgid "masatn"
@@ -64,405 +63,397 @@ msgid ""
 "image collections. It is built with GTK4 and libadwaita and supports common "
 "image formats."
 msgstr ""
-"画像ビューワは、画像コレクションをすばやく閲覧するためのフォルダベースのサム"
-"ネイルブラウザです。GTK4とlibadwaitaを用いて構築されており、一般的な画像形式"
-"に対応しています。"
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:34
 msgid "Display fullscreen when slideshow."
-msgstr "スライドショー実行時、フルスクリーンで画像を表示するようにしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:35
 msgid "Added search feature."
-msgstr "検索機能を追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:36
 msgid "Added flip image feature."
-msgstr "画像の反転表示機能を追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:37
 msgid "Supported the GIF animation."
-msgstr "GIFのアニメーション表示をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:38
 msgid "Added a slider that the change thumbnail size."
-msgstr "サムネイルのサイズを変更できるスライダーを追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:39
 msgid "Added random playing slideshow feature."
-msgstr "スライドショーのランダム再生機能を追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:40
 msgid "Added thumbnail caching feature."
-msgstr "サムネイルのキャッシュ機能を追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:47
 msgid "Added support for the \"Pan\" feature in image."
-msgstr "画像ビューで \"パン\" 機能をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:48
 msgid "Can open files in \"Download\" directory."
-msgstr "\"ダウンロード\" フォルダのファイルも開けるようになりました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:49
 msgid "Added tooltip in image view window."
 msgstr ""
-"画像ビューの \"次の画像\" および \"前の画像\" ボタンに、ツールチップを付けま"
-"した"
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:56
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:64
 msgid "Performed a refactoring. No features were added or removed."
-msgstr "リファクタリングを行ないました、機能の追加/削除はありません"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:57
 msgid "Fixed it so that when you zoom in, it zooms to the correct position."
-msgstr "ズームインした際、正しい位置にズームする様に修正しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:71
 msgid ""
 "Modified the system to monitor the “Pictures” folder and update thumbnails "
 "whenever images are added or deleted."
 msgstr ""
-"\"画像\"フォルダを監視して、画像が追加または削除された場合はサムネイルの更新"
-"を行うよう変更しました"
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:78
 msgid "Support image sorting."
-msgstr "画像の並び替えをサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:79
 msgid "Support reload thumbnails."
-msgstr "サムネイルの更新をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:80
 msgid ""
 "Made it so that the window size is remembered when you close the image view "
 "or thumbnail window."
 msgstr ""
-"画像ビューやサムネイルウィンドウを閉じた際、ウィンドウのサイズが記憶されるよ"
-"うにしました"
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:81
 msgid "Removed the video playback feature."
-msgstr "動画の再生機能を削除しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:88
 msgid "Support Zoom In/Out."
-msgstr "ズームイン/アウトをサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:95
 msgid "Support slideshow."
-msgstr "スライドショーをサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:102
 msgid "Fixed an issue where no sound was playing when videos were played."
-msgstr "動画の再生時に、音声が出ない問題を修正しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:109
 msgid "Add video playback support."
-msgstr "動画の再生機能を追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:116
 msgid "EXIF information display is now supported."
-msgstr "EXIF 情報の表示をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:123
 msgid "Image rotation is now supported."
-msgstr "画像の回転をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:130
 msgid "Added status bar."
-msgstr "ステータスバーを追加しました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:131
 msgid "Supports Home, End, PageUp, PageDown keys."
-msgstr "Home, End, PageUp, PageDown キーをサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:138
 msgid "Supports vim like keyboard operation. (h, j, k, l)"
-msgstr "vim 風のキーボード操作 (h, j, k, l) をサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:145
 msgid "Supports .bmp and .tiff file format."
-msgstr ".bmp および .tiff 形式のファイルをサポートしました"
+msgstr ""
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:146
 msgid "Support Left and Right arrow key for view Previous and Next image."
 msgstr ""
-"左および右矢印キーによる、前の画像または次の画像の表示をサポートしました"
 
 #: data/io.github.masatn2026.ImageViewer.metainfo.xml.in:152
 msgid "Initial release"
-msgstr "最初のリリース"
+msgstr ""
 
 #: src/controllers/gallerycontroller.py:214
 msgid "image read."
 msgid_plural "images read."
-msgstr[0] "枚の画像を読み込みました"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/controllers/gallerycontroller.py:240
 #, python-brace-format
 msgid "Failed to load {count} image."
 msgid_plural "Failed to load {count} images."
-msgstr[0] "{count} 枚の画像の読み込みに失敗しました"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/controllers/gallerycontroller.py:274
 msgid "Failed to open folder."
-msgstr "フォルダを開けませんでした"
+msgstr ""
 
 #: src/controllers/viewercontroller.py:319
 #, python-brace-format
 msgid "Failed to open {filename}"
-msgstr "{filename} を開けませんでした"
+msgstr ""
 
 #: src/preferences.py:80
 #, python-brace-format
 msgid "Thumbnail cache cleared ({size})."
-msgstr "サムネイルのキャッシュをクリアしました ({size})"
+msgstr ""
 
 #: src/preferences.ui:13 src/window.ui:201
 msgid "Preferences"
-msgstr "設定"
+msgstr ""
 
 #: src/preferences.ui:18
 msgid "Slideshow"
-msgstr "スライドショー"
+msgstr ""
 
 #: src/preferences.ui:21
 msgid "Interval"
-msgstr "間隔"
+msgstr ""
 
 #: src/preferences.ui:22
 msgid "Seconds between slides"
-msgstr "スライド間の間隔(秒)"
+msgstr ""
 
 #: src/preferences.ui:28
 msgid "Shuffle"
-msgstr "ランダム再生"
+msgstr ""
 
 #: src/preferences.ui:29
 msgid "Play slides in random order"
-msgstr "スライドをランダムに再生します"
+msgstr ""
 
 #: src/preferences.ui:36
 msgid "Thumbnails"
-msgstr "サムネイル"
+msgstr ""
 
 #: src/preferences.ui:39
 msgid "Thumbnail Cache"
-msgstr "サムネイルのキャッシュ"
+msgstr ""
 
 #: src/preferences.ui:40
 msgid "Calculating…"
-msgstr "計算中..."
+msgstr ""
 
 #: src/preferences.ui:43
 msgid "Clear"
-msgstr "クリア"
+msgstr ""
 
 #: src/preferences.ui:46
 msgid "Delete all cached thumbnails from disk"
-msgstr "ディスク上の全てのキャッシュをクリアします"
+msgstr ""
 
 #: src/shortcuts.ui:8
 msgctxt "shortcut window"
 msgid "General"
-msgstr "一般"
+msgstr ""
 
 #: src/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "Open Folder"
-msgstr "フォルダを開く"
+msgstr ""
 
 #: src/shortcuts.ui:17
 msgctxt "shortcut window"
 msgid "Open Selected Image"
-msgstr "選択した画像を開く"
+msgstr ""
 
 #: src/shortcuts.ui:23
 msgctxt "shortcut window"
 msgid "Reload Thumbnails"
-msgstr "サムネイルの更新"
+msgstr ""
 
 #: src/shortcuts.ui:29
 msgctxt "shortcut window"
 msgid "Search"
-msgstr "検索"
+msgstr ""
 
 #: src/shortcuts.ui:35
 msgctxt "shortcut window"
 msgid "Sort by Name"
-msgstr "名前順に並べ替え"
+msgstr ""
 
 #: src/shortcuts.ui:41
 msgctxt "shortcut window"
 msgid "Sort by Date"
-msgstr "日付順に並べ替え"
+msgstr ""
 
 #: src/shortcuts.ui:47
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr "終了"
+msgstr ""
 
 #: src/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Navigation"
-msgstr "ナビゲーション"
+msgstr ""
 
 #: src/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Image Above"
-msgstr "上の画像"
+msgstr ""
 
 #: src/shortcuts.ui:64
 msgctxt "shortcut window"
 msgid "Previous Image"
-msgstr "前の画像"
+msgstr ""
 
 #: src/shortcuts.ui:70
 msgctxt "shortcut window"
 msgid "Next Image"
-msgstr "次の画像"
+msgstr ""
 
 #: src/shortcuts.ui:76
 msgctxt "shortcut window"
 msgid "Image Below"
-msgstr "下の画像"
+msgstr ""
 
 #: src/shortcuts.ui:82
 msgctxt "shortcut window"
 msgid "First Image"
-msgstr "最初の画像"
+msgstr ""
 
 #: src/shortcuts.ui:88
 msgctxt "shortcut window"
 msgid "Last Image"
-msgstr "最後の画像"
+msgstr ""
 
 #: src/shortcuts.ui:94
 msgctxt "shortcut window"
 msgid "Previous Page"
-msgstr "前のページ"
+msgstr ""
 
 #: src/shortcuts.ui:100
 msgctxt "shortcut window"
 msgid "Next Page"
-msgstr "次のページ"
+msgstr ""
 
 #: src/shortcuts.ui:108
 msgctxt "shortcut window"
 msgid "View"
-msgstr "ビュー"
+msgstr ""
 
 #: src/shortcuts.ui:111
 msgctxt "shortcut window"
 msgid "Close Image"
-msgstr "画像を閉じる"
+msgstr ""
 
 #: src/shortcuts.ui:117
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
-msgstr "全画面表示を切り替える"
+msgstr ""
 
 #: src/shortcuts.ui:123
 msgctxt "shortcut window"
 msgid "Rotate Clockwise"
-msgstr "時計回りに回転"
+msgstr ""
 
 #: src/shortcuts.ui:129
 msgctxt "shortcut window"
 msgid "Rotate Counterclockwise"
-msgstr "反時計回りに回転"
+msgstr ""
 
 #: src/shortcuts.ui:135
 msgctxt "shortcut window"
 msgid "Flip Horizontal"
-msgstr "水平に反転"
+msgstr ""
 
 #: src/shortcuts.ui:141
 msgctxt "shortcut window"
 msgid "Flip Vertical"
-msgstr "垂直に反転"
+msgstr ""
 
 #: src/shortcuts.ui:147
 msgctxt "shortcut window"
 msgid "Show/Hide EXIF data"
-msgstr "EXIF データを表示する/隠す"
+msgstr ""
 
 #: src/shortcuts.ui:153
 msgctxt "shortcut window"
 msgid "Fit to Window"
-msgstr "ウィンドウサイズに合わせる"
+msgstr ""
 
 #: src/shortcuts.ui:159
 msgctxt "shortcut window"
 msgid "Actual Size"
-msgstr "実サイズにする"
+msgstr ""
 
 #: src/shortcuts.ui:165
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr "ズームイン"
+msgstr ""
 
 #: src/shortcuts.ui:171
 msgctxt "shortcut window"
 msgid "Zoom Out"
-msgstr "ズームアウト"
+msgstr ""
 
 #: src/shortcuts.ui:179
 msgctxt "shortcut window"
 msgid "Tools"
-msgstr "ツール"
+msgstr ""
 
 #: src/shortcuts.ui:182
 msgctxt "shortcut window"
 msgid "Start Slideshow"
-msgstr "スライドショーの開始"
+msgstr ""
 
 #: src/shortcuts.ui:188
 msgctxt "shortcut window"
 msgid "Preferences"
-msgstr "設定"
+msgstr ""
 
 #: src/shortcuts.ui:196
 msgctxt "shortcut window"
 msgid "Help"
-msgstr "ヘルプ"
+msgstr ""
 
 #: src/shortcuts.ui:199
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
-msgstr "キーボードショートカット"
+msgstr ""
 
 #: src/shortcuts.ui:205
 msgctxt "shortcut window"
 msgid "About"
-msgstr "画像ビューワについて"
+msgstr ""
 
 #: src/viewer.py:119
 msgid "Camera: "
-msgstr "カメラ: "
+msgstr ""
 
 #: src/viewer.py:120
 msgid "Shooting Datetime: "
-msgstr "撮影日時: "
+msgstr ""
 
 #: src/viewer.py:121
 msgid "Pixel Size: "
-msgstr "ピクセルサイズ: "
+msgstr ""
 
 #: src/viewer.py:122
 msgid "Orientation: "
-msgstr "向き: "
+msgstr ""
 
 #: src/viewer.py:123
 msgid "Shutter Speed: "
-msgstr "露出時間: "
+msgstr ""
 
 #: src/viewer.py:124
 msgid "FNumber: "
-msgstr "絞り: "
+msgstr ""
 
 #: src/viewer.py:125
 msgid "ISO: "
@@ -470,164 +461,80 @@ msgstr ""
 
 #: src/viewer.py:126
 msgid "Focal Length: "
-msgstr "焦点距離: "
+msgstr ""
 
 #: src/viewer.ui:17
 msgid "Previous Image"
-msgstr "前の画像"
+msgstr ""
 
 #: src/viewer.ui:24
 msgid "Next Image"
-msgstr "次の画像"
+msgstr ""
 
 #: src/window.ui:19
 msgid "Thumbnail Size"
-msgstr "サムネイルのサイズ"
+msgstr ""
 
 #: src/window.ui:42
 msgid "Adjust Thumbnail Size"
-msgstr "サムネイルのサイズの変更"
+msgstr ""
 
 #: src/window.ui:73
 msgid "Main Menu"
-msgstr "メインメニュー"
+msgstr ""
 
 #: src/window.ui:82
 msgid "Sort"
-msgstr "並べ替え"
+msgstr ""
 
 #: src/window.ui:89
 msgid "Search"
-msgstr "検索"
+msgstr ""
 
 #: src/window.ui:104
 msgid "Search by filename…"
-msgstr "ファイル名で検索…"
+msgstr ""
 
 #: src/window.ui:143
 msgid "Ready."
-msgstr "準備完了"
+msgstr ""
 
 #: src/window.ui:156
 msgid "Name"
-msgstr "名前"
+msgstr ""
 
 #: src/window.ui:161
 msgid "Name (Descending)"
-msgstr "名前 (降順)"
+msgstr ""
 
 #: src/window.ui:168
 msgid "Date"
-msgstr "日付"
+msgstr ""
 
 #: src/window.ui:173
 msgid "Date (Descending)"
-msgstr "日付 (降順)"
+msgstr ""
 
 #: src/window.ui:183
 msgid "Open"
-msgstr "開く"
+msgstr ""
 
 #: src/window.ui:189
 msgid "Reload Thumbnails"
-msgstr "サムネイルの更新"
+msgstr ""
 
 #: src/window.ui:195
 msgid "Start Slideshow"
-msgstr "スライドショーの開始"
+msgstr ""
 
 #: src/window.ui:207
 msgid "Keyboard Shortcuts"
-msgstr "キーボードショートカット"
+msgstr ""
 
 #: src/window.ui:211
 msgid "About ImageViewer"
-msgstr "画像ビューワについて"
+msgstr ""
 
 #: src/window.ui:217
 msgid "Quit"
-msgstr "終了"
-
-#~ msgid "Folder-orientad thumbnail image browser"
-#~ msgstr "フォルダー別サムネイル画像ビューアー"
-
-#~ msgctxt "shortcuts window"
-#~ msgid "Reload Thumbnails"
-#~ msgstr "サムネイルの更新"
-
-#~ msgctxt "shortcuts window"
-#~ msgid "Search"
-#~ msgstr "検索"
-
-#~ msgctxt "shortcuts window"
-#~ msgid "Quit"
-#~ msgstr "画像ビューワの終了"
-
-#, python-brace-format
-#~ msgid "Failed to load {count} image(s)."
-#~ msgstr "{count} 枚の画像の読み込みに失敗しました"
-
-#~ msgid "Keyboard shortcuts"
-#~ msgstr "キーボードショートカット"
-
-#~ msgid "Quit Image Viewer"
-#~ msgstr "画像ビューワを終了する"
-
-#~ msgid "Rotate Image"
-#~ msgstr "画像の回転"
-
-#~ msgid "View in Original Size"
-#~ msgstr "もとの画像サイズで表示する"
-
-#~ msgid "Open Preference"
-#~ msgstr "設定画面を開く"
-
-#~ msgid "Others"
-#~ msgstr "その他"
-
-#~ msgid "Show Keyboard Shortcuts"
-#~ msgstr "ショートカットの表示"
-
-#~ msgid "Show About Dialog"
-#~ msgstr "画像ビューワについてを開く"
-
-#~ msgid "_Start Slideshow"
-#~ msgstr "スライドショーの開始(_S)"
-
-#~ msgid "_Preferences"
-#~ msgstr "設定(_P)"
-
-#, fuzzy
-#~ msgid ""
-#~ " Interval\n"
-#~ "                "
-#~ msgstr "間隔"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "     Preferences\n"
-#~ "    "
-#~ msgstr "設定"
-
-#~ msgid ""
-#~ "\n"
-#~ "                  Seconds between slides.\n"
-#~ "                "
-#~ msgstr "スライド間の間隔(秒)"
-
-#, fuzzy
-#~ msgid "Folder-oriented thumbnail images browser"
-#~ msgstr "フォルダー別サムネイル画像ビューアー"
-
-#~ msgid "Browse Images"
-#~ msgstr "画像を閲覧"
-
-#~ msgid "Browse and view image files"
-#~ msgstr "画像ファイルの参照と表示"
-
-#~ msgid "Simple GTK4 Image Viewer"
-#~ msgstr "シンプルな GTK4 の画像ビューワ"
-
-#~ msgid "ShutterSpeed: "
-#~ msgstr "露出時間: "
+msgstr ""

@@ -120,9 +120,11 @@ class ImageViewerWindow(Adw.ApplicationWindow):
     def on_open(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         self.controller.on_open(action, param)
 
+    """
     def on_slideshow(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
         self.controller.on_slideshow(action, param)
-
+    """
+ 
     def open_path(self, gfile: Gio.File) -> None:
         self.controller.open_path(gfile)
 
@@ -185,13 +187,13 @@ class ImageViewerWindow(Adw.ApplicationWindow):
             return
 
         child = selected[0]
-        gfile = getattr(child, "image_file", None)
+        gfile: Gio.File | None = getattr(child, "image_file", None)
 
         if gfile is None:
             self.status_label.set_text("")
             return
 
-        filename = gfile.get_basename()
+        filename = gfile.get_basename() or ""
 
         try:
             index = image_files.index(gfile)

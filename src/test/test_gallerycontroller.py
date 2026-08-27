@@ -9,6 +9,7 @@ GalleryController (GTKに依存するクラス) を unittest.mock でテスト�
   差し替えてあるので、このファイルの import 時点でも本物のGTKは不要。
 """
 
+from collections import deque
 from unittest.mock import MagicMock
 
 import pytest
@@ -253,7 +254,7 @@ class TestLoadNextThumbnail:
         controller.thumbnail_cache.get_texture.return_value = paintable
         controller.view.thumbnail_size = 128
 
-        controller.pending_files = [gfile]
+        controller.pending_files = deque([gfile])
 
         result = controller._load_next_thumbnail()
 
@@ -267,7 +268,7 @@ class TestLoadNextThumbnail:
             broken=False,
         )
         assert controller.loaded_count == 1
-        assert controller.pending_files == []
+        assert len(controller.pending_files) == 0
         # まだ残りがない = キューが空になったので False (idle_addの停止)
         assert result is False
 
@@ -289,7 +290,7 @@ class TestLoadNextThumbnail:
             "読み込み失敗(テスト用)"
         )
 
-        controller.pending_files = [gfile]
+        controller.pending_files = deque([gfile])
 
         controller._load_next_thumbnail()
 
@@ -313,7 +314,7 @@ class TestLoadNextThumbnail:
 
         another_gfile = MagicMock()  # まだ読み込まれていない残り1枚
 
-        controller.pending_files = [gfile, another_gfile]
+        controller.pending_files = deque([gfile, another_gfile])
 
         controller._load_next_thumbnail()
 

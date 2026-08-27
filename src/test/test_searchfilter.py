@@ -76,6 +76,21 @@ class TestNonAsciiFilenames:
         assert matches_filename("旅行_沖縄_2026.jpg", "北海道") is False
 
 
+class TestUnicodeAndCasefold:
+    """Unicode 正規化や casefold に対応していること。"""
+
+    def test_casefold_eszett(self):
+        # ドイツ語の ß (casefold で ss)
+        assert matches_filename("straße.jpg", "STRASSE") is True
+
+    def test_unicode_normalization_nfd_nfc(self):
+        # 結合文字 (NFD) と 合成文字 (NFC) のマッチ
+        # 'が' in NFD is 'か' + 濁点 (\u304b\u3099)
+        nfd_str = "\u304b\u3099.jpg"
+        nfc_query = "が"
+        assert matches_filename(nfd_str, nfc_query) is True
+
+
 @pytest.mark.parametrize(
     "filename,query,expected",
     [
@@ -88,3 +103,4 @@ class TestNonAsciiFilenames:
 )
 def test_matches_filename_parametrized(filename, query, expected):
     assert matches_filename(filename, query) is expected
+
