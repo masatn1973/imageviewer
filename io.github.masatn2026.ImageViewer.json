@@ -84,7 +84,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/masatn1973/imageviewer.git",
-                    "branch": "main"
+                    "branch": "0.2.3"
                 }
             ]
         }
