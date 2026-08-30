@@ -369,3 +369,67 @@ class TestOnSortChanged:
             expected_mode, reverse=expected_reverse
         )
         action.set_state.assert_called_once_with(value)
+
+
+# ---------------------------------------------------------------------------
+# ドラッグ＆ドロップ (on_drop) のテスト
+# ---------------------------------------------------------------------------
+class TestOnDrop:
+    """on_drop がドロップされたファイルの種類に応じて正しい処理を呼ぶことを確認する。"""
+
+    def _make_drop_value(self, files):
+        """Gdk.FileList の get_files() が files を返す MagicMock を作る。"""
+        value = MagicMock()
+        value.get_files.return_value = files
+        return value
+
+    def _make_file(self, file_type, basename):
+        """ファイルタイプとファイル名を持つ MagicMock Gio.File を作る。"""
+        from gi.repository import Gio
+        file = MagicMock()
+        file.query_file_type.return_value = file_type
+        file.get_basename.return_value = basename
+        return file
+
+    def test_drop_directory_calls_open_dropped_folder(self, controller):
+        """ディレクトリをドロップすると _open_dropped_folder が idle_add に渡される。"""
+        from gi.repository import GLib, Gio
+        folder = self._make_file(Gio.FileType.DIRECTORY, "Photos")
+        value = self._make_drop_value([folder])
+
+        result = controller.on_drop(MagicMock(), value, 0.0, 0.0)
+
+        assert result is True
+        GLib.idle_add.assert_called_once_with(controller._open_dropped_folder, folder)
+
+    def test_drop_image_file_calls_open_dropped_image(self, controller):
+        """画像ファイルをドロップすると _open_dropped_image が idle_add に渡される。"""
+        from gi.repository import GLib, Gio
+        image = self._make_file(Gio.FileType.REGULAR, "photo.jpg")
+        value = self._make_drop_value([image])
+
+        GLib.idle_add.reset_mock()
+        result = controller.on_drop(MagicMock(), value, 0.0, 0.0)
+
+        assert result is True
+        GLib.idle_add.assert_called_once_with(controller._open_dropped_image, image)
+
+    def test_drop_unsupported_file_returns_false(self, controller):
+        """非対応ファイル(テキストなど)をドロップすると False を返す。"""
+        from gi.repository import Gio
+        text_file = self._make_file(Gio.FileType.REGULAR, "notes.txt")
+        value = self._make_drop_value([text_file])
+
+        result = controller.on_drop(MagicMock(), value, 0.0, 0.0)
+
+        assert result is False
+
+    def test_open_dropped_image_calls_open_path(self, controller):
+        """_open_dropped_image が open_path を呼ぶことを確認する。"""
+        gfile = MagicMock()
+        gfile.get_parent.return_value = MagicMock()
+
+        controller._open_dropped_image(gfile)
+
+        controller.model.load_folder.assert_called_once()
+

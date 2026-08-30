@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING
 
 from gi.repository import Gdk, Gtk, Gio, GLib
 
+from models.gallerymodel import IMAGE_EXTS
 from models.searchfilter import matches_filename
 from models.thumbnailcache import ThumbnailCache
 
@@ -282,17 +283,25 @@ class GalleryController:
         files = value.get_files()
 
         for file in files:
-            if (
-                file.query_file_type(Gio.FileQueryInfoFlags.NONE, None)
-                == Gio.FileType.DIRECTORY
-            ):
+            file_type = file.query_file_type(Gio.FileQueryInfoFlags.NONE, None)
+
+            if file_type == Gio.FileType.DIRECTORY:
                 GLib.idle_add(self._open_dropped_folder, file)
+                return True
+
+            basename = file.get_basename() or ""
+            if basename.lower().endswith(IMAGE_EXTS):
+                GLib.idle_add(self._open_dropped_image, file)
                 return True
 
         return False
 
     def _open_dropped_folder(self, folder: Gio.File) -> bool:
         self.model.load_folder(folder)
+        return False
+
+    def _open_dropped_image(self, gfile: Gio.File) -> bool:
+        self.open_path(gfile)
         return False
 
     def reload_folder(self) -> None:

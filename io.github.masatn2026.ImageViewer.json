@@ -4,7 +4,6 @@
     "runtime-version": "50",
     "sdk": "org.gnome.Sdk",
     "command": "imageviewer",
-    "separate-locales": false,
     "finish-args": [
         "--share=ipc",
         "--device=dri",
@@ -25,7 +24,6 @@
     ],
     "modules": [
         {
-            "name": "inih",
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DINI_BUILD_TESTS=OFF",
@@ -84,8 +82,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/masatn2026/imageviewer.git",
-                    "tag": "0.2.3",
-                    "commit": "c014f335ab26bbdc1fc2a527d71f6d4ca89e9964"
+                    "branch": "main"
                 }
             ]
         }
