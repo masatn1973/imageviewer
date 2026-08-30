@@ -59,6 +59,7 @@ class GalleryController:
         self.thumbnail_cache: ThumbnailCache = ThumbnailCache()
 
         self.search_text: str = ""
+        self._search_debounce_id: int | None = None
 
         # Model -> Controller
         self.model.connect("files-loaded", self.on_files_loaded)
@@ -111,6 +112,17 @@ class GalleryController:
     # --- 絞り込み検索 (ファイル名) ----------------------------------------------
     def on_search_changed(self, entry: Gtk.SearchEntry) -> None:
         self.search_text = entry.get_text()
+
+        # 高速タイピング中に毎キーストロークで 大量の画像ののフィルタ処理が
+        # 走るのを防ぐため、300ms のデバウンスを挟む。
+        # 前のタイマーが残っていればキャンセルしてリセットする。
+        if self._search_debounce_id is not None:
+            GLib.source_remove(self._search_debounce_id)
+        self._search_debounce_id = GLib.timeout_add(300, self._apply_search_filter)
+
+    def _apply_search_filter(self) -> bool:
+        """デバウンス後に実際にフィルタを適用する。"""
+        self._search_debounce_id = None
         flowbox = self.view.flowbox
         flowbox.invalidate_filter()
 
@@ -124,13 +136,12 @@ class GalleryController:
         selected = flowbox.get_selected_children()
         visible_children = self._visible_children(flowbox)
 
-        if not visible_children:
-            return
-
-        if not selected or selected[0] not in visible_children:
+        if visible_children and (not selected or selected[0] not in visible_children):
             target = visible_children[0]
             flowbox.unselect_all()
             flowbox.select_child(target)
+
+        return False  # GLib タイマーを停止する
 
     def filter_thumbnail(self, child: Gtk.FlowBoxChild) -> bool:
         """GtkFlowBox.set_filter_func に渡すコールバック。
@@ -410,6 +421,10 @@ class GalleryController:
     def cleanup(self) -> None:
         """ウィンドウ終了時の後始末。タイマー、アイドル処理、フォルダ監視を停止する。"""
         self.stop_slideshow()
+
+        if self._search_debounce_id is not None:
+            GLib.source_remove(self._search_debounce_id)
+            self._search_debounce_id = None
 
         if self.thumbnail_idle_id is not None:
             GLib.source_remove(self.thumbnail_idle_id)
