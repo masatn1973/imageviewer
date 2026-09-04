@@ -136,9 +136,8 @@ class ImageViewerApplication(Adw.Application):
         win = self._get_or_create_window()
 
         if files:
-            gfile = files[0]
+            win.open_path(files[0])
 
-        win.open_path(gfile)
         win.present()
 
     def _get_or_create_window(self) -> ImageViewerWindow:

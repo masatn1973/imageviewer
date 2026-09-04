@@ -32,6 +32,11 @@ if TYPE_CHECKING:
     from viewer import ImageViewerDialog
 
 
+# 解凍爆弾 (Decompression Bomb / Pixel Flood) による OOM クラッシュ対策
+MAX_SAFE_IMAGE_DIMENSION: int = 16384
+MAX_SAFE_IMAGE_PIXELS: int = 100_000_000  # 100メガピクセル (約400MB RGBA)
+
+
 class ViewerController:
     """viewer.py (ImageViewerDialog) のイベントハンドラを集約する Controller。
 
@@ -188,9 +193,31 @@ class ViewerController:
 
         else:
             # 通常時はフルサイズでデコード（実寸表示のため）
-            GdkPixbuf.Pixbuf.new_from_stream_async(
-                stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
-            )
+            # ただし、解凍爆弾 (Decompression Bomb / Pixel Flood) による OOM クラッシュを
+            # 防ぐため、極端に巨大な画像は安全な上限サイズに収めてデコードする
+            native_size = self._get_native_image_size(gfile)
+
+            if (
+                native_size is not None
+                and (
+                    native_size[0] > MAX_SAFE_IMAGE_DIMENSION
+                    or native_size[1] > MAX_SAFE_IMAGE_DIMENSION
+                    or (native_size[0] * native_size[1]) > MAX_SAFE_IMAGE_PIXELS
+                )
+            ):
+                GdkPixbuf.Pixbuf.new_from_stream_at_scale_async(
+                    stream,
+                    MAX_SAFE_IMAGE_DIMENSION,
+                    MAX_SAFE_IMAGE_DIMENSION,
+                    True,  # preserve_aspect_ratio
+                    self._load_cancellable,
+                    self._on_pixbuf_ready,
+                    (gfile, stream),
+                )
+            else:
+                GdkPixbuf.Pixbuf.new_from_stream_async(
+                    stream, self._load_cancellable, self._on_pixbuf_ready, (gfile, stream)
+                )
 
     def _get_native_image_size(self, gfile: Gio.File) -> tuple[int, int] | None:
         path = gfile.get_path()

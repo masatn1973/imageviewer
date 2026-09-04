@@ -65,6 +65,7 @@ def gallerycontroller_module():
     fake_gi_repository.Gtk = MagicMock(name="Gtk")
     fake_gi_repository.Gio = MagicMock(name="Gio")
     fake_gi_repository.GLib = MagicMock(name="GLib")
+    fake_gi_repository.GLib.timeout_add.side_effect = lambda _ms, cb, *a: cb(*a)
     fake_gi_repository.GdkPixbuf = MagicMock(name="GdkPixbuf")
     fake_gi.repository = fake_gi_repository
 
@@ -181,6 +182,7 @@ def _make_controller(module, flowbox):
     view.search_entry = MagicMock(name="search_entry")
     view.search_entry.get_delegate.return_value = MagicMock(name="search_entry_delegate")
     controller.view = view
+    controller._search_debounce_id = None
 
     return controller
 

@@ -26,5 +26,6 @@ flatpak build-bundle repo io.github.masatn2026.ImageViewer.flatpak io.github.mas
 
 ```
 flatpak remote-add --user --no-gpg-verify imageviewer-repo repo
-flatpak install -y io.github.masatn2026.ImageViewer
+flatpak install -y --user io.github.masatn2026.ImageViewer.flatpak
+flatpak install -y --user io.github.masatn2026.ImageViewer.Locale
 ```

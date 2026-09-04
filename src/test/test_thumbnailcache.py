@@ -336,3 +336,30 @@ class TestDiskCacheMaintenance:
         cache.clear_memory_cache()
 
         assert len(cache._memory_cache) == 0
+
+    def test_prune_disk_cache_removes_oldest_files_when_exceeding_limit(self, tmp_path):
+        cache = ThumbnailCache(cache_dir=tmp_path)
+
+        file1 = tmp_path / "old.png"
+        file2 = tmp_path / "mid.png"
+        file3 = tmp_path / "new.png"
+
+        file1.write_bytes(b"a" * 100)
+        file2.write_bytes(b"b" * 100)
+        file3.write_bytes(b"c" * 100)
+
+        # タイムスタンプを設定 (old: 1000, mid: 2000, new: 3000)
+        import os
+        os.utime(file1, (1000, 1000))
+        os.utime(file2, (2000, 2000))
+        os.utime(file3, (3000, 3000))
+
+        # 上限 150 バイトに指定してプルーニング
+        freed = cache.prune_disk_cache(max_size_bytes=150)
+
+        assert freed == 200  # old と mid が削除される (100 + 100 = 200バイト解放)
+        assert not file1.exists()
+        assert not file2.exists()
+        assert file3.exists()
+        assert cache.disk_cache_size_bytes() == 100
+

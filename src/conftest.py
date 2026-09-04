@@ -117,6 +117,8 @@ def _install_fake_drawing_area(fake_repository):
     """
     fake_repository.Gtk.DrawingArea = _FakeGtkWidget
     fake_repository.Adw.PreferencesDialog = _FakeGtkWidget
+    fake_repository.Adw.Application = _FakeGtkWidget
+    fake_repository.Adw.ApplicationWindow = _FakeGtkWidget
 
 
 _install_fake_gi()

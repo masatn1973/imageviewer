@@ -83,6 +83,8 @@ class ThumbnailCache:
         # (cache_dir プロパティに初めてアクセスした時)まで解決を遅らせる。
         self._explicit_cache_dir = Path(cache_dir) if cache_dir is not None else None
         self._resolved_cache_dir: Path | None = None
+        self.disk_limit_bytes: int = 500 * 1024 * 1024  # 500 MB
+        self._save_count: int = 0
 
     @property
     def cache_dir(self) -> Path:
@@ -150,6 +152,44 @@ class ThumbnailCache:
                 pass
         return total
 
+    def prune_disk_cache(self, max_size_bytes: int | None = None) -> int:
+        """ディスクキャッシュの合計サイズが上限を超過していた場合、古いものから削除する。
+
+        Returns:
+            int: 削除によって解放されたバイト数
+        """
+        limit = max_size_bytes if max_size_bytes is not None else self.disk_limit_bytes
+        freed = 0
+        try:
+            files_with_meta: list[tuple[Path, float, int]] = []
+            total_size = 0
+            for f in self.cache_dir.glob("*.png"):
+                try:
+                    stat = f.stat()
+                    total_size += stat.st_size
+                    files_with_meta.append((f, stat.st_mtime, stat.st_size))
+                except OSError:
+                    continue
+
+            if total_size <= limit:
+                return 0
+
+            # 更新日時が古い順にソートして上限以下になるまで削除
+            files_with_meta.sort(key=lambda item: item[1])
+            for path, _mtime, size in files_with_meta:
+                try:
+                    path.unlink(missing_ok=True)
+                    total_size -= size
+                    freed += size
+                    if total_size <= limit:
+                        break
+                except OSError:
+                    pass
+        except Exception as e:
+            print(f"[ThumbnailCache] Failed to prune disk cache: {e}")
+
+        return freed
+
     # ------------------------------------------------------------------
     # 内部処理
     # ------------------------------------------------------------------
@@ -194,6 +234,9 @@ class ThumbnailCache:
 
         try:
             pixbuf.savev(str(disk_path), "png", [], [])
+            self._save_count += 1
+            if self._save_count % 50 == 0:
+                self.prune_disk_cache()
         except GLib.Error as e:
             # ディスク保存に失敗してもメモリ上では使えるので致命的エラーにはしない
             print(f"[ThumbnailCache] Failed to save disk cache: {e}")

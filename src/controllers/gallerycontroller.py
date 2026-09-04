@@ -116,7 +116,7 @@ class GalleryController:
         # 高速タイピング中に毎キーストロークで 大量の画像ののフィルタ処理が
         # 走るのを防ぐため、300ms のデバウンスを挟む。
         # 前のタイマーが残っていればキャンセルしてリセットする。
-        if self._search_debounce_id is not None:
+        if getattr(self, "_search_debounce_id", None) is not None:
             GLib.source_remove(self._search_debounce_id)
         self._search_debounce_id = GLib.timeout_add(300, self._apply_search_filter)
 

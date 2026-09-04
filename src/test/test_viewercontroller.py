@@ -386,3 +386,27 @@ class TestOnCloseRequest:
         controller.on_close_request()
 
         view.save_window_geometry.assert_called_once_with(800, 600)
+
+
+class TestSafeImageLoading:
+    def test_huge_image_decoded_at_scale(self, make_controller):
+        from gi.repository import GdkPixbuf
+        from controllers.viewercontroller import MAX_SAFE_IMAGE_DIMENSION
+
+        controller, state, view = make_controller()
+        gfile = make_gfile(path="/tmp/huge.png")
+        stream = MagicMock()
+        gfile.read_finish.return_value = stream
+
+        # 極端に巨大なサイズ (30000 x 30000) を返す
+        controller._get_native_image_size = MagicMock(return_value=(30000, 30000))
+
+        result = MagicMock()
+        controller._on_file_read(gfile, result, None)
+
+        # 安全な上限サイズ (MAX_SAFE_IMAGE_DIMENSION) で縮小読み込みされること
+        GdkPixbuf.Pixbuf.new_from_stream_at_scale_async.assert_called_once()
+        args = GdkPixbuf.Pixbuf.new_from_stream_at_scale_async.call_args[0]
+        assert args[1] == MAX_SAFE_IMAGE_DIMENSION
+        assert args[2] == MAX_SAFE_IMAGE_DIMENSION
+
